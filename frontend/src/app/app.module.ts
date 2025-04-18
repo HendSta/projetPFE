@@ -9,7 +9,8 @@ import { FooterComponent } from './components/footer/footer.component';
 import { LucideAngularModule } from 'lucide-angular';
 import { 
   Moon, Sun, LogIn, Activity, Stethoscope, Menu, UserPlus, 
-  Users, Trophy, Mail, Linkedin 
+  Users, Trophy, Mail, Linkedin, Facebook, Twitter, Instagram,
+  MapPin, Phone, Clock, CreditCard, Landmark, CircleDollarSign, ChevronRight
 } from 'lucide-angular';
 
 @NgModule({
@@ -24,7 +25,8 @@ import {
     AppRoutingModule,
     LucideAngularModule.pick({ 
       Moon, Sun, LogIn, Activity, Stethoscope, Menu, UserPlus,
-      Users, Trophy, Mail, Linkedin
+      Users, Trophy, Mail, Linkedin, Facebook, Twitter, Instagram,
+      MapPin, Phone, Clock, CreditCard, Landmark, CircleDollarSign, ChevronRight
     })
   ],
   providers: [],

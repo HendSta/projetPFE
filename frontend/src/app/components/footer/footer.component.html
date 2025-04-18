@@ -1,1 +1,117 @@
-<p>footer works!</p>
+<footer class="bg-gradient-to-r from-blue-800 to-blue-600 dark:from-blue-900 dark:to-blue-800 text-white">
+  <!-- Main Footer Content -->
+  <div class="container mx-auto px-4 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <!-- Company Info -->
+      <div>
+        <div class="flex items-center mb-4">
+          <div class="bg-white p-2 rounded-full mr-3">
+            <lucide-icon name="stethoscope" class="h-6 w-6 text-blue-600" [strokeWidth]="1.5"></lucide-icon>
+          </div>
+          <span class="text-xl font-bold">MedWin</span>
+        </div>
+        <p class="text-blue-100 dark:text-blue-200 text-sm mb-4">
+          Providing state-of-the-art medical analysis services with precision and care since 2010.
+        </p>
+        <div class="flex space-x-3 mt-6">
+          <a href="#" class="bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors">
+            <lucide-icon name="facebook" class="h-5 w-5"></lucide-icon>
+          </a>
+          <a href="#" class="bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors">
+            <lucide-icon name="twitter" class="h-5 w-5"></lucide-icon>
+          </a>
+          <a href="#" class="bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors">
+            <lucide-icon name="instagram" class="h-5 w-5"></lucide-icon>
+          </a>
+          <a href="#" class="bg-white/10 hover:bg-white/20 p-2 rounded-full transition-colors">
+            <lucide-icon name="linkedin" class="h-5 w-5"></lucide-icon>
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <h3 class="text-lg font-bold mb-4 border-b border-blue-500/50 pb-2">Quick Links</h3>
+        <ul class="space-y-2">
+          <li><a href="#" class="text-blue-100 hover:text-white transition-colors flex items-center">
+            <lucide-icon name="chevron-right" class="h-4 w-4 mr-1"></lucide-icon> Home
+          </a></li>
+          <li><a href="#" class="text-blue-100 hover:text-white transition-colors flex items-center">
+            <lucide-icon name="chevron-right" class="h-4 w-4 mr-1"></lucide-icon> About Us
+          </a></li>
+          <li><a href="#" class="text-blue-100 hover:text-white transition-colors flex items-center">
+            <lucide-icon name="chevron-right" class="h-4 w-4 mr-1"></lucide-icon> Services
+          </a></li>
+          <li><a href="#" class="text-blue-100 hover:text-white transition-colors flex items-center">
+            <lucide-icon name="chevron-right" class="h-4 w-4 mr-1"></lucide-icon> Book Appointment
+          </a></li>
+          <li><a href="#" class="text-blue-100 hover:text-white transition-colors flex items-center">
+            <lucide-icon name="chevron-right" class="h-4 w-4 mr-1"></lucide-icon> Our Specialists
+          </a></li>
+          <li><a href="#" class="text-blue-100 hover:text-white transition-colors flex items-center">
+            <lucide-icon name="chevron-right" class="h-4 w-4 mr-1"></lucide-icon> Contact
+          </a></li>
+        </ul>
+      </div>
+
+      <!-- Contact Info -->
+      <div>
+        <h3 class="text-lg font-bold mb-4 border-b border-blue-500/50 pb-2">Contact Us</h3>
+        <ul class="space-y-3">
+          <li class="flex items-start">
+            <lucide-icon name="map-pin" class="h-5 w-5 mr-2 mt-0.5 text-blue-300"></lucide-icon>
+            <span class="text-blue-100">123 Medical Center Blvd,<br>Suite 500, Health City, HC 12345</span>
+          </li>
+          <li class="flex items-center">
+            <lucide-icon name="phone" class="h-5 w-5 mr-2 text-blue-300"></lucide-icon>
+            <span class="text-blue-100">+1 (555) 123-4567</span>
+          </li>
+          <li class="flex items-center">
+            <lucide-icon name="mail" class="h-5 w-5 mr-2 text-blue-300"></lucide-icon>
+            <span class="text-blue-100">info@medwin.com</span>
+          </li>
+          <li class="flex items-center">
+            <lucide-icon name="clock" class="h-5 w-5 mr-2 text-blue-300"></lucide-icon>
+            <span class="text-blue-100">Mon-Fri: 8AM-6PM<br>Sat: 9AM-1PM</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Newsletter -->
+      <div>
+        <h3 class="text-lg font-bold mb-4 border-b border-blue-500/50 pb-2">Stay Updated</h3>
+        <p class="text-blue-100 text-sm mb-4">Subscribe to our newsletter for the latest health tips and service updates.</p>
+        <div class="form-control">
+          <div class="relative">
+            <input type="email" placeholder="Your email address" class="input w-full pr-16 bg-blue-700/50 border-blue-500/50 placeholder:text-blue-300/60 focus:border-white" />
+            <button class="btn btn-sm absolute top-0 right-0 rounded-l-none bg-blue-500 border-blue-500 hover:bg-blue-400 hover:border-blue-400">
+              Subscribe
+            </button>
+          </div>
+        </div>
+        <div class="mt-4">
+          <a href="#" class="text-blue-200 hover:text-white underline text-sm">Privacy Policy</a>
+          <span class="text-blue-400 mx-2">|</span>
+          <a href="#" class="text-blue-200 hover:text-white underline text-sm">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Footer -->
+  <div class="border-t border-blue-500/30 py-6">
+    <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+      <div class="text-sm text-blue-200 mb-4 md:mb-0">
+        © 2025 MedWin Medical Analysis. All rights reserved.
+      </div>
+      <div class="flex items-center">
+        <span class="text-sm text-blue-300 mr-2">Payment Methods:</span>
+        <div class="flex space-x-2">
+          <lucide-icon name="credit-card" class="h-5 w-5 text-blue-200"></lucide-icon>
+          <lucide-icon name="landmark" class="h-5 w-5 text-blue-200"></lucide-icon>
+          <lucide-icon name="circle-dollar-sign" class="h-5 w-5 text-blue-200"></lucide-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
