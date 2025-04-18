@@ -7,7 +7,10 @@ import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { LucideAngularModule } from 'lucide-angular';
-import { Moon, Sun, LogIn, Activity, Stethoscope, Menu, UserPlus } from 'lucide-angular';
+import { 
+  Moon, Sun, LogIn, Activity, Stethoscope, Menu, UserPlus, 
+  Users, Trophy, Mail, Linkedin 
+} from 'lucide-angular';
 
 @NgModule({
   declarations: [
@@ -20,7 +23,8 @@ import { Moon, Sun, LogIn, Activity, Stethoscope, Menu, UserPlus } from 'lucide-
     BrowserModule,
     AppRoutingModule,
     LucideAngularModule.pick({ 
-      Moon, Sun, LogIn, Activity, Stethoscope, Menu, UserPlus 
+      Moon, Sun, LogIn, Activity, Stethoscope, Menu, UserPlus,
+      Users, Trophy, Mail, Linkedin
     })
   ],
   providers: [],

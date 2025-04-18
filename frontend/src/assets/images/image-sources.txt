@@ -1,0 +1,28 @@
+Medical Images Sources
+
+These are recommended free stock photos you can download for your application:
+
+1. Doctor images:
+- Doctor 1: https://www.pexels.com/photo/woman-wearing-white-coat-5214958/
+- Doctor 2: https://www.pexels.com/photo/man-in-white-dress-shirt-wearing-stethoscope-4173251/
+- Doctor 3: https://www.pexels.com/photo/woman-in-white-coat-holding-clipboard-5452293/
+- Doctor 4: https://www.pexels.com/photo/man-wearing-white-dress-shirt-and-blue-necktie-5327585/
+
+2. Medical analysis images:
+- Blood test: https://www.pexels.com/photo/crop-scientist-conducting-blood-test-in-laboratory-5722164/
+- Genetic testing: https://www.pexels.com/photo/person-holding-test-tube-954585/
+- Diagnostic imaging: https://www.pexels.com/photo/photo-of-healthcare-workers-checking-up-on-a-child-4021775/
+
+3. Hero section image:
+- Medical technology: https://www.pexels.com/photo/crop-doctor-examining-x-ray-on-computer-4226140/
+
+4. Patient images (for testimonials):
+- Patient 1: https://www.pexels.com/photo/man-in-blue-and-white-plaid-dress-shirt-3778680/
+- Patient 2: https://www.pexels.com/photo/woman-wearing-eyeglasses-773371/
+- Patient 3: https://www.pexels.com/photo/man-in-gray-button-up-shirt-3785079/
+
+Download these images and save them with appropriate filenames:
+- doctor-1.jpg, doctor-2.jpg, doctor-3.jpg, doctor-4.jpg
+- blood-test.jpg, genetic-test.jpg, imaging.jpg
+- doctor-hero.jpg
+- patient-1.jpg, patient-2.jpg, patient-3.jpg 
