@@ -1,5 +1,5 @@
 <!-- Hero Section - Slider -->
-<div class="carousel w-full min-h-[80vh] bg-gradient-to-r from-blue-700 to-blue-500 dark:from-blue-900 dark:to-blue-700 text-white relative overflow-hidden" data-carousel-autoplay="true" data-carousel-interval="6000">
+<div class="carousel w-full min-h-[80vh] bg-gradient-to-r from-blue-700/40 to-blue-500/40 dark:from-blue-900/40 dark:to-blue-700/40 backdrop-blur-md text-white relative overflow-hidden border border-white/10 shadow-lg rounded-xl" data-carousel-autoplay="true" data-carousel-interval="6000">
   <!-- Slide 1 -->
   <div id="slide1" class="carousel-item absolute w-full h-full transition-all duration-500 transform" 
        [ngClass]="{'opacity-100 translate-x-0': currentSlide === 1, 'opacity-0 translate-x-full': currentSlide !== 1}">
@@ -10,9 +10,12 @@
           <p class="text-xl mb-8">Analyze your medical results automatically with artificial intelligence. Save time and get accurate interpretations of your medical tests.</p>
         </div>
         <div class="lg:w-1/2 flex justify-center">
-          <img src="https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg?auto=compress&cs=tinysrgb&w=1280" 
-               class="rounded-lg shadow-2xl max-w-full h-auto object-cover" 
-               alt="Medical analysis with artificial intelligence" />
+          <div class="relative transform hover:-translate-y-2 transition-all duration-500">
+            <img src="https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg?auto=compress&cs=tinysrgb&w=1280" 
+                 class="rounded-xl shadow-[0_20px_25px_-5px_rgba(0,0,0,0.3)] hover:shadow-[0_25px_30px_-5px_rgba(0,0,0,0.4)] max-w-full h-auto object-cover" 
+                 alt="Medical analysis with artificial intelligence" />
+            <div class="absolute inset-0 rounded-xl shadow-inner pointer-events-none"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -27,9 +30,12 @@
    <p class="text-xl mb-8">Our AI-powered platform ensures accurate interpretation of your medical tests with advanced machine learning algorithms.</p>
   </div>
  <div class="lg:w-1/2 flex justify-center">
-   <img src="https://images.pexels.com/photos/3825586/pexels-photo-3825586.jpeg?auto=compress&cs=tinysrgb&w=1280" 
-        class="rounded-lg shadow-2xl max-w-[60%] h-auto object-cover mx-auto" 
-        alt="Medical AI diagnosis" />
+   <div class="relative transform hover:-translate-y-2 transition-all duration-500">
+     <img src="https://images.pexels.com/photos/3825586/pexels-photo-3825586.jpeg?auto=compress&cs=tinysrgb&w=1280" 
+          class="rounded-xl shadow-[0_20px_25px_-5px_rgba(0,0,0,0.3)] hover:shadow-[0_25px_30px_-5px_rgba(0,0,0,0.4)] max-w-[60%] h-auto object-cover mx-auto" 
+          alt="Medical AI diagnosis" />
+     <div class="absolute inset-0 rounded-xl shadow-inner pointer-events-none"></div>
+   </div>
  </div>
 </div>
 </div>
@@ -45,9 +51,12 @@
           <p class="text-xl mb-8">Join the future of medicine with MedWin's cutting-edge AI solutions for healthcare professionals and patients.</p>
         </div>
         <div class="lg:w-1/2 flex justify-center">
-          <img src="https://images.pexels.com/photos/7579831/pexels-photo-7579831.jpeg?auto=compress&cs=tinysrgb&w=1280" 
-               class="rounded-lg shadow-2xl max-w-full h-auto object-cover" 
-               alt="Healthcare innovation" />
+          <div class="relative transform hover:-translate-y-2 transition-all duration-500">
+            <img src="https://images.pexels.com/photos/7579831/pexels-photo-7579831.jpeg?auto=compress&cs=tinysrgb&w=1280" 
+                 class="rounded-xl shadow-[0_20px_25px_-5px_rgba(0,0,0,0.3)] hover:shadow-[0_25px_30px_-5px_rgba(0,0,0,0.4)] max-w-full h-auto object-cover" 
+                 alt="Healthcare innovation" />
+            <div class="absolute inset-0 rounded-xl shadow-inner pointer-events-none"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -283,10 +292,9 @@
 </div>
 
 <!-- CTA Section -->
-<div class="bg-gradient-to-r from-blue-700 to-blue-500 dark:from-blue-900 dark:to-blue-700 text-white py-16">
+<div class="bg-gradient-to-r from-indigo-900/80 to-blue-800/80 backdrop-blur-md text-white py-16 relative overflow-hidden border-t border-indigo-300/10 shadow-lg">
   <div class="container mx-auto px-4 text-center">
     <h2 class="text-3xl font-bold mb-6">Ready to revolutionize your medical analysis?</h2>
     <p class="text-xl mb-8 max-w-2xl mx-auto">Try our artificial intelligence solution today and discover how it can transform your medical practice.</p>
-    
   </div>
 </div>
