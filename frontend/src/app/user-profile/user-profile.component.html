@@ -1,0 +1,38 @@
+<div *ngIf="auth.user$ | async as user" class="card w-96 bg-base-100 shadow-lg hover:shadow-xl transition-all">
+  <div class="card-body">
+    <div class="flex items-center gap-4 mb-4">
+      <div class="avatar">
+        <div class="w-16 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
+          <img [src]="user.picture || 'https://via.placeholder.com/80'" alt="Profile picture" />
+        </div>
+      </div>
+      <div>
+        <h2 class="card-title">{{ user.name }}</h2>
+        <p class="text-sm opacity-70">{{ user.email }}</p>
+      </div>
+    </div>
+    
+    <div class="divider"></div>
+    
+    <div class="space-y-2">
+      <p *ngIf="user.email_verified" class="flex items-center gap-2 text-success">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        Email verified
+      </p>
+      <p *ngIf="!user.email_verified" class="flex items-center gap-2 text-warning">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+        Email not verified
+      </p>
+    </div>
+    
+    <div class="divider"></div>
+    
+    <div class="card-actions justify-end">
+      <button class="btn btn-sm btn-outline">Edit Profile</button>
+    </div>
+  </div>
+</div>
