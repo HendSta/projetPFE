@@ -15,9 +15,10 @@ import {
 } from 'lucide-angular';
 import { SigninComponent } from './components/signin/signin.component';
 import { SignupComponent } from './components/signup/signup.component';
-import { AuthButtonComponent } from './auth-button/auth-button.component';
-import { UserProfileComponent } from './user-profile/user-profile.component';
+import { AuthButtonComponent } from './components/auth-button/auth-button.component';
+import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { AuthModule } from '@auth0/auth0-angular';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -34,8 +35,8 @@ import { AuthModule } from '@auth0/auth0-angular';
     BrowserModule,
     AppRoutingModule,
     AuthModule.forRoot({
-      domain: 'dev-3z4wx78gwy1inwps.us.auth0.com',
-      clientId: '2CTMPHhvwVZ2OK8LK9mQM6GoitUSgIVe',
+      domain: environment.auth0.domain,
+      clientId: environment.auth0.clientId,
       authorizationParams: {
         redirect_uri: window.location.origin //redirect after l auth
       }
