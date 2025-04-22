@@ -1,13 +1,13 @@
 const User = require('../models/user.model');
 
 exports.registerUser = async (req, res) => {
-  const { auth0Id, email, name, picture, password } = req.body;
+  const { auth0Id, email, name,password, picture } = req.body;
 
   try {
     let user = await User.findOne({ auth0Id });
 
     if (!user) {
-      user = new User({ auth0Id, email, name, picture, password });
+      user = new User({ auth0Id, email, name,password, picture });
       await user.save();
       console.log('Utilisateur enregistré');
     } else {

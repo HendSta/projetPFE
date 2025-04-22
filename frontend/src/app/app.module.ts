@@ -14,11 +14,14 @@ import {
   Check, CheckCircle, FileText, Download, Headphones, HelpCircle
 } from 'lucide-angular';
 import { SigninComponent } from './components/signin/signin.component';
+import { DoctorDashboardComponent } from './components/doctor-dashboard/doctor-dashboard.component';
 import { SignupComponent } from './components/signup/signup.component';
 import { AuthButtonComponent } from './components/auth-button/auth-button.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
 import { AuthModule } from '@auth0/auth0-angular';
 import { environment } from '../environments/environment';
+import { AnalyzingComponent } from './components/analyzing/analyzing.component';
+import { HistoricsComponent } from './components/historics/historics.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +32,10 @@ import { environment } from '../environments/environment';
     SigninComponent,
     SignupComponent,
     AuthButtonComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    DoctorDashboardComponent,
+    AnalyzingComponent,
+    HistoricsComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,5 +1,14 @@
 <div class="min-h-screen bg-white dark:bg-gray-900 text-black dark:text-white transition-colors duration-200">
 <app-navbar></app-navbar>
-<router-outlet></router-outlet>
+<!-- Exemple dans app.component.html ou un autre composant de layout -->
+<ng-container *ngIf="(auth.isLoading$ | async); else appLoaded">
+    <div class="flex justify-center items-center h-screen">
+      <span class="loading loading-spinner loading-lg text-primary"></span>
+    </div>
+  </ng-container>
+  
+  <ng-template #appLoaded>
+    <router-outlet></router-outlet>
+  </ng-template>
 <app-footer></app-footer>
 </div>

@@ -15,4 +15,12 @@ export class SigninComponent {
   // Auth0 gère la redirection après la connexion
   this.auth.loginWithRedirect();
 }
+
+logout() {
+  this.auth.logout({ 
+    logoutParams: { 
+      returnTo: document.location.origin + '/home' 
+    } 
+  });
+}
 }

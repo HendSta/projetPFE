@@ -1,0 +1,45 @@
+<div class="drawer drawer-mobile drawer-open h-screen bg-base-200 dark:bg-gray-900">
+  <input id="medical-dashboard" type="checkbox" class="drawer-toggle" />
+  <div class="drawer-content p-6 bg-base-200 dark:bg-gray-900 overflow-auto">
+    <!-- Render routed page here -->
+    <router-outlet></router-outlet>
+  </div>
+  <div class="drawer-side">
+    <label for="medical-dashboard" class="drawer-overlay"></label>
+    <aside class="w-72 min-h-screen bg-gradient-to-r from-indigo-900/80 to-blue-800/80 backdrop-blur-md text-white p-6 flex flex-col border-r border-indigo-300/20">
+      <!-- User Info -->
+      <div class="flex items-center mb-8">
+        <div class="avatar">
+          <div class="w-12 rounded-full ring ring-white ring-offset-4">
+            <img [src]="userProfile?.picture || 'https://via.placeholder.com/80'" alt="Doctor avatar" />
+          </div>
+        </div>
+        <div class="ml-4">
+          <p class="text-lg font-bold">{{ userProfile?.name || 'Doctor' }}</p>
+          <p class="text-sm opacity-75">{{ userProfile?.email }}</p>
+        </div>
+      </div>
+      <!-- Navigation -->
+      <ul class="menu menu-compact flex-1">
+        <li>
+          <a routerLink="/user-profile" routerLinkActive="bg-white/20 text-white" class="mb-2 hover:bg-white/20 rounded-lg px-4 py-2 transition-colors flex items-center">
+            <img [src]="userProfile?.picture || 'https://via.placeholder.com/40'" alt="Avatar" class="w-6 h-6 rounded-full mr-3" />
+            Profile
+          </a>
+        </li>
+        <li>
+          <a routerLink="/analyzing" routerLinkActive="bg-white/20 text-white" class="mb-2 hover:bg-white/20 rounded-lg px-4 py-2 transition-colors flex items-center">
+            <lucide-icon name="stethoscope" class="h-5 w-5 inline-block mr-3"></lucide-icon>
+            Analyze
+          </a>
+        </li>
+        <li>
+          <a routerLink="/historics" routerLinkActive="bg-white/20 text-white" class="mb-2 hover:bg-white/20 rounded-lg px-4 py-2 transition-colors flex items-center">
+            <lucide-icon name="file-text" class="h-5 w-5 inline-block mr-3"></lucide-icon>
+            History
+          </a>
+        </li>
+      </ul>
+    </aside>
+  </div>
+</div>
