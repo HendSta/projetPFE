@@ -7,6 +7,10 @@ const userSchema = new mongoose.Schema({
   password: String,
   picture: String,
   role: { type: String, default: 'user' },
+  specialty: { type: String, default: '' },
+  experience: { type: Number, default: 0 },
+  clinicAddress: { type: String, default: '' },
+  phone: { type: String, default: '' }
 }, { timestamps: true });
 
 module.exports = mongoose.model('User', userSchema);

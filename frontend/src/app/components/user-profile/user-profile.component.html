@@ -1,38 +1,68 @@
-<div *ngIf="auth.user$ | async as user" class="card w-96 bg-base-100 shadow-lg hover:shadow-xl transition-all">
-  <div class="card-body">
-    <div class="flex items-center gap-4 mb-4">
-      <div class="avatar">
-        <div class="w-16 rounded-full ring ring-primary ring-offset-base-100 ring-offset-2">
-          <img [src]="user.picture || 'https://via.placeholder.com/80'" alt="Profile picture" />
+<div *ngIf="currentUser" class="container mx-auto p-4">
+
+  <!-- Profile Edit Form -->
+  <div class="card w-full md:w-1/2 mx-auto bg-base-100 shadow-lg rounded-xl p-8 dark:bg-gray-800 dark:shadow-md">
+    <form #profileForm="ngForm" (ngSubmit)="saveProfile()" class="space-y-2">
+      <div class="form-control">
+        <!-- Hidden native file input -->
+        <input type="file" id="profileImage" (change)="onFileSelected($event)" class="hidden" />
+        <!-- Styled label button for upload -->
+        <label for="profileImage" class="w-full text-white font-semibold py-2 rounded bg-gradient-to-r from-indigo-900/90 to-blue-800/90 dark:from-indigo-700/90 dark:to-blue-700/90 hover:from-indigo-800/90 hover:to-blue-700/90 transition-colors text-center cursor-pointer">
+          Upload Image
+        </label>
+        <img *ngIf="previewUrl" [src]="previewUrl" alt="Preview" class="w-24 h-24 rounded-full mt-4 mx-auto" />
+      </div>
+      <!-- Name Field -->
+      <div class="form-control">
+        <label class="label"><span class="label-text text-gray-700 dark:text-gray-200">Full Name</span></label>
+        <input type="text" placeholder="Name" [(ngModel)]="currentUser.name" name="name"
+          class="input input-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 transition" />
+      </div>
+      <!-- Email Field -->
+      <div class="form-control">
+        <label class="label"><span class="label-text text-gray-700 dark:text-gray-200">Email</span></label>
+        <input type="email" placeholder="Email" [(ngModel)]="currentUser.email" name="email"
+          class="input input-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 transition" />
+      </div>
+      <!-- Password Field -->
+      <div class="form-control">
+        <label class="label"><span class="label-text text-gray-700 dark:text-gray-200">New Password</span></label>
+        <input type="password" placeholder="Enter new password"
+          [(ngModel)]="password" name="password" #passwordInput="ngModel"
+          required minlength="8" [attr.pattern]="passwordPattern.source"
+          title="At least 8 characters: uppercase, lowercase, and number"
+          class="input input-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 transition" />
+        <div *ngIf="passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)" class="text-red-500 text-sm mt-1">
+          <div *ngIf="passwordInput.errors?.['required']">Password is required.</div>
+          <div *ngIf="passwordInput.errors?.['minlength']">Password must be at least 8 characters.</div>
+          <div *ngIf="passwordInput.errors?.['pattern']">Password must include uppercase, lowercase, and number.</div>
         </div>
       </div>
-      <div>
-        <h2 class="card-title">{{ user.name }}</h2>
-        <p class="text-sm opacity-70">{{ user.email }}</p>
+      <div class="form-control">
+        <label class="label"><span class="label-text text-gray-700 dark:text-gray-200">Specialty</span></label>
+        <input type="text" placeholder="e.g. Cardiologist" [(ngModel)]="specialty" name="specialty" class="input input-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
       </div>
-    </div>
-    
-    <div class="divider"></div>
-    
-    <div class="space-y-2">
-      <p *ngIf="user.email_verified" class="flex items-center gap-2 text-success">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        Email verified
-      </p>
-      <p *ngIf="!user.email_verified" class="flex items-center gap-2 text-warning">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-        </svg>
-        Email not verified
-      </p>
-    </div>
-    
-    <div class="divider"></div>
-    
-    <div class="card-actions justify-end">
-      <button class="btn btn-sm btn-outline">Edit Profile</button>
-    </div>
+      <div class="form-control">
+        <label class="label"><span class="label-text text-gray-700 dark:text-gray-200">Years of Experience</span></label>
+        <input type="number" placeholder="e.g. 10" [(ngModel)]="experience" name="experience" class="input input-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+      </div>
+      <div class="form-control">
+        <label class="label"><span class="label-text text-gray-700 dark:text-gray-200">Clinic Address</span></label>
+        <textarea placeholder="Your clinic address" [(ngModel)]="clinicAddress" name="clinicAddress" class="textarea textarea-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
+      </div>
+     
+      <div class="form-control">
+        <label class="label"><span class="label-text text-gray-700 dark:text-gray-200">Phone Number</span></label>
+        <div class="input-group">
+          <input type="tel" placeholder="234-567-890" [(ngModel)]="phone" name="phone" class="input input-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+        </div>
+      </div>
+      <div class="form-control mt-6">
+        <button type="submit" [disabled]="password && passwordInput.invalid"
+          class="w-full text-white font-semibold py-2 rounded bg-gradient-to-r from-indigo-900/90 to-blue-800/90 dark:from-indigo-700/90 dark:to-blue-700/90 hover:from-indigo-800/90 hover:to-blue-700/90 transition-colors">
+          Save Changes
+        </button>
+      </div>
+    </form>
   </div>
 </div>
