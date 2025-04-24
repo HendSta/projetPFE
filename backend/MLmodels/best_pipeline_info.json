@@ -1,0 +1,18 @@
+{
+    "name": "pipeline CodParametre",
+    "date_trained": "2025-04-15T16:25:49.820721",
+    "features": [
+        "motscles",
+        "Unite",
+        "LibParametre",
+        "FAMILLE",
+        "LIBMEDWINabrege",
+        "ValeurUsuelleMin",
+        "ValeurUsuelleMax"
+    ],
+    "target": [
+        "CodParametre"
+    ],
+    "accuracy_test": 0.9949238578680203,
+    "note": "RandomForest avec TFIDF et StandardScaler"
+}

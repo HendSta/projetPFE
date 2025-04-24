@@ -1,0 +1,19 @@
+{
+    "text_columns": [
+        "motscles",
+        "Unite",
+        "LibParametre",
+        "FAMILLE",
+        "LIBMEDWINabrege"
+    ],
+    "numeric_columns": [
+        "ValeurUsuelleMin",
+        "ValeurUsuelleMax"
+    ],
+    "target": [
+        "CodParametre",
+        "LIBMEDWINabrege",
+        "LibParametre",
+        "FAMILLE"
+    ]
+}

@@ -1,0 +1,8 @@
+{
+    "model": "RandomForestClassifier",
+    "n_estimators": 100,
+    "random_state": 42,
+    "accuracy_test_cod_parametre": 0.9949,
+    "trained_on": "2025-04-15 16:25:47.725671",
+    "note": "Multi-output TF-IDF + StandardScaler. Target = [CodParametre, LIBMEDWINabrege, LibParametre, FAMILLE]"
+}
