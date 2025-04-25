@@ -49,6 +49,24 @@
     </div>
   
     <div *ngIf="analysisResult && analysisResult.length" class="mt-8">
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 mb-6">
+        <h3 class="text-2xl font-bold text-indigo-800 dark:text-indigo-300 mb-4">Patient Information</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="flex flex-col">
+            <span class="text-sm text-gray-500 dark:text-gray-400">Patient Name</span>
+            <span class="font-medium text-indigo-700 dark:text-indigo-300">{{ patientInfo.NomPatient }}</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm text-gray-500 dark:text-gray-400">Doctor</span>
+            <span class="font-medium text-indigo-700 dark:text-indigo-300">{{ patientInfo.Medecin }}</span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm text-gray-500 dark:text-gray-400">Analysis Date</span>
+            <span class="font-medium text-indigo-700 dark:text-indigo-300">{{ patientInfo.DateAnalyse || 'Not specified' }}</span>
+          </div>
+        </div>
+      </div>
+
       <h3 class="text-2xl font-bold text-indigo-800 dark:text-indigo-300 mb-4">Analysis Results</h3>
       <div class="overflow-x-auto">
         <table class="min-w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg">
@@ -61,6 +79,9 @@
             <tr *ngFor="let row of analysisResult" class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
               <td *ngFor="let col of tableColumns" class="px-4 py-3 text-sm whitespace-nowrap">
                 <ng-container [ngSwitch]="col">
+                  <ng-container *ngSwitchCase="'NomPatient'">
+                    <span class="font-medium text-indigo-800 dark:text-indigo-300">{{ row[col] }}</span>
+                  </ng-container>
                   <ng-container *ngSwitchCase="'ValeurActuelle'">
                     <span class="font-mono font-medium text-indigo-600 dark:text-indigo-400">{{ row[col] | number:'1.0-2' }}</span>
                   </ng-container>

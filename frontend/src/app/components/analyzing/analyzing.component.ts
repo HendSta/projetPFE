@@ -11,6 +11,11 @@ export class AnalyzingComponent {
   isLoading: boolean = false;
   analysisResult: any[] = [];
   tableColumns: string[] = [];
+  patientInfo: any = {
+    NomPatient: 'Patient inconnu',
+    Medecin: 'Médecin inconnu',
+    DateAnalyse: ''
+  };
 
   constructor(private http: HttpClient) {}
 
@@ -34,30 +39,44 @@ export class AnalyzingComponent {
 
     this.isLoading = true;
 
-    this.http.post<any[]>('http://127.0.0.1:8000/upload-pdf', formData)
-      .subscribe({
-        next: (response) => {
-          this.isLoading = false;
-          this.analysisResult = response;
-          // Define table columns in fixed order: input fields then prediction fields
-          this.tableColumns = [
-            'CodeParametre',
-            'ValeurActuelle',
-            'Unite',
-            'ValeursUsuelles',
-            'ValeurUsuelleMin',
-            'ValeurUsuelleMax',
-            'CodParametre',
-            'LIBMEDWINabrege',
-            'LibParametre',
-            'FAMILLE'
-          ];
-          console.log('Analysis result:', this.analysisResult);
-        },
-        error: (error) => {
-          this.isLoading = false;
-          console.error('Error uploading file:', error);
+    this.http.post<any[]>('http://127.0.0.1:8000/upload-pdf', formData, {
+      headers: {
+        'Accept': 'application/json',
+      },
+      withCredentials: true
+    }).subscribe({
+      next: (response) => {
+        this.isLoading = false;
+        this.analysisResult = response;
+        
+        // Extraire les informations du patient du premier résultat
+        if (response.length > 0) {
+          this.patientInfo = {
+            NomPatient: response[0].NomPatient || 'Patient inconnu',
+            Medecin: response[0].Medecin || 'Médecin inconnu',
+            DateAnalyse: response[0].DateAnalyse || ''
+          };
         }
-      });
+        
+        // Define table columns in fixed order
+        this.tableColumns = [
+          'CodeParametre',
+          'ValeurActuelle',
+          'Unite',
+          'ValeursUsuelles',
+          'ValeurUsuelleMin',
+          'ValeurUsuelleMax',
+          'CodParametre',
+          'LIBMEDWINabrege',
+          'LibParametre',
+          'FAMILLE'
+        ];
+        console.log('Analysis result:', this.analysisResult);
+      },
+      error: (error) => {
+        this.isLoading = false;
+        console.error('Error uploading file:', error);
+      }
+    });
   }
 }
