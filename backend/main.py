@@ -7,7 +7,7 @@ import re
 import numpy as np
 import io
 from fastapi.middleware.cors import CORSMiddleware
-from typing import List
+from typing import List, Dict, Any
 
 app = FastAPI()
 
@@ -32,6 +32,14 @@ class InputData(BaseModel):
     ValeurUsuelleMax: float
 
 class PredictionResult(BaseModel):
+    # Champs d'entrée
+    CodeParametre: str
+    ValeurActuelle: float
+    Unite: str
+    ValeursUsuelles: str
+    ValeurUsuelleMin: float
+    ValeurUsuelleMax: float
+    # Champs prédits
     CodParametre: str
     LIBMEDWINabrege: str
     LibParametre: str
@@ -43,6 +51,7 @@ def predict(data: InputData):
     df = pd.DataFrame([data.dict()])
     preds = pipeline.predict(df)[0]
     return PredictionResult(
+        **data.dict(),
         CodParametre=preds[0],
         LIBMEDWINabrege=preds[1],
         LibParametre=preds[2],
@@ -62,11 +71,12 @@ async def upload_pdf(file: UploadFile = File(...)):
 
     return [
         PredictionResult(
+            **input_data,
             CodParametre=p[0],
             LIBMEDWINabrege=p[1],
             LibParametre=p[2],
             FAMILLE=p[3]
-        ) for p in preds
+        ) for input_data, p in zip(data_fields_list, preds)
     ]
 
 # ==== Extraction complète des paramètres ====
