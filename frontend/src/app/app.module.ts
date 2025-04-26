@@ -12,7 +12,7 @@ import {
   Moon, Sun, LogIn, Activity, Stethoscope, Menu, UserPlus, 
   Users, Trophy, Mail, Linkedin, Facebook, Twitter, Instagram,
   MapPin, Phone, Clock, CreditCard, Landmark, CircleDollarSign, ChevronRight,
-  Check, CheckCircle, FileText, Download, Headphones, HelpCircle
+  Check, CheckCircle, FileText, Download, Headphones, HelpCircle,UploadCloud,PlayCircle
 } from 'lucide-angular';
 import { SigninComponent } from './components/signin/signin.component';
 import { DoctorDashboardComponent } from './components/doctor-dashboard/doctor-dashboard.component';
@@ -54,7 +54,7 @@ import { HistoricsComponent } from './components/historics/historics.component';
       Moon, Sun, LogIn, Activity, Stethoscope, Menu, UserPlus,
       Users, Trophy, Mail, Linkedin, Facebook, Twitter, Instagram,
       MapPin, Phone, Clock, CreditCard, Landmark, CircleDollarSign, ChevronRight,
-      Check, CheckCircle, FileText, Download, Headphones, HelpCircle
+      Check, CheckCircle, FileText, Download, Headphones, HelpCircle,UploadCloud, PlayCircle
     })
   ],
   providers: [],

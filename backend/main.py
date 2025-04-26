@@ -1,4 +1,4 @@
-from fastapi import FastAPI, UploadFile, File, HTTPException
+from fastapi import FastAPI, UploadFile, File, HTTPException, Body
 from pydantic import BaseModel
 import joblib
 import pandas as pd
@@ -342,3 +342,83 @@ async def upload_pdf(file: UploadFile = File(...)):
         results.append(result)
 
     return results
+
+@app.post("/analyze-risk")
+def analyze_risk(param: dict = Body(...)):
+    import joblib
+    import pandas as pd
+    import numpy as np
+    model_path = "MLmodels/model2.joblib"
+    # Charger le modèle
+    model = joblib.load(model_path)
+
+    # Préparer le DataFrame à partir du paramètre reçu
+    df_test = pd.DataFrame([param])
+
+    # Préparation des features dérivées (copie de preparer_features)
+    df_result = df_test.copy()
+    try:
+        df_result['ValeurAnterieure'] = pd.to_numeric(df_result['ValeurAnterieure'], errors='coerce')
+        for i, row in df_result.iterrows():
+            if not pd.isna(row['ValeurAnterieure']) and row['ValeurAnterieure'] != 0:
+                df_result.loc[i, 'DeltaValeurPrecedente'] = row['ValeurActuelle'] - row['ValeurAnterieure']
+                df_result.loc[i, 'RatioValeurPrecedente'] = row['ValeurActuelle'] / row['ValeurAnterieure']
+            else:
+                df_result.loc[i, 'DeltaValeurPrecedente'] = 0
+                df_result.loc[i, 'RatioValeurPrecedente'] = 1
+    except:
+        df_result['DeltaValeurPrecedente'] = 0
+        df_result['RatioValeurPrecedente'] = 1
+    df_result['PourcentageValeurMin'] = (df_result['ValeurActuelle'] / df_result['ValeurUsuelleMin']) * 100
+    df_result['PourcentageValeurMax'] = (df_result['ValeurActuelle'] / df_result['ValeurUsuelleMax']) * 100
+    df_result['EcartNormalise'] = 0.0
+    mask = (df_result['ValeurUsuelleMax'] - df_result['ValeurUsuelleMin']) > 0
+    df_result.loc[mask, 'EcartNormalise'] = (
+        (df_result.loc[mask, 'ValeurActuelle'] - df_result.loc[mask, 'ValeurUsuelleMin']) /
+        (df_result.loc[mask, 'ValeurUsuelleMax'] - df_result.loc[mask, 'ValeurUsuelleMin'])
+    )
+    for col in ['DeltaValeurPrecedente', 'RatioValeurPrecedente', 'PourcentageValeurMin', 
+                'PourcentageValeurMax', 'EcartNormalise']:
+        df_result[col] = df_result[col].replace([np.inf, -np.inf], np.nan)
+        df_result[col] = df_result[col].fillna(0)
+
+    # Statut
+    valeur_actuelle = df_result['ValeurActuelle'].values[0]
+    min_usuel = df_result['ValeurUsuelleMin'].values[0]
+    max_usuel = df_result['ValeurUsuelleMax'].values[0]
+    if valeur_actuelle < min_usuel:
+        statut = "BAS"
+    elif valeur_actuelle > max_usuel:
+        statut = "ÉLEVÉ"
+    else:
+        statut = "NORMAL"
+
+    # Features pour le ML
+    features_for_ml = df_result[['DeltaValeurPrecedente', 'RatioValeurPrecedente', 
+                                 'PourcentageValeurMin', 'PourcentageValeurMax', 
+                                 'EcartNormalise', 'ValeurActuelle', 'CodeParametre']]
+    predicted_risk_num = model.predict(features_for_ml)[0]
+    risk_map = {0: 'Aucun', 1: 'Faible', 2: 'Modéré', 3: 'Élevé'}
+    degre_risque = risk_map.get(int(predicted_risk_num), 'Inconnu')
+
+    # Conseil simple
+    if degre_risque == "Aucun":
+        conseil = "Aucune action particulière requise. Les valeurs sont dans la plage normale."
+    elif degre_risque == "Faible":
+        conseil = f"À surveiller lors du prochain contrôle. Le {param['CodParametre']} est légèrement {statut.lower()}."
+    elif degre_risque == "Modéré":
+        conseil = f"Surveillance recommandée. Le {param['CodParametre']} est {statut.lower()} avec un risque modéré."
+    else:  # Élevé
+        conseil = f"Consultation médicale recommandée. Le {param['CodParametre']} présente un risque élevé."
+
+    # Conversion explicite des types pour la réponse JSON
+    return {
+        "parametre": str(param['CodeParametre']),
+        "valeur_actuelle": float(valeur_actuelle),
+        "unite": str(param.get('Unite', '')),
+        "valeur_anterieure": float(param.get('ValeurAnterieure', 0) or 0),
+        "valeurs_usuelles": str(param.get('ValeursUsuelles', '')),
+        "statut_risque": str(statut),
+        "degre_risque": str(degre_risque),
+        "conseil": str(conseil)
+    }

@@ -16,6 +16,7 @@ export class AnalyzingComponent {
     Medecin: 'Médecin inconnu',
     DateAnalyse: ''
   };
+  riskResults: { [key: number]: any } = {};
 
   constructor(private http: HttpClient) {}
 
@@ -24,6 +25,7 @@ export class AnalyzingComponent {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
+      this.riskResults = {};
     }
   }
 
@@ -60,13 +62,12 @@ export class AnalyzingComponent {
         
         // Define table columns in fixed order
         this.tableColumns = [
-          'CodeParametre',
+          'CodParametre',
           'ValeurActuelle',
           'Unite',
           'ValeursUsuelles',
           'ValeurUsuelleMin',
           'ValeurUsuelleMax',
-          'CodParametre',
           'LIBMEDWINabrege',
           'LibParametre',
           'FAMILLE'
@@ -78,5 +79,21 @@ export class AnalyzingComponent {
         console.error('Error uploading file:', error);
       }
     });
+  }
+
+  analyzeRow(row: any, index: number) {
+    this.http.post<any>('http://127.0.0.1:8000/analyze-risk', row).subscribe({
+      next: (result) => {
+        this.riskResults[index] = result;
+      },
+      error: (error) => {
+        this.riskResults[index] = { erreur: 'Erreur lors de l\'analyse' };
+        console.error(error);
+      }
+    });
+  }
+
+  showRiskHeaders(): boolean {
+    return Object.keys(this.riskResults).length > 0;
   }
 }

@@ -13,8 +13,8 @@
         <!-- Card content -->
         <div class="relative z-10">
           <div class="flex items-center mb-6">
-            <div class="bg-gradient-to-r from-indigo-600 to-blue-600 p-3 rounded-lg shadow-lg mr-4 transform group-hover:scale-110 transition-transform duration-300">
-              <lucide-icon name="file-upload" class="h-8 w-8 text-white" [strokeWidth]="1.5"></lucide-icon>
+            <div class="bg-gradient-to-r from-indigo-600 to-blue-600 p-1 rounded-lg shadow-lg mr-4 transform group-hover:scale-110 transition-transform duration-300">
+              <lucide-icon name="upload-cloud" class="h-4 w-4 text-white" [strokeWidth]="1.5"></lucide-icon>
             </div>
             <h3 class="text-xl font-semibold text-indigo-800 dark:text-indigo-300">Upload PDF</h3>
           </div>
@@ -73,10 +73,18 @@
           <thead>
             <tr class="bg-gray-50 dark:bg-gray-700">
               <th *ngFor="let col of tableColumns" class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 whitespace-nowrap">{{ col }}</th>
+              <th>Analyser</th>
+              <th *ngIf="showRiskHeaders()">Statut du risque</th>
+              <th *ngIf="showRiskHeaders()">Degré du risque</th>
+              <th *ngIf="showRiskHeaders()">Conseil</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-            <tr *ngFor="let row of analysisResult" class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+            <tr *ngFor="let row of analysisResult; let i = index"
+                class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                [ngClass]="{
+                  'bg-red-100 dark:bg-red-900': riskResults[i] && (riskResults[i].statut_risque === 'BAS' || riskResults[i].statut_risque === 'ÉLEVÉ')
+                }">
               <td *ngFor="let col of tableColumns" class="px-4 py-3 text-sm whitespace-nowrap">
                 <ng-container [ngSwitch]="col">
                   <ng-container *ngSwitchCase="'NomPatient'">
@@ -116,6 +124,19 @@
                     <span class="text-gray-900 dark:text-gray-100">{{ row[col] }}</span>
                   </ng-container>
                 </ng-container>
+              </td>
+              <td class="px-4 py-3 text-sm whitespace-nowrap">
+                <button class="btn btn-sm btn-primary" (click)="analyzeRow(row, i)">Analyser</button>
+              </td>
+              <td *ngIf="riskResults[i]" class="px-4 py-3 text-sm whitespace-nowrap">
+                <div *ngIf="!riskResults[i].erreur">{{ riskResults[i].statut_risque }}</div>
+                <div *ngIf="riskResults[i].erreur" class="text-red-600">{{ riskResults[i].erreur }}</div>
+              </td>
+              <td *ngIf="riskResults[i]" class="px-4 py-3 text-sm whitespace-nowrap">
+                <div *ngIf="!riskResults[i].erreur">{{ riskResults[i].degre_risque }}</div>
+              </td>
+              <td *ngIf="riskResults[i]" class="px-4 py-3 text-sm whitespace-nowrap">
+                <div *ngIf="!riskResults[i].erreur">{{ riskResults[i].conseil }}</div>
               </td>
             </tr>
           </tbody>
