@@ -76,6 +76,7 @@
               <th>Analyser</th>
               <th *ngIf="showRiskHeaders()">Statut du risque</th>
               <th *ngIf="showRiskHeaders()">Degré du risque</th>
+              <th *ngIf="showRiskHeaders()">Tendance</th>
               <th *ngIf="showRiskHeaders()">Conseil</th>
             </tr>
           </thead>
@@ -126,6 +127,21 @@
                   <ng-container *ngSwitchCase="'FAMILLE'">
                     <span class="text-gray-900 dark:text-gray-100">{{ row[col] }}</span>
                   </ng-container>
+                  <ng-container *ngSwitchCase="'ValeurAnterieure'">
+                    <span class="font-mono text-gray-600 dark:text-gray-400">
+                      {{ row[col] !== '' && row[col] !== null ? (row[col] | number:'1.0-2') : '' }}
+                    </span>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'DateAnterieure'">
+                    <span class="text-gray-600 dark:text-gray-400">
+                      {{ row[col] || '' }}
+                    </span>
+                  </ng-container>
+                  <ng-container *ngSwitchCase="'Tendance'">
+                    <span class="text-gray-600 dark:text-gray-400">
+                      {{ row[col] || '' }}
+                    </span>
+                  </ng-container>
                   <ng-container *ngSwitchDefault>
                     <span class="text-gray-900 dark:text-gray-100">{{ row[col] }}</span>
                   </ng-container>
@@ -140,6 +156,9 @@
               </td>
               <td *ngIf="riskResults[i]" class="px-4 py-3 text-sm whitespace-nowrap">
                 <div *ngIf="!riskResults[i].erreur">{{ riskResults[i].degre_risque }}</div>
+              </td>
+              <td *ngIf="riskResults[i]" class="px-4 py-3 text-sm whitespace-nowrap">
+                <div *ngIf="!riskResults[i].erreur">{{ riskResults[i].tendance }}</div>
               </td>
               <td *ngIf="riskResults[i]" class="px-4 py-3 text-sm whitespace-nowrap">
                 <div *ngIf="!riskResults[i].erreur">{{ riskResults[i].conseil }}</div>

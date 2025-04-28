@@ -68,6 +68,8 @@ export class AnalyzingComponent {
           'ValeursUsuelles',
           'ValeurUsuelleMin',
           'ValeurUsuelleMax',
+          'ValeurAnterieure',
+          'DateAnterieure',
           'LIBMEDWINabrege',
           'LibParametre',
           'FAMILLE'

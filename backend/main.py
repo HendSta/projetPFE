@@ -7,12 +7,13 @@ import re
 import numpy as np
 import io
 from fastapi.middleware.cors import CORSMiddleware
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 import os
 import json
 from rapidfuzz import process
 from sklearn.impute import SimpleImputer
 import random
+import math
 
 app = FastAPI()
 
@@ -38,6 +39,8 @@ class InputData(BaseModel):
     ValeursUsuelles: str
     ValeurUsuelleMin: float
     ValeurUsuelleMax: float
+    ValeurAnterieure: Optional[float] = None
+    DateAnterieure: str = ''
 
 class PredictionResult(BaseModel):
     # Champs d'entrée
@@ -47,6 +50,8 @@ class PredictionResult(BaseModel):
     ValeursUsuelles: str
     ValeurUsuelleMin: float
     ValeurUsuelleMax: float
+    ValeurAnterieure: Optional[float] = None
+    DateAnterieure: str = ''
     # Champs prédits
     CodParametre: str
     LIBMEDWINabrege: str
@@ -85,7 +90,7 @@ TYPE_ANALYSES = {
 REGEX_DATE = r"\b(\d{2}/\d{2}/\d{4})\b"
 REGEX_PATIENT = r"(?i)nom\s*:\s*(.*)"
 REGEX_MEDECIN = r"(?i)demandé par\s*:\s*(.*)"
-REGEX_PARAMETRE = r"([\w\s]+)\s+(\d+[.,]?\d*)\s*([a-zA-Z/%³]*)\s*(\d+[.,]?\d*)?\s*(\d{2}/\d{2}/\d{2})?\s*\(([^)]*)\)?"
+REGEX_PARAMETRE = r"([\w\s\.]+)\s+(\d+[.,]?\d*)\s*([a-zA-Z/%³]*)\s*(\d+[.,]?\d*)?\s*(\d{2}/\d{2}/\d{2,4})?\s*\(([^)]*)\)?"
 
 # Unit mapping
 UNIT_MAPPING = {
@@ -190,63 +195,49 @@ def extract_patient_info(text: str) -> Dict[str, str]:
     
     return patient_info
 
-def extract_all_fields_from_text(text: str) -> List[dict]:
-    """Extrait tous les paramètres et valeurs du texte nettoyé."""
+def extract_all_fields_from_text(text: str) -> list:
+    """Extrait tous les paramètres et valeurs du texte nettoyé, y compris valeur antérieure et date antérieure si présentes sur la même ligne."""
     results = []
-    type_analyse = None
-    examen = None
-    
-    for line in text.splitlines():
+    lines = text.splitlines()
+    for line in lines:
         line = line.strip()
         if not line:
             continue
-            
-        # Détection des types d'analyses
-        for type_normalise, variantes in TYPE_ANALYSES.items():
-            for variante in variantes:
-                if variante.lower() in line.lower():
-                    type_analyse = type_normalise
-                    break
-            if type_analyse:
-                break
-                
-        # Détection des examens
-        if line and not line.isupper() and len(line.split()) <= 3:
-            examen = line.lower()
-            continue
-            
-        # Extraction des paramètres et valeurs
         param_match = re.search(REGEX_PARAMETRE, line)
+        valeur_anterieure = None
+        date_anterieure = ''
         if param_match:
-            parametre = param_match.group(1).strip().lower()
+            parametre = param_match.group(1).replace('.', '').strip().lower()
             valeur_actuelle = param_match.group(2).strip()
             unite = param_match.group(3).strip()
             valeur_usuelles = param_match.group(6).strip()
-            
+            valeur_anterieure = param_match.group(4).strip() if param_match.group(4) else None
+            date_anterieure = param_match.group(5).strip() if param_match.group(5) else ''
             # Normalisation des unités
             unite = UNIT_MAPPING.get(unite.lower(), unite)
-            
             # Normalisation des valeurs numériques
             try:
                 valeur_actuelle = normalize_numeric_values(valeur_actuelle)
             except ValueError:
-                continue
-                
+                valeur_actuelle = ''
+            try:
+                valeur_anterieure = normalize_numeric_values(valeur_anterieure) if valeur_anterieure not in [None, ''] else None
+            except ValueError:
+                valeur_anterieure = None
             # Extraction des bornes min/max
             min_val, max_val = extract_min_max(valeur_usuelles)
-            
             # Nettoyage du code paramètre
             parametre = nettoyer_code_parametre(parametre)
-            
             results.append({
                 "CodeParametre": parametre,
                 "ValeurActuelle": valeur_actuelle,
                 "Unite": unite,
                 "ValeursUsuelles": valeur_usuelles,
                 "ValeurUsuelleMin": min_val,
-                "ValeurUsuelleMax": max_val
+                "ValeurUsuelleMax": max_val,
+                "ValeurAnterieure": valeur_anterieure,
+                "DateAnterieure": date_anterieure
             })
-    
     if not results:
         raise HTTPException(status_code=400, detail="Aucun paramètre reconnu dans le PDF")
     return results
@@ -308,6 +299,19 @@ def postprocess_valeurs_usuelles(df):
     df = df.apply(format_valeurs, axis=1)
     return df
 
+def clean_json_value(val, field_type):
+    if isinstance(val, float) and (math.isnan(val) or math.isinf(val)):
+        if field_type == float or field_type == Optional[float]:
+            return None
+        else:
+            return "n'existe pas"
+    return val
+
+def to_native(val):
+    if isinstance(val, (np.generic,)):
+        return val.item()
+    return val
+
 # ==== API Endpoints ====
 @app.post("/predict", response_model=PredictionResult)
 def predict(data: InputData):
@@ -359,11 +363,10 @@ async def upload_pdf(file: UploadFile = File(...)):
     # Créer les résultats avec les prédictions
     results = []
     for input_data, p in zip(df.to_dict('records'), preds):
-        # S'assurer que toutes les valeurs numériques sont des float
-        input_data['ValeurActuelle'] = float(input_data['ValeurActuelle'])
-        input_data['ValeurUsuelleMin'] = float(input_data['ValeurUsuelleMin'])
-        input_data['ValeurUsuelleMax'] = float(input_data['ValeurUsuelleMax'])
-        
+        # Nettoyer les valeurs NaN/inf selon le type attendu
+        for k, v in input_data.items():
+            field_type = PredictionResult.model_fields[k].annotation if k in PredictionResult.model_fields else str
+            input_data[k] = clean_json_value(v, field_type)
         result = PredictionResult(
             **input_data,
             CodParametre=p[0],
@@ -433,6 +436,18 @@ def analyze_risk(param: dict = Body(...)):
     risk_map = {0: 'Aucun', 1: 'Faible', 2: 'Modéré', 3: 'Élevé'}
     degre_risque = risk_map.get(int(predicted_risk_num), 'Inconnu')
 
+    # Détermination de la tendance
+    valeur_anterieure = df_result['ValeurAnterieure'].values[0]
+    tendance = "Indéterminée (pas de valeur antérieure)"
+    if not pd.isna(valeur_anterieure) and valeur_anterieure != 0:
+        delta = df_result['DeltaValeurPrecedente'].values[0]
+        if abs(delta) < 0.05 * (max_usuel - min_usuel):
+            tendance = "Stable"
+        elif delta > 0:
+            tendance = "En hausse"
+        else:
+            tendance = "En baisse"
+
     # Conseil simple
     if degre_risque == "Aucun":
         conseil = "Aucune action particulière requise. Les valeurs sont dans la plage normale."
@@ -445,12 +460,13 @@ def analyze_risk(param: dict = Body(...)):
 
     # Conversion explicite des types pour la réponse JSON
     return {
-        "parametre": str(param['CodeParametre']),
-        "valeur_actuelle": float(valeur_actuelle),
-        "unite": str(param.get('Unite', '')),
-        "valeur_anterieure": float(param.get('ValeurAnterieure', 0) or 0),
-        "valeurs_usuelles": str(param.get('ValeursUsuelles', '')),
-        "statut_risque": str(statut),
-        "degre_risque": str(degre_risque),
-        "conseil": str(conseil)
+        "parametre": to_native(param['CodeParametre']),
+        "valeur_actuelle": to_native(valeur_actuelle),
+        "unite": to_native(param.get('Unite', '')),
+        "valeur_anterieure": to_native(valeur_anterieure) if not pd.isna(valeur_anterieure) else "n'existe pas",
+        "valeurs_usuelles": to_native(param.get('ValeursUsuelles', '')),
+        "statut_risque": to_native(statut),
+        "degre_risque": to_native(degre_risque),
+        "tendance": to_native(tendance),
+        "conseil": to_native(conseil)
     }
