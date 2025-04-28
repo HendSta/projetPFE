@@ -94,13 +94,19 @@
                     <span class="font-mono font-medium text-indigo-600 dark:text-indigo-400">{{ row[col] | number:'1.0-2' }}</span>
                   </ng-container>
                   <ng-container *ngSwitchCase="'ValeursUsuelles'">
-                    <span class="font-mono text-gray-600 dark:text-gray-400">{{ row['ValeurUsuelleMin'] | number:'1.0-2' }} - {{ row['ValeurUsuelleMax'] | number:'1.0-2' }}</span>
+                    <span class="font-mono text-gray-600 dark:text-gray-400">
+                      {{ row['ValeursUsuelles'] ? row['ValeursUsuelles'] : (row['ValeurUsuelleMin'] | number:'1.0-2') + ' - ' + (row['ValeurUsuelleMax'] | number:'1.0-2') }}
+                    </span>
                   </ng-container>
                   <ng-container *ngSwitchCase="'ValeurUsuelleMin'">
-                    <span class="font-mono text-gray-600 dark:text-gray-400">{{ row[col] | number:'1.0-2' }}</span>
+                    <span class="font-mono text-gray-600 dark:text-gray-400">
+                      {{ (row[col] === '' || row[col] === null || row[col] === -1000000 || row[col] === '-1000000' || row[col] === '-1,000,000') ? '' : (row[col] | number:'1.0-2') }}
+                    </span>
                   </ng-container>
                   <ng-container *ngSwitchCase="'ValeurUsuelleMax'">
-                    <span class="font-mono text-gray-600 dark:text-gray-400">{{ row[col] | number:'1.0-2' }}</span>
+                    <span class="font-mono text-gray-600 dark:text-gray-400">
+                      {{ (row[col] === '' || row[col] === null || row[col] === 1000000 || row[col] === '1000000' || row[col] === '1,000,000') ? '' : (row[col] | number:'1.0-2') }}
+                    </span>
                   </ng-container>
                   <ng-container *ngSwitchCase="'CodeParametre'">
                     <span class="font-medium text-gray-900 dark:text-gray-100">{{ row[col] }}</span>
@@ -144,4 +150,3 @@
       </div>
     </div>
   </div>
-  

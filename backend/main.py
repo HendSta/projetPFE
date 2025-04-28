@@ -221,8 +221,6 @@ def extract_all_fields_from_text(text: str) -> List[dict]:
             parametre = param_match.group(1).strip().lower()
             valeur_actuelle = param_match.group(2).strip()
             unite = param_match.group(3).strip()
-            valeur_anterieure = param_match.group(4).strip() if param_match.group(4) else ""
-            date_anterieure = param_match.group(5).strip() if param_match.group(5) else ""
             valeur_usuelles = param_match.group(6).strip()
             
             # Normalisation des unités
@@ -279,6 +277,37 @@ def handle_missing_values(df: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
+def postprocess_valeurs_usuelles(df):
+    def format_valeurs(row):
+        val_usuelle = str(row['ValeursUsuelles'])
+        # nombre - 1,000,000
+        match_min = re.match(r'^\s*(\d+(?:[.,]?\d+)?)\s*-\s*1[,.]?0{6,}', val_usuelle)
+        if match_min:
+            min_val = match_min.group(1).replace(',', '.')
+            row['ValeursUsuelles'] = f"{min_val}<"
+            row['ValeurUsuelleMin'] = float(min_val)
+            row['ValeurUsuelleMax'] = ''
+            return row
+        # 1,000,000 - nombre
+        match_max = re.match(r'^1[,.]?0{6,}\s*-\s*(\d+(?:[.,]?\d+)?)', val_usuelle)
+        if match_max:
+            max_val = match_max.group(1).replace(',', '.')
+            row['ValeursUsuelles'] = f"{max_val}>"
+            row['ValeurUsuelleMin'] = ''
+            row['ValeurUsuelleMax'] = float(max_val)
+            return row
+        # -1,000,000
+        match_neg = re.match(r'^-1[,.]?0{6,}\s*-\s*(\d+(?:[.,]?\d+)?)', val_usuelle)
+        if match_neg:
+            nombre = match_neg.group(1).replace(',', '.')
+            row['ValeurUsuelleMin'] = ''
+            row['ValeursUsuelles'] = f"{nombre}>"
+            row['ValeurUsuelleMax'] = float(nombre)
+            return row
+        return row
+    df = df.apply(format_valeurs, axis=1)
+    return df
+
 # ==== API Endpoints ====
 @app.post("/predict", response_model=PredictionResult)
 def predict(data: InputData):
@@ -320,6 +349,9 @@ async def upload_pdf(file: UploadFile = File(...)):
     
     # Gérer les valeurs manquantes
     df = handle_missing_values(df)
+    
+    # Post-traitement des valeurs usuelles
+    df = postprocess_valeurs_usuelles(df)
     
     # Faire la prédiction
     preds = pipeline.predict(df)
