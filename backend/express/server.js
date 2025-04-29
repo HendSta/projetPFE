@@ -19,7 +19,9 @@ mongoose.connect(process.env.MONGO_URI, {
 
 // Routes
 const authRoutes = require('./routes/auth.routes');
+const medicalReportRoutes = require('./routes/medical-report.routes');
 app.use('/api/auth', authRoutes);
+app.use('/api/medical-reports', medicalReportRoutes);
 
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {

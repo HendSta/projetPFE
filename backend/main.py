@@ -347,7 +347,7 @@ async def upload_pdf(file: UploadFile = File(...)):
     # Ajouter les informations du patient à chaque résultat
     for item in data_fields_list:
         item.update(patient_info)
-    
+
     # Créer le DataFrame
     df = pd.DataFrame(data_fields_list)
     

@@ -148,7 +148,8 @@
                 </ng-container>
               </td>
               <td class="px-4 py-3 text-sm whitespace-nowrap">
-                <button class="btn btn-sm btn-primary" (click)="analyzeRow(row, i)">Analyser</button>
+                <button class="btn btn-sm bg-gradient-to-r from-indigo-900 to-blue-800 hover:from-indigo-800 hover:to-blue-700 
+                text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300" (click)="analyzeRow(row, i)">Analyze</button>
               </td>
               <td *ngIf="riskResults[i]" class="px-4 py-3 text-sm whitespace-nowrap">
                 <div *ngIf="!riskResults[i].erreur">{{ riskResults[i].statut_risque }}</div>
@@ -167,5 +168,16 @@
           </tbody>
         </table>
       </div>
+    </div>
+
+    <!-- Bouton de sauvegarde -->
+    <div *ngIf="analysisResult && analysisResult.length" class="flex justify-center mt-8 mb-8">
+      <button (click)="saveReport()" 
+        class="btn bg-gradient-to-r from-indigo-900 to-blue-800 hover:from-indigo-800 hover:to-blue-700 
+        text-white shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300
+        px-8 py-3 rounded-lg font-medium flex items-center">
+        <lucide-icon name="save" class="h-5 w-5 mr-2"></lucide-icon>
+        Save Report
+      </button>
     </div>
   </div>
