@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MedicalReportService } from '../../services/medical-report.service';
 import { AuthService } from '@auth0/auth0-angular';
-import { Loader, FileText, Eye, Trash2, X, Stethoscope } from 'lucide-angular';
+import { Loader, FileText, Eye, Trash2, X, Stethoscope, Download } from 'lucide-angular';
 
 interface MedicalReport {
   _id: string;
@@ -19,6 +19,8 @@ interface MedicalReport {
     normalMax?: string | number;
     riskStatus?: 'NORMAL' | 'BAS' | 'ÉLEVÉ';
     riskDegree?: 'Aucun' | 'Faible' | 'Modéré' | 'Élevé';
+    trend?: string;
+    advice?: string;
   }>;
 }
 
@@ -85,6 +87,35 @@ export class HistoricsComponent implements OnInit {
         }
       });
     }
+  }
+
+  downloadReport(id: string) {
+    this.isLoading = true;
+    this.medicalReportService.downloadReport(id).subscribe({
+      next: (blob) => {
+        this.isLoading = false;
+        // Créer une URL pour le blob
+        const url = window.URL.createObjectURL(blob);
+        
+        // Créer un élément de lien
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `rapport-medical-${id}.pdf`;
+        
+        // Ajouter au document et déclencher le téléchargement
+        document.body.appendChild(a);
+        a.click();
+        
+        // Nettoyer
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      },
+      error: (error) => {
+        this.isLoading = false;
+        this.errorMessage = 'Échec du téléchargement du rapport. Veuillez réessayer plus tard.';
+        console.error('Error downloading report:', error);
+      }
+    });
   }
 
   formatDate(dateString: string): string {

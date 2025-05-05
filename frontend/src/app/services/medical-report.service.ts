@@ -44,4 +44,11 @@ export class MedicalReportService {
   updateReport(id: string, reportData: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/${id}`, reportData);
   }
+
+  // Télécharger un rapport au format PDF
+  downloadReport(id: string): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/download/${id}`, {
+      responseType: 'blob'
+    });
+  }
 } 
