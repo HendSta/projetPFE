@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MedicalReportService } from '../../services/medical-report.service';
 import { AuthService } from '@auth0/auth0-angular';
 import { Loader, FileText, Eye, Trash2, X, Stethoscope, Download } from 'lucide-angular';
+import { Router } from '@angular/router';
 
 interface MedicalReport {
   _id: string;
@@ -38,7 +39,8 @@ export class HistoricsComponent implements OnInit {
 
   constructor(
     private medicalReportService: MedicalReportService,
-    private auth: AuthService
+    private auth: AuthService,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -126,5 +128,19 @@ export class HistoricsComponent implements OnInit {
       hour: '2-digit',
       minute: '2-digit'
     });
+  }
+
+  reanalyzeReport(report: MedicalReport) {
+    // Store report data in localStorage to pass it to analyzing component
+    localStorage.setItem('reportToReanalyze', JSON.stringify(report));
+    
+    // Store the original report ID for reference
+    localStorage.setItem('originalReportId', report._id);
+    
+    // Navigate to analyzing component inside the doctor dashboard
+    this.router.navigate(['analyzing']);
+    
+    // Close the modal
+    this.closeReportDetails();
   }
 }

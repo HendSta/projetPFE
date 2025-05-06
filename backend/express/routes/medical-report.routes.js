@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createReport, getUserReports, getReport, deleteReport, downloadReport } = require('../controllers/medical-report.controller');
+const { createReport, getUserReports, getReport, deleteReport, downloadReport, updateReport } = require('../controllers/medical-report.controller');
 
 // Créer un nouveau rapport médical
 router.post('/', createReport);
@@ -16,5 +16,8 @@ router.get('/:id', getReport);
 
 // Supprimer un rapport
 router.delete('/:id', deleteReport);
+
+// Mettre à jour un rapport existant
+router.put('/:id', updateReport);
 
 module.exports = router; 

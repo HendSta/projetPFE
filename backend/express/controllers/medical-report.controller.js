@@ -409,10 +409,50 @@ const downloadReport = async (req, res) => {
   }
 };
 
+// Mettre à jour un rapport existant
+const updateReport = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { auth0Id, patientName, doctorName, analysisDate, results, isReanalysis } = req.body;
+    
+    // Vérifier si le rapport existe
+    const existingReport = await MedicalReport.findById(id);
+    
+    if (!existingReport) {
+      return res.status(404).json({ message: 'Rapport non trouvé' });
+    }
+    
+    // Vérifier que l'utilisateur est le propriétaire du rapport
+    if (existingReport.auth0Id !== auth0Id) {
+      return res.status(403).json({ message: 'Vous n\'êtes pas autorisé à modifier ce rapport' });
+    }
+    
+    // Mettre à jour les champs
+    existingReport.patientName = patientName;
+    existingReport.doctorName = doctorName;
+    existingReport.analysisDate = new Date(analysisDate);
+    existingReport.results = results;
+    existingReport.lastUpdated = new Date(); // Ajouter un horodatage de mise à jour
+    
+    // Ajouter une information que c'est une réanalyse
+    if (isReanalysis) {
+      existingReport.isReanalyzed = true;
+      existingReport.reanalysisDate = new Date();
+    }
+    
+    const updatedReport = await existingReport.save();
+    res.json(updatedReport);
+  } catch (err) {
+    console.error('Error updating medical report:', err);
+    res.status(500).json({ message: 'Error updating medical report', error: err.message });
+  }
+};
+
 module.exports = {
   createReport,
   getUserReports,
   getReport,
   deleteReport,
-  downloadReport
+  downloadReport,
+  updateReport
 }; 
