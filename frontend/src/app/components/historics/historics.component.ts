@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MedicalReportService } from '../../services/medical-report.service';
 import { AuthService } from '@auth0/auth0-angular';
-import { Loader, FileText, Eye, Trash2, X, Stethoscope, Download } from 'lucide-angular';
+import { Loader, FileText, Eye, Trash2, X, Stethoscope, Download, Search, RefreshCw, User, Calendar } from 'lucide-angular';
 import { Router } from '@angular/router';
 
 interface MedicalReport {
@@ -32,10 +32,14 @@ interface MedicalReport {
 })
 export class HistoricsComponent implements OnInit {
   reports: MedicalReport[] = [];
+  filteredReports: MedicalReport[] = [];
   isLoading = false;
   errorMessage = '';
   selectedReport: MedicalReport | null = null;
   showReportDetails = false;
+  
+  // Propriété pour la recherche unifiée
+  searchQuery: string = '';
 
   constructor(
     private medicalReportService: MedicalReportService,
@@ -54,6 +58,7 @@ export class HistoricsComponent implements OnInit {
     this.medicalReportService.getUserReports().subscribe({
       next: (reports) => {
         this.reports = reports;
+        this.filteredReports = [...reports];
         this.isLoading = false;
       },
       error: (error) => {
@@ -62,6 +67,52 @@ export class HistoricsComponent implements OnInit {
         console.error('Error loading reports:', error);
       }
     });
+  }
+
+  // Méthode utilitaire pour convertir la date en format local
+  private convertToLocalDate(dateString: string): Date {
+    const date = new Date(dateString);
+    // Ajuster pour le décalage horaire local
+    const localDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+    return localDate;
+  }
+
+  // Méthode pour formater la date en format lisible
+  formatDate(dateString: string): string {
+    const date = this.convertToLocalDate(dateString);
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+  applyFilters() {
+    if (!this.searchQuery.trim()) {
+      this.filteredReports = [...this.reports];
+      return;
+    }
+
+    const query = this.searchQuery.toLowerCase().trim();
+    
+    this.filteredReports = this.reports.filter(report => {
+      // Formatage de la date du rapport en anglais (ex: August 4, 2024)
+      const reportDateStr = this.convertToLocalDate(report.analysisDate).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      }).toLowerCase();
+      
+      // Recherche par date (partielle) ou par nom de patient
+      return report.patientName.toLowerCase().includes(query) || reportDateStr.includes(query);
+    });
+  }
+
+  resetFilters() {
+    this.searchQuery = '';
+    this.filteredReports = [...this.reports];
   }
 
   viewReportDetails(report: MedicalReport) {
@@ -117,16 +168,6 @@ export class HistoricsComponent implements OnInit {
         this.errorMessage = 'Échec du téléchargement du rapport. Veuillez réessayer plus tard.';
         console.error('Error downloading report:', error);
       }
-    });
-  }
-
-  formatDate(dateString: string): string {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
     });
   }
 
