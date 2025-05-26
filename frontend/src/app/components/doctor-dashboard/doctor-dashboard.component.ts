@@ -11,6 +11,8 @@ import { ProfileService } from 'src/app/services/profile.service';
 export class DoctorDashboardComponent implements OnInit {
   userProfile: any;
   auth0Id: string = '';
+  showWebmailMenu = false;
+  webmailMenuTimeout: any;
 
   constructor(public auth: AuthService, private http: HttpClient, private profileService: ProfileService) {}
 
@@ -38,5 +40,30 @@ export class DoctorDashboardComponent implements OnInit {
 
   logout(): void {
     this.auth.logout({ logoutParams: { returnTo: window.location.origin } });
+  }
+
+  openGmail() {
+    window.open('https://mail.google.com/', '_blank');
+  }
+
+  openOutlook() {
+    window.open('https://outlook.live.com/mail/', '_blank');
+  }
+
+  copyEmail(email: string) {
+    navigator.clipboard.writeText(email);
+  }
+
+  toggleWebmailMenu() {
+    this.showWebmailMenu = !this.showWebmailMenu;
+    if (this.showWebmailMenu) {
+      clearTimeout(this.webmailMenuTimeout);
+    }
+  }
+
+  hideWebmailMenuWithDelay() {
+    this.webmailMenuTimeout = setTimeout(() => {
+      this.showWebmailMenu = false;
+    }, 300);
   }
 }

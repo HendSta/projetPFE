@@ -40,6 +40,64 @@
           </a>
         </li>
       </ul>
+      <!-- Section Email -->
+      <a
+        *ngIf="userProfile?.email"
+        [href]="'mailto:' + userProfile.email"
+        class="mt-8 flex items-center bg-white/10 rounded-lg px-4 py-3 text-white shadow-inner transition-all duration-200 hover:bg-indigo-600/80 hover:shadow-lg cursor-pointer group"
+        title="Open your mailbox"
+      >
+        <lucide-icon name="mail" class="h-5 w-5 mr-3 text-indigo-200 group-hover:text-white transition-colors"></lucide-icon>
+        <span class="truncate text-sm font-medium underline group-hover:text-white">{{ userProfile.email }}</span>
+        <!-- Bouton ouverture webmail -->
+        <ng-container *ngIf="userProfile.email">
+          <button
+            *ngIf="userProfile.email.endsWith('@gmail.com')"
+            (click)="$event.preventDefault(); openGmail()"
+            class="ml-3 px-2 py-1 rounded bg-red-500 hover:bg-red-600 text-white text-xs flex items-center shadow transition-all duration-200"
+            title="Ouvrir Gmail"
+            type="button"
+          >
+            <lucide-icon name="external-link" class="h-4 w-4 mr-1"></lucide-icon>Gmail
+          </button>
+          <button
+            *ngIf="userProfile.email.endsWith('@outlook.com') || userProfile.email.endsWith('@hotmail.com') || userProfile.email.endsWith('@live.com')"
+            (click)="$event.preventDefault(); openOutlook()"
+            class="ml-3 px-2 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white text-xs flex items-center shadow transition-all duration-200"
+            title="Ouvrir Outlook Web"
+            type="button"
+          >
+            <lucide-icon name="external-link" class="h-4 w-4 mr-1"></lucide-icon>Outlook
+          </button>
+          <button
+            *ngIf="!(userProfile.email.endsWith('@gmail.com') || userProfile.email.endsWith('@outlook.com') || userProfile.email.endsWith('@hotmail.com') || userProfile.email.endsWith('@live.com'))"
+            class="ml-3 px-2 py-1 rounded bg-gray-500 hover:bg-gray-600 text-white text-xs flex items-center relative shadow transition-all duration-200"
+            title="Choisir un webmail ou copier l'email"
+            type="button"
+            (click)="toggleWebmailMenu()"
+            (blur)="hideWebmailMenuWithDelay()"
+            tabindex="0"
+          >
+            <lucide-icon name="external-link" class="h-4 w-4 mr-1"></lucide-icon>Other Webmail
+            <!-- Menu déroulant custom -->
+            <div *ngIf="showWebmailMenu" class="absolute top-10 right-0 z-50 bg-white text-gray-800 rounded-lg shadow-lg min-w-[160px] border border-gray-200 animate-fade-in">
+              <button (mousedown)="openGmail(); showWebmailMenu=false" class="w-full text-left px-4 py-2 hover:bg-indigo-100 flex items-center">
+                <lucide-icon name='mail' class='h-4 w-4 mr-2 text-red-500'></lucide-icon>Ouvrir Gmail
+              </button>
+              <button (mousedown)="openOutlook(); showWebmailMenu=false" class="w-full text-left px-4 py-2 hover:bg-blue-100 flex items-center">
+                <lucide-icon name='mail' class='h-4 w-4 mr-2 text-blue-500'></lucide-icon>Ouvrir Outlook
+              </button>
+              <button (mousedown)="copyEmail(userProfile.email); showWebmailMenu=false" class="w-full text-left px-4 py-2 hover:bg-green-100 flex items-center">
+                <lucide-icon name='copy' class='h-4 w-4 mr-2 text-green-500'></lucide-icon>Copier l'email
+              </button>
+            </div>
+          </button>
+        </ng-container>
+      </a>
+      <div *ngIf="!userProfile?.email" class="mt-8 flex items-center bg-white/10 rounded-lg px-4 py-3 text-white shadow-inner">
+        <lucide-icon name="mail" class="h-5 w-5 mr-3 text-indigo-200"></lucide-icon>
+        <span class="truncate text-sm font-medium">No email</span>
+      </div>
     </aside>
   </div>
 </div>
