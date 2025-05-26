@@ -18,7 +18,10 @@
               placeholder="Search by patient name or date (e.g., August 4, 2024)..."
               class="w-full px-6 py-4 pl-14 bg-white/60 dark:bg-gray-700/60 border-2 border-transparent rounded-xl focus:border-indigo-500 focus:ring-2 focus:ring-indigo-300 dark:focus:ring-indigo-700 dark:text-white text-lg shadow-md transition-all duration-300 outline-none hover:shadow-xl"
             >
-            <lucide-icon name="search" class="absolute left-5 top-4 h-6 w-6 text-indigo-500 opacity-80"></lucide-icon>
+            <lucide-icon 
+              name="search" 
+              class="absolute left-3 top-1/2 -translate-y-[45%] h-6 w-6 text-indigo-500 opacity-80 pointer-events-none transition-all duration-300"
+            ></lucide-icon>
           </div>
           <button
             (click)="resetFilters()"
