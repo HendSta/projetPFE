@@ -14,6 +14,8 @@ from rapidfuzz import process
 from sklearn.impute import SimpleImputer
 import random
 import math
+import xml.etree.ElementTree as ET
+from fastapi.responses import JSONResponse
 
 app = FastAPI()
 
@@ -86,11 +88,11 @@ TYPE_ANALYSES = {
     "dosage des vitamines": ["dosage des vitamines"]
 }
 
-# Regex patterns
+# Regex patterns - Amélioré pour capturer les nombres avec beaucoup de séparateurs
 REGEX_DATE = r"\b(\d{2}/\d{2}/\d{4})\b"
 REGEX_PATIENT = r"(?i)nom\s*:\s*(.*)"
 REGEX_MEDECIN = r"(?i)demandé par\s*:\s*(.*)"
-REGEX_PARAMETRE = r"([\w\s\.]+)\s+(\d+[.,]?\d*)\s*([a-zA-Z/%³]*)\s*(\d+[.,]?\d*)?\s*(\d{2}/\d{2}/\d{2,4})?\s*\(([^)]*)\)?"
+REGEX_PARAMETRE = r"([\w\s]+?)[\s\.]+(\d+(?:[ \.,]\d+)*)\s*([a-zA-Z/%³]*)\s*(\d+(?:[ \.,]\d+)*)?\s*(\d{2}/\d{2}/\d{2,4})?\s*\(([^)]*)\)?"
 
 # Unit mapping
 UNIT_MAPPING = {
@@ -117,7 +119,13 @@ def normalize_numeric_values(val):
     """Normalise les valeurs numériques."""
     if not isinstance(val, str):
         return val
+    
+    # Supprimer les espaces à l'intérieur des nombres (ex: 4 290 -> 4290)
+    val = re.sub(r'(?<=\d)\s+(?=\d)', '', val)
+    
+    # Remplacer les virgules par des points pour la conversion
     val = val.replace(',', '.')
+    
     if val.isdigit() and val.startswith('0') and len(val) > 1:
         return int(val)
     try:
@@ -131,13 +139,19 @@ def extract_min_max(valeur_usuelles):
         return None, None
     valeur_usuelles = valeur_usuelles.strip()
 
+    # Nettoyer les espaces à l'intérieur des nombres dans la chaîne 
+    # avant de faire l'extraction
+    valeur_usuelles = re.sub(r'(?<=\d)\s+(?=\d)', '', valeur_usuelles)
+
     range_pattern = r'(\d+(?:[.,]\d+)?)\s*-\s*(\d+(?:[.,]\d+)?)'
     lt_pattern = r'<\s*(\d+(?:[.,]\d+)?)'
     gt_pattern = r'>\s*(\d+(?:[.,]\d+)?)'
 
     range_match = re.search(range_pattern, valeur_usuelles)
     if range_match:
-        return float(range_match.group(1).replace(',', '.')), float(range_match.group(2).replace(',', '.'))
+        min_val = range_match.group(1).replace(',', '.')
+        max_val = range_match.group(2).replace(',', '.')
+        return float(min_val), float(max_val)
 
     lt_match = re.search(lt_pattern, valeur_usuelles)
     if lt_match:
@@ -173,6 +187,16 @@ def nettoyer_text(contenu: str) -> str:
     contenu = re.sub(r'\.(?!\d)', '', contenu)
     return contenu
 
+def nettoyer_nom_patient(nom):
+    """Supprime les caractères non nécessaires comme les astérisques du nom du patient."""
+    if not nom or not isinstance(nom, str):
+        return "Patient inconnu"
+    # Supprimer les astérisques
+    nom = re.sub(r'[*]+', '', nom)
+    # Supprimer les espaces multiples et les espaces au début/fin
+    nom = re.sub(r'\s+', ' ', nom).strip()
+    return nom if nom else "Patient inconnu"
+
 def extract_patient_info(text: str) -> Dict[str, str]:
     """Extrait les informations du patient."""
     patient_info = {
@@ -187,7 +211,7 @@ def extract_patient_info(text: str) -> Dict[str, str]:
     
     patient_match = re.search(REGEX_PATIENT, text)
     if patient_match:
-        patient_info["NomPatient"] = patient_match.group(1).strip()
+        patient_info["NomPatient"] = nettoyer_nom_patient(patient_match.group(1).strip())
     
     medecin_match = re.search(REGEX_MEDECIN, text)
     if medecin_match:
@@ -203,6 +227,15 @@ def extract_all_fields_from_text(text: str) -> list:
         line = line.strip()
         if not line:
             continue
+            
+        # Nettoyer les motifs "X % Soit :"
+        # On conserve uniquement le nom du paramètre au début et ce qui suit "Soit :" s'il est présent
+        soit_match = re.search(r'^([\w\s\.]+)\s+(\d+)\s*%\s*Soit\s*:\s*(.+)$', line, re.IGNORECASE)
+        if soit_match:
+            param_name = soit_match.group(1).strip()
+            values_part = soit_match.group(3).strip()
+            line = f"{param_name} {values_part}"
+            
         param_match = re.search(REGEX_PARAMETRE, line)
         valeur_anterieure = None
         date_anterieure = ''
@@ -210,7 +243,7 @@ def extract_all_fields_from_text(text: str) -> list:
             parametre = param_match.group(1).replace('.', '').strip().lower()
             valeur_actuelle = param_match.group(2).strip()
             unite = param_match.group(3).strip()
-            valeur_usuelles = param_match.group(6).strip()
+            valeur_usuelles = param_match.group(6).strip() if param_match.group(6) else ""
             valeur_anterieure = param_match.group(4).strip() if param_match.group(4) else None
             date_anterieure = param_match.group(5).strip() if param_match.group(5) else ''
             # Normalisation des unités
@@ -326,57 +359,75 @@ def predict(data: InputData):
     )
 
 @app.post("/upload-pdf", response_model=List[PredictionResult])
-async def upload_pdf(file: UploadFile = File(...)):
-    if file.content_type != "application/pdf":
-        raise HTTPException(status_code=400, detail="Le fichier doit être au format PDF")
-    
+async def upload_file(file: UploadFile = File(...)):
     content = await file.read()
+    file_extension = file.filename.split('.')[-1].lower()
     
-    # Extraire le texte du PDF
-    extracted_text = extract_text_from_pdf_bytes(content)
+    try:
+        if file_extension == "pdf":
+            if file.content_type != "application/pdf":
+                raise HTTPException(status_code=400, detail="Le fichier doit être au format PDF")
+            
+            # Traitement PDF existant
+            extracted_text = extract_text_from_pdf_bytes(content)
+            cleaned_text = nettoyer_text(extracted_text)
+            patient_info = extract_patient_info(cleaned_text)
+            data_fields_list = extract_all_fields_from_text(cleaned_text)
+            
+            for item in data_fields_list:
+                item.update(patient_info)
+                
+            # Créer le DataFrame
+            df = pd.DataFrame(data_fields_list)
+            
+        elif file_extension == "xml":
+            # Traitement XML
+            results = parse_xml_file(content)
+            # Convertir la liste de résultats en DataFrame
+            df = pd.DataFrame(results)
+            
+        else:
+            raise HTTPException(status_code=400, detail="Format de fichier non pris en charge. Utilisez PDF ou XML.")
     
-    # Nettoyer le texte
-    cleaned_text = nettoyer_text(extracted_text)
-    
-    # Extraire les informations du patient
-    patient_info = extract_patient_info(cleaned_text)
-    
-    # Extraire les paramètres et valeurs
-    data_fields_list = extract_all_fields_from_text(cleaned_text)
-    
-    # Ajouter les informations du patient à chaque résultat
-    for item in data_fields_list:
-        item.update(patient_info)
+        # Traitement commun pour PDF et XML
+        df = handle_missing_values(df)
+        df = postprocess_valeurs_usuelles(df)
+        
+        # Si on a du PDF et qu'on a besoin de prédire les paramètres
+        if file_extension == "pdf":
+            # Faire la prédiction
+            preds = pipeline.predict(df)
+            
+            # Créer les résultats avec les prédictions
+            results = []
+            for input_data, p in zip(df.to_dict('records'), preds):
+                # Nettoyer les valeurs NaN/inf selon le type attendu
+                for k, v in input_data.items():
+                    field_type = PredictionResult.model_fields[k].annotation if k in PredictionResult.model_fields else str
+                    input_data[k] = clean_json_value(v, field_type)
+                result = PredictionResult(
+                    **input_data,
+                    CodParametre=p[0],
+                    LIBMEDWINabrege=p[1],
+                    LibParametre=p[2],
+                    FAMILLE=p[3]
+                )
+                results.append(result)
+        else:
+            # Pour XML, nous avons déjà les informations complètes
+            results = []
+            for input_data in df.to_dict('records'):
+                # Nettoyer les valeurs NaN/inf selon le type attendu
+                for k, v in input_data.items():
+                    field_type = PredictionResult.model_fields[k].annotation if k in PredictionResult.model_fields else str
+                    input_data[k] = clean_json_value(v, field_type)
+                result = PredictionResult(**input_data)
+                results.append(result)
 
-    # Créer le DataFrame
-    df = pd.DataFrame(data_fields_list)
-    
-    # Gérer les valeurs manquantes
-    df = handle_missing_values(df)
-    
-    # Post-traitement des valeurs usuelles
-    df = postprocess_valeurs_usuelles(df)
-    
-    # Faire la prédiction
-    preds = pipeline.predict(df)
-
-    # Créer les résultats avec les prédictions
-    results = []
-    for input_data, p in zip(df.to_dict('records'), preds):
-        # Nettoyer les valeurs NaN/inf selon le type attendu
-        for k, v in input_data.items():
-            field_type = PredictionResult.model_fields[k].annotation if k in PredictionResult.model_fields else str
-            input_data[k] = clean_json_value(v, field_type)
-        result = PredictionResult(
-            **input_data,
-            CodParametre=p[0],
-            LIBMEDWINabrege=p[1],
-            LibParametre=p[2],
-            FAMILLE=p[3]
-        )
-        results.append(result)
-
-    return results
+        return results
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur lors du traitement: {str(e)}")
 
 @app.post("/analyze-risk")
 def analyze_risk(param: dict = Body(...)):
@@ -470,3 +521,108 @@ def analyze_risk(param: dict = Body(...)):
         "tendance": to_native(tendance),
         "conseil": to_native(conseil)
     }
+
+# Fonction de debug temporaire pour tester l'extraction
+def debug_extraction(line):
+    """Teste l'extraction d'une ligne et affiche les résultats"""
+    match = re.search(REGEX_PARAMETRE, line)
+    if match:
+        return {
+            "param": match.group(1).strip(),
+            "valeur": match.group(2).strip(),
+            "unite": match.group(3).strip() if match.group(3) else "",
+            "valeur_ant": match.group(4).strip() if match.group(4) else None,
+            "date": match.group(5).strip() if match.group(5) else "",
+            "usuelles": match.group(6).strip() if match.group(6) else ""
+        }
+    return None
+
+# Ajouter les fonctions de traitement XML
+def extract_valeurs_usuelles_xml(val):
+    """Extrait les bornes min/max des valeurs usuelles depuis un format XML."""
+    if not isinstance(val, str) or val.strip() == "":
+        return None, None
+    val = val.lower().replace(',', '.').strip()
+
+    try:
+        if '-' in val:
+            parts = val.split('-')
+            return float(parts[0].strip()), float(parts[1].strip())
+        elif 'inf à' in val:
+            return None, float(re.sub(r"[^\d.]", "", val))
+        elif 'sup à' in val or '>' in val:
+            return float(re.sub(r"[^\d.]", "", val)), None
+    except:
+        return None, None
+
+    return None, None
+
+def parse_xml_file(xml_bytes: bytes) -> list:
+    """Parse un fichier XML et retourne les résultats au format attendu par l'API."""
+    try:
+        # Utiliser BytesIO pour lire les bytes comme un fichier
+        tree = ET.parse(io.BytesIO(xml_bytes))
+        root = tree.getroot()
+        
+        results = []
+
+        demande = root.find(".//Demande")
+        if demande is None:
+            raise HTTPException(status_code=400, detail="Format XML non reconnu: élément 'Demande' introuvable")
+            
+        nom_patient = demande.findtext("NomPatient", "").strip()
+        prenom_patient = demande.findtext("PrenomPatient", "").strip()
+        patient_name = f"{nom_patient} {prenom_patient}".strip()
+        patient_name = nettoyer_nom_patient(patient_name)
+        medecin = demande.findtext("MedecinPrescripteur", "").strip()
+        date_analyse = demande.findtext("DateSaisie", "").strip()
+
+        # Convertir la date si nécessaire
+        if re.match(r'^\d{4}-\d{2}-\d{2}$', date_analyse):
+            parts = date_analyse.split('-')
+            date_analyse = f"{parts[2]}/{parts[1]}/{parts[0]}"
+
+        for examen in demande.findall(".//Examen"):
+            famille = examen.findtext("Famille", "").strip()
+            code_analyse = examen.findtext("CodeAnalyse", "").strip()
+            lib_analyse = examen.findtext("LibAnalyse", "").strip()
+
+            for res in examen.findall("Resultat"):
+                cod_param = res.findtext("CodParametre", "").strip()
+                lib_param = res.findtext("LibParametre", "").strip()
+                valeur = res.findtext("Valeur", "").replace(",", ".").strip()
+                unite = res.findtext("Unite", "").strip()
+                val_usuelle = res.findtext("ValeurUsuelles", "").strip()
+
+                val_min, val_max = extract_valeurs_usuelles_xml(val_usuelle)
+
+                # Normalisation des valeurs
+                try:
+                    valeur_actuelle = normalize_numeric_values(valeur)
+                except ValueError:
+                    valeur_actuelle = ''
+
+                results.append({
+                    "CodeParametre": cod_param.lower(),
+                    "ValeurActuelle": valeur_actuelle,
+                    "Unite": unite,
+                    "ValeursUsuelles": val_usuelle,
+                    "ValeurUsuelleMin": val_min,
+                    "ValeurUsuelleMax": val_max,
+                    "ValeurAnterieure": None,
+                    "DateAnterieure": '',
+                    "NomPatient": patient_name,
+                    "Medecin": medecin,
+                    "DateAnalyse": date_analyse,
+                    "CodParametre": cod_param,  # Champ prédit (copie du code paramètre)
+                    "LIBMEDWINabrege": cod_param,  # Pourrait être différent, dépend du modèle
+                    "LibParametre": lib_param,
+                    "FAMILLE": famille
+                })
+
+        if not results:
+            raise HTTPException(status_code=400, detail="Aucun paramètre reconnu dans le XML")
+            
+        return results
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Erreur lors du traitement du XML: {str(e)}")
