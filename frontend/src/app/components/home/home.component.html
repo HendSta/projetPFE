@@ -6,14 +6,14 @@
     <div class="container mx-auto px-4 py-16 h-full flex items-center justify-center">
       <div class="flex flex-col lg:flex-row items-center gap-12">
         <div class="lg:w-1/2">
-          <h1 class="text-4xl md:text-6xl font-bold mb-6">Medical Artificial Intelligence</h1>
-          <p class="text-xl mb-8">Analyze your medical results automatically with artificial intelligence. Save time and get accurate interpretations of your medical tests.</p>
+          <h1 class="text-4xl md:text-6xl font-bold mb-6">{{ 'HERO_SLIDE1_TITLE' | translate }}</h1>
+          <p class="text-xl mb-8">{{ 'HERO_SLIDE1_DESCRIPTION' | translate }}</p>
         </div>
         <div class="lg:w-1/2 flex justify-center">
           <div class="relative transform hover:-translate-y-2 transition-all duration-500">
             <img src="https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg?auto=compress&cs=tinysrgb&w=1280" 
                  class="rounded-xl shadow-[0_20px_25px_-5px_rgba(0,0,0,0.3)] hover:shadow-[0_25px_30px_-5px_rgba(0,0,0,0.4)] max-w-full h-auto object-cover" 
-                 alt="Medical analysis with artificial intelligence" />
+                 alt="{{ 'HERO_SLIDE1_IMAGE_ALT' | translate }}" />
             <div class="absolute inset-0 rounded-xl shadow-inner pointer-events-none"></div>
           </div>
         </div>
@@ -26,14 +26,14 @@
   <div class="container mx-auto px-4 py-16 h-full flex items-center justify-center">
   <div class="flex flex-col lg:flex-row items-center gap-12">
   <div class="lg:w-1/2">
-   <h1 class="text-4xl md:text-6xl font-bold mb-6">Precision Diagnosis</h1>
-   <p class="text-xl mb-8">Our AI-powered platform ensures accurate interpretation of your medical tests with advanced machine learning algorithms.</p>
+   <h1 class="text-4xl md:text-6xl font-bold mb-6">{{ 'HERO_SLIDE2_TITLE' | translate }}</h1>
+   <p class="text-xl mb-8">{{ 'HERO_SLIDE2_DESCRIPTION' | translate }}</p>
   </div>
  <div class="lg:w-1/2 flex justify-center">
    <div class="relative transform hover:-translate-y-2 transition-all duration-500">
      <img src="https://images.pexels.com/photos/3825586/pexels-photo-3825586.jpeg?auto=compress&cs=tinysrgb&w=1280" 
           class="rounded-xl shadow-[0_20px_25px_-5px_rgba(0,0,0,0.3)] hover:shadow-[0_25px_30px_-5px_rgba(0,0,0,0.4)] max-w-[60%] h-auto object-cover mx-auto" 
-          alt="Medical AI diagnosis" />
+          alt="{{ 'HERO_SLIDE2_IMAGE_ALT' | translate }}" />
      <div class="absolute inset-0 rounded-xl shadow-inner pointer-events-none"></div>
    </div>
  </div>
@@ -47,14 +47,14 @@
     <div class="container mx-auto px-4 py-16 h-full flex items-center justify-center">
       <div class="flex flex-col lg:flex-row items-center gap-12">
         <div class="lg:w-1/2">
-          <h1 class="text-4xl md:text-6xl font-bold mb-6">Healthcare Innovation</h1>
-          <p class="text-xl mb-8">Join the future of medicine with MedWin's cutting-edge AI solutions for healthcare professionals and patients.</p>
+          <h1 class="text-4xl md:text-6xl font-bold mb-6">{{ 'HERO_SLIDE3_TITLE' | translate }}</h1>
+          <p class="text-xl mb-8">{{ 'HERO_SLIDE3_DESCRIPTION' | translate }}</p>
         </div>
         <div class="lg:w-1/2 flex justify-center">
           <div class="relative transform hover:-translate-y-2 transition-all duration-500">
             <img src="https://images.pexels.com/photos/7579831/pexels-photo-7579831.jpeg?auto=compress&cs=tinysrgb&w=1280" 
                  class="rounded-xl shadow-[0_20px_25px_-5px_rgba(0,0,0,0.3)] hover:shadow-[0_25px_30px_-5px_rgba(0,0,0,0.4)] max-w-full h-auto object-cover" 
-                 alt="Healthcare innovation" />
+                 alt="{{ 'HERO_SLIDE3_IMAGE_ALT' | translate }}" />
             <div class="absolute inset-0 rounded-xl shadow-inner pointer-events-none"></div>
           </div>
         </div>
@@ -83,8 +83,8 @@
 <div class="bg-white dark:bg-gray-800 py-16">
   <div class="container mx-auto px-4">
     <div class="text-center mb-12">
-      <h2 class="text-3xl font-bold text-blue-800 dark:text-blue-300">Our Medical Analysis Services</h2>
-      <p class="text-gray-600 dark:text-gray-400 mt-4 max-w-2xl mx-auto">Use our artificial intelligence-based solution to analyze your medical results with precision.</p>
+      <h2 class="text-3xl font-bold text-blue-800 dark:text-blue-300">{{ 'SERVICES_SECTION_TITLE' | translate }}</h2>
+      <p class="text-gray-600 dark:text-gray-400 mt-4 max-w-2xl mx-auto">{{ 'SERVICES_SECTION_SUBTITLE' | translate }}</p>
     </div>
     
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -95,9 +95,9 @@
             <div class="bg-blue-600 p-3 rounded-lg mr-4">
               <lucide-icon name="file-text" class="h-8 w-8 text-white"></lucide-icon>
             </div>
-            <h3 class="text-xl font-bold text-blue-900 dark:text-blue-300">Data Extraction</h3>
+            <h3 class="text-xl font-bold text-blue-900 dark:text-blue-300">{{ 'SERVICE1_TITLE' | translate }}</h3>
           </div>
-          <p class="text-gray-600 dark:text-gray-400">Our system analyzes your medical test PDF documents and automatically extracts all important information: values, units, and reference ranges.</p>
+          <p class="text-gray-600 dark:text-gray-400">{{ 'SERVICE1_DESCRIPTION' | translate }}</p>
         </div>
       </div>
       
@@ -108,9 +108,9 @@
             <div class="bg-blue-600 p-3 rounded-lg mr-4">
               <lucide-icon name="check-circle" class="h-8 w-8 text-white"></lucide-icon>
             </div>
-            <h3 class="text-xl font-bold text-blue-900 dark:text-blue-300">Anomaly Detection</h3>
+            <h3 class="text-xl font-bold text-blue-900 dark:text-blue-300">{{ 'SERVICE2_TITLE' | translate }}</h3>
           </div>
-          <p class="text-gray-600 dark:text-gray-400">Our artificial intelligence automatically identifies abnormal values in your tests and alerts you to points requiring special attention.</p>
+          <p class="text-gray-600 dark:text-gray-400">{{ 'SERVICE2_DESCRIPTION' | translate }}</p>
         </div>
       </div>
       
@@ -121,9 +121,9 @@
             <div class="bg-blue-600 p-3 rounded-lg mr-4">
               <lucide-icon name="stethoscope" class="h-8 w-8 text-white"></lucide-icon>
             </div>
-            <h3 class="text-xl font-bold text-blue-900 dark:text-blue-300">Medical Prediction</h3>
+            <h3 class="text-xl font-bold text-blue-900 dark:text-blue-300">{{ 'SERVICE3_TITLE' | translate }}</h3>
           </div>
-          <p class="text-gray-600 dark:text-gray-400">Our advanced LLM model analyzes your test results to provide predictions about potential medical conditions, helping you better understand your health.</p>
+          <p class="text-gray-600 dark:text-gray-400">{{ 'SERVICE3_DESCRIPTION' | translate }}</p>
         </div>
       </div>
     </div>
@@ -134,8 +134,8 @@
 <div class="bg-blue-50 dark:bg-gray-900 py-16">
   <div class="container mx-auto px-4">
     <div class="text-center mb-12">
-      <h2 class="text-3xl font-bold text-blue-800 dark:text-blue-300">How It Works</h2>
-      <p class="text-gray-600 dark:text-gray-400 mt-4 max-w-2xl mx-auto">A simple three-step process to get the analysis of your medical documents</p>
+      <h2 class="text-3xl font-bold text-blue-800 dark:text-blue-300">{{ 'HOW_IT_WORKS_TITLE' | translate }}</h2>
+      <p class="text-gray-600 dark:text-gray-400 mt-4 max-w-2xl mx-auto">{{ 'HOW_IT_WORKS_SUBTITLE' | translate }}</p>
     </div>
     
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -144,8 +144,8 @@
         <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-4">
           <span class="text-2xl text-white font-bold">1</span>
         </div>
-        <h3 class="text-xl font-bold text-blue-800 dark:text-blue-300 mb-3">Upload Your PDF</h3>
-        <p class="text-gray-600 dark:text-gray-400">Simply import your PDF document containing your medical test results into our secure system.</p>
+        <h3 class="text-xl font-bold text-blue-800 dark:text-blue-300 mb-3">{{ 'STEP1_TITLE' | translate }}</h3>
+        <p class="text-gray-600 dark:text-gray-400">{{ 'STEP1_DESCRIPTION' | translate }}</p>
       </div>
       
       <!-- Step 2 -->
@@ -153,8 +153,8 @@
         <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-4">
           <span class="text-2xl text-white font-bold">2</span>
         </div>
-        <h3 class="text-xl font-bold text-blue-800 dark:text-blue-300 mb-3">AI Processing</h3>
-        <p class="text-gray-600 dark:text-gray-400">Our artificial intelligence models automatically analyze your data and identify important values.</p>
+        <h3 class="text-xl font-bold text-blue-800 dark:text-blue-300 mb-3">{{ 'STEP2_TITLE' | translate }}</h3>
+        <p class="text-gray-600 dark:text-gray-400">{{ 'STEP2_DESCRIPTION' | translate }}</p>
       </div>
       
       <!-- Step 3 -->
@@ -162,8 +162,8 @@
         <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mb-4">
           <span class="text-2xl text-white font-bold">3</span>
         </div>
-        <h3 class="text-xl font-bold text-blue-800 dark:text-blue-300 mb-3">Receive Your Report</h3>
-        <p class="text-gray-600 dark:text-gray-400">Get a detailed report with interpretation of your results and recommendations based on the analysis.</p>
+        <h3 class="text-xl font-bold text-blue-800 dark:text-blue-300 mb-3">{{ 'STEP3_TITLE' | translate }}</h3>
+        <p class="text-gray-600 dark:text-gray-400">{{ 'STEP3_DESCRIPTION' | translate }}</p>
       </div>
     </div>
   </div>
@@ -174,10 +174,10 @@
   <div class="container mx-auto px-4">
     <div class="flex flex-col lg:flex-row items-center gap-12">
       <div class="lg:w-1/2">
-        <img src="https://images.pexels.com/photos/5722164/pexels-photo-5722164.jpeg?auto=compress&cs=tinysrgb&w=1280" class="rounded-lg shadow-xl" alt="Medical analysis by AI" />
+        <img src="https://images.pexels.com/photos/5722164/pexels-photo-5722164.jpeg?auto=compress&cs=tinysrgb&w=1280" class="rounded-lg shadow-xl" alt="{{ 'FEATURES_IMAGE_ALT' | translate }}" />
       </div>
       <div class="lg:w-1/2">
-        <h2 class="text-3xl font-bold text-blue-800 dark:text-blue-300 mb-6">Why Choose Our Solution</h2>
+        <h2 class="text-3xl font-bold text-blue-800 dark:text-blue-300 mb-6">{{ 'FEATURES_SECTION_TITLE' | translate }}</h2>
         
         <div class="space-y-4">
           <div class="flex items-start">
@@ -185,8 +185,8 @@
               <lucide-icon name="check" class="h-6 w-6 text-blue-600 dark:text-blue-300"></lucide-icon>
             </div>
             <div>
-              <h3 class="text-lg font-bold text-blue-700 dark:text-blue-300">Exceptional Accuracy</h3>
-              <p class="text-gray-600 dark:text-gray-400">Our ML models have been trained on thousands of medical documents to ensure accurate data extraction.</p>
+              <h3 class="text-lg font-bold text-blue-700 dark:text-blue-300">{{ 'FEATURE1_TITLE' | translate }}</h3>
+              <p class="text-gray-600 dark:text-gray-400">{{ 'FEATURE1_DESCRIPTION' | translate }}</p>
             </div>
           </div>
           
@@ -195,8 +195,8 @@
               <lucide-icon name="check" class="h-6 w-6 text-blue-600 dark:text-blue-300"></lucide-icon>
             </div>
             <div>
-              <h3 class="text-lg font-bold text-blue-700 dark:text-blue-300">Fast and Efficient</h3>
-              <p class="text-gray-600 dark:text-gray-400">Get your results in seconds, without waiting or tedious manual interpretation.</p>
+              <h3 class="text-lg font-bold text-blue-700 dark:text-blue-300">{{ 'FEATURE2_TITLE' | translate }}</h3>
+              <p class="text-gray-600 dark:text-gray-400">{{ 'FEATURE2_DESCRIPTION' | translate }}</p>
             </div>
           </div>
           
@@ -205,8 +205,8 @@
               <lucide-icon name="check" class="h-6 w-6 text-blue-600 dark:text-blue-300"></lucide-icon>
             </div>
             <div>
-              <h3 class="text-lg font-bold text-blue-700 dark:text-blue-300">Data Security</h3>
-              <p class="text-gray-600 dark:text-gray-400">Your medical information is processed with the highest level of security and confidentiality.</p>
+              <h3 class="text-lg font-bold text-blue-700 dark:text-blue-300">{{ 'FEATURE3_TITLE' | translate }}</h3>
+              <p class="text-gray-600 dark:text-gray-400">{{ 'FEATURE3_DESCRIPTION' | translate }}</p>
             </div>
           </div>
           
@@ -215,8 +215,8 @@
               <lucide-icon name="check" class="h-6 w-6 text-blue-600 dark:text-blue-300"></lucide-icon>
             </div>
             <div>
-              <h3 class="text-lg font-bold text-blue-700 dark:text-blue-300">Medwin Integration</h3>
-              <p class="text-gray-600 dark:text-gray-400">Our solution integrates seamlessly with Medwin management software for a complete experience.</p>
+              <h3 class="text-lg font-bold text-blue-700 dark:text-blue-300">{{ 'FEATURE4_TITLE' | translate }}</h3>
+              <p class="text-gray-600 dark:text-gray-400">{{ 'FEATURE4_DESCRIPTION' | translate }}</p>
             </div>
           </div>
         </div>
@@ -291,10 +291,124 @@
   </div>
 </div>
 
+<!-- Pricing Section -->
+<div class="bg-white dark:bg-gray-800 py-16">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-blue-800 dark:text-blue-300">{{ 'PRICING_SECTION_TITLE' | translate }}</h2>
+      <p class="text-gray-600 dark:text-gray-400 mt-4 max-w-2xl mx-auto">{{ 'PRICING_SECTION_SUBTITLE' | translate }}</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- Plan 1: Basic -->
+      <div class="card bg-blue-50 dark:bg-gray-900 shadow-xl">
+        <div class="card-body text-center">
+          <h3 class="text-2xl font-bold text-blue-900 dark:text-blue-300 mb-2">{{ 'PLAN_BASIC_TITLE' | translate }}</h3>
+          <p class="text-gray-500 dark:text-gray-400">{{ 'PLAN_BASIC_DESCRIPTION' | translate }}</p>
+          <div class="text-5xl font-extrabold text-blue-800 dark:text-blue-300 my-4">
+            $0<span class="text-xl font-normal text-gray-500">{{ 'PLAN_MONTH_SUFFIX' | translate }}</span>
+          </div>
+          <ul class="list-none text-left mb-6 space-y-2">
+            <li class="flex items-center text-gray-700 dark:text-gray-300">
+              <lucide-icon name="check" class="h-5 w-5 text-green-500 mr-2"></lucide-icon>
+              {{ 'PLAN_BASIC_FEATURE1' | translate }}
+            </li>
+            <li class="flex items-center text-gray-700 dark:text-gray-300">
+              <lucide-icon name="check" class="h-5 w-5 text-green-500 mr-2"></lucide-icon>
+              {{ 'PLAN_BASIC_FEATURE2' | translate }}
+            </li>
+            <li class="flex items-center text-gray-700 dark:text-gray-300 opacity-50">
+              <lucide-icon name="x" class="h-5 w-5 text-red-500 mr-2"></lucide-icon>
+              {{ 'PLAN_BASIC_FEATURE3' | translate }}
+            </li>
+            <li class="flex items-center text-gray-700 dark:text-gray-300 opacity-50">
+              <lucide-icon name="x" class="h-5 w-5 text-red-500 mr-2"></lucide-icon>
+              {{ 'PLAN_BASIC_FEATURE4' | translate }}
+            </li>
+            <li class="flex items-center text-gray-700 dark:text-gray-300 opacity-50">
+              <lucide-icon name="x" class="h-5 w-5 text-red-500 mr-2"></lucide-icon>
+              {{ 'PLAN_BASIC_FEATURE5' | translate }}
+            </li>
+          </ul>
+          <button class="btn bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded-lg">{{ 'PLAN_BASIC_BUTTON' | translate }}</button>
+        </div>
+      </div>
+      
+      <!-- Plan 2: Professional -->
+      <div class="card bg-blue-100 dark:bg-gray-700 shadow-xl border-2 border-blue-500">
+        <div class="card-body text-center">
+          <h3 class="text-2xl font-bold text-blue-900 dark:text-blue-300 mb-2">{{ 'PLAN_PROFESSIONAL_TITLE' | translate }}</h3>
+          <p class="text-gray-500 dark:text-gray-400">{{ 'PLAN_PROFESSIONAL_DESCRIPTION' | translate }}</p>
+          <div class="text-5xl font-extrabold text-blue-800 dark:text-blue-300 my-4">
+            $29<span class="text-xl font-normal text-gray-500">{{ 'PLAN_MONTH_SUFFIX' | translate }}</span>
+          </div>
+          <ul class="list-none text-left mb-6 space-y-2">
+            <li class="flex items-center text-gray-700 dark:text-gray-300">
+              <lucide-icon name="check" class="h-5 w-5 text-green-500 mr-2"></lucide-icon>
+              {{ 'PLAN_PROFESSIONAL_FEATURE1' | translate }}
+            </li>
+            <li class="flex items-center text-gray-700 dark:text-gray-300">
+              <lucide-icon name="check" class="h-5 w-5 text-green-500 mr-2"></lucide-icon>
+              {{ 'PLAN_PROFESSIONAL_FEATURE2' | translate }}
+            </li>
+            <li class="flex items-center text-gray-700 dark:text-gray-300">
+              <lucide-icon name="check" class="h-5 w-5 text-green-500 mr-2"></lucide-icon>
+              {{ 'PLAN_PROFESSIONAL_FEATURE3' | translate }}
+            </li>
+            <li class="flex items-center text-gray-700 dark:text-gray-300 opacity-50">
+              <lucide-icon name="x" class="h-5 w-5 text-red-500 mr-2"></lucide-icon>
+              {{ 'PLAN_PROFESSIONAL_FEATURE4' | translate }}
+            </li>
+            <li class="flex items-center text-gray-700 dark:text-gray-300 opacity-50">
+              <lucide-icon name="x" class="h-5 w-5 text-red-500 mr-2"></lucide-icon>
+              {{ 'PLAN_PROFESSIONAL_FEATURE5' | translate }}
+            </li>
+          </ul>
+          <button class="btn bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded-lg">{{ 'PLAN_PROFESSIONAL_BUTTON' | translate }}</button>
+        </div>
+      </div>
+      
+      <!-- Plan 3: Enterprise -->
+      <div class="card bg-blue-50 dark:bg-gray-900 shadow-xl">
+        <div class="card-body text-center">
+          <h3 class="text-2xl font-bold text-blue-900 dark:text-blue-300 mb-2">{{ 'PLAN_ENTERPRISE_TITLE' | translate }}</h3>
+          <p class="text-gray-500 dark:text-gray-400">{{ 'PLAN_ENTERPRISE_DESCRIPTION' | translate }}</p>
+          <div class="text-5xl font-extrabold text-blue-800 dark:text-blue-300 my-4">
+            $99<span class="text-xl font-normal text-gray-500">{{ 'PLAN_MONTH_SUFFIX' | translate }}</span>
+          </div>
+          <ul class="list-none text-left mb-6 space-y-2">
+            <li class="flex items-center text-gray-700 dark:text-gray-300">
+              <lucide-icon name="check" class="h-5 w-5 text-green-500 mr-2"></lucide-icon>
+              {{ 'PLAN_ENTERPRISE_FEATURE1' | translate }}
+            </li>
+            <li class="flex items-center text-gray-700 dark:text-gray-300">
+              <lucide-icon name="check" class="h-5 w-5 text-green-500 mr-2"></lucide-icon>
+              {{ 'PLAN_ENTERPRISE_FEATURE2' | translate }}
+            </li>
+            <li class="flex items-center text-gray-700 dark:text-gray-300">
+              <lucide-icon name="check" class="h-5 w-5 text-green-500 mr-2"></lucide-icon>
+              {{ 'PLAN_ENTERPRISE_FEATURE3' | translate }}
+            </li>
+            <li class="flex items-center text-gray-700 dark:text-gray-300">
+              <lucide-icon name="check" class="h-5 w-5 text-green-500 mr-2"></lucide-icon>
+              {{ 'PLAN_ENTERPRISE_FEATURE4' | translate }}
+            </li>
+            <li class="flex items-center text-gray-700 dark:text-gray-300">
+              <lucide-icon name="check" class="h-5 w-5 text-green-500 mr-2"></lucide-icon>
+              {{ 'PLAN_ENTERPRISE_FEATURE5' | translate }}
+            </li>
+          </ul>
+          <button class="btn bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded-lg">{{ 'PLAN_ENTERPRISE_BUTTON' | translate }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- CTA Section -->
 <div class="bg-gradient-to-r from-indigo-900/80 to-blue-800/80 backdrop-blur-md text-white py-16 relative overflow-hidden border-t border-indigo-300/10 shadow-lg">
   <div class="container mx-auto px-4 text-center">
-    <h2 class="text-3xl font-bold mb-6">Ready to revolutionize your medical analysis?</h2>
-    <p class="text-xl mb-8 max-w-2xl mx-auto">Try our artificial intelligence solution today and discover how it can transform your medical practice.</p>
+    <h2 class="text-3xl font-bold mb-6">{{ 'CTA_TITLE' | translate }}</h2>
+    <p class="text-xl mb-8 max-w-2xl mx-auto">{{ 'CTA_DESCRIPTION' | translate }}</p>
   </div>
 </div>

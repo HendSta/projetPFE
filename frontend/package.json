@@ -20,6 +20,8 @@
     "@angular/router": "^16.2.0",
     "@auth0/auth0-angular": "^2.2.3",
     "@clerk/clerk-js": "^5.61.2",
+    "@ngx-translate/core": "^16.0.4",
+    "@ngx-translate/http-loader": "^16.0.1",
     "file-saver": "^2.0.5",
     "lucide-angular": "^0.501.0",
     "rxjs": "~7.8.0",

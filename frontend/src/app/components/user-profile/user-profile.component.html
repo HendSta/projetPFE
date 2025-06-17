@@ -8,59 +8,59 @@
         <input type="file" id="profileImage" (change)="onFileSelected($event)" class="hidden" />
         <!-- Styled label button for upload -->
         <label for="profileImage" class="w-full text-white font-semibold py-2 rounded bg-gradient-to-r from-indigo-900/90 to-blue-800/90 dark:from-indigo-700/90 dark:to-blue-700/90 hover:from-indigo-800/90 hover:to-blue-700/90 transition-colors text-center cursor-pointer">
-          Upload Image
+          {{ 'UPLOAD_IMAGE' | translate }}
         </label>
-        <img *ngIf="previewUrl" [src]="previewUrl" alt="Preview" class="w-24 h-24 rounded-full mt-4 mx-auto" />
+        <img *ngIf="previewUrl" [src]="previewUrl" [alt]="'PROFILE_IMAGE_ALT' | translate" class="w-24 h-24 rounded-full mt-4 mx-auto" />
       </div>
       <!-- Name Field -->
       <div class="form-control">
-        <label class="label"><span class="label-text text-gray-700 dark:text-gray-200">Full Name</span></label>
-        <input type="text" placeholder="Name" [(ngModel)]="currentUser.name" name="name"
+        <label class="label"><span class="label-text text-gray-700 dark:text-gray-200">{{ 'FULL_NAME' | translate }}</span></label>
+        <input type="text" [placeholder]="'FULL_NAME_PLACEHOLDER' | translate" [(ngModel)]="currentUser.name" name="name"
           class="input input-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 transition" />
       </div>
       <!-- Email Field -->
       <div class="form-control">
-        <label class="label"><span class="label-text text-gray-700 dark:text-gray-200">Email</span></label>
-        <input type="email" placeholder="Email" [(ngModel)]="currentUser.email" name="email"
+        <label class="label"><span class="label-text text-gray-700 dark:text-gray-200">{{ 'EMAIL' | translate }}</span></label>
+        <input type="email" [placeholder]="'EMAIL_PLACEHOLDER' | translate" [(ngModel)]="currentUser.email" name="email"
           class="input input-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 transition" />
       </div>
       <!-- Password Field -->
       <div class="form-control">
-        <label class="label"><span class="label-text text-gray-700 dark:text-gray-200">New Password</span></label>
-        <input type="password" placeholder="Enter new password"
+        <label class="label"><span class="label-text text-gray-700 dark:text-gray-200">{{ 'NEW_PASSWORD' | translate }}</span></label>
+        <input type="password" [placeholder]="'PASSWORD_PLACEHOLDER' | translate"
           [(ngModel)]="password" name="password" #passwordInput="ngModel"
           required minlength="8" [attr.pattern]="passwordPattern.source"
-          title="At least 8 characters: uppercase, lowercase, and number"
+          [title]="'PASSWORD_REQUIREMENTS' | translate"
           class="input input-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-300 transition" />
         <div *ngIf="passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)" class="text-red-500 text-sm mt-1">
-          <div *ngIf="passwordInput.errors?.['required']">Password is required.</div>
-          <div *ngIf="passwordInput.errors?.['minlength']">Password must be at least 8 characters.</div>
-          <div *ngIf="passwordInput.errors?.['pattern']">Password must include uppercase, lowercase, and number.</div>
+          <div *ngIf="passwordInput.errors?.['required']">{{ 'PASSWORD_REQUIRED_ERROR' | translate }}</div>
+          <div *ngIf="passwordInput.errors?.['minlength']">{{ 'PASSWORD_MIN_LENGTH_ERROR' | translate }}</div>
+          <div *ngIf="passwordInput.errors?.['pattern']">{{ 'PASSWORD_PATTERN_ERROR' | translate }}</div>
         </div>
       </div>
       <div class="form-control">
-        <label class="label"><span class="label-text text-gray-700 dark:text-gray-200">Specialty</span></label>
-        <input type="text" placeholder="e.g. Cardiologist" [(ngModel)]="specialty" name="specialty" class="input input-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+        <label class="label"><span class="label-text text-gray-700 dark:text-gray-200">{{ 'SPECIALTY' | translate }}</span></label>
+        <input type="text" [placeholder]="'SPECIALTY_PLACEHOLDER' | translate" [(ngModel)]="specialty" name="specialty" class="input input-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
       </div>
       <div class="form-control">
-        <label class="label"><span class="label-text text-gray-700 dark:text-gray-200">Years of Experience</span></label>
-        <input type="number" placeholder="e.g. 10" [(ngModel)]="experience" name="experience" class="input input-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+        <label class="label"><span class="label-text text-gray-700 dark:text-gray-200">{{ 'EXPERIENCE' | translate }}</span></label>
+        <input type="number" [placeholder]="'EXPERIENCE_PLACEHOLDER' | translate" [(ngModel)]="experience" name="experience" class="input input-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
       </div>
       <div class="form-control">
-        <label class="label"><span class="label-text text-gray-700 dark:text-gray-200">Clinic Address</span></label>
-        <textarea placeholder="Your clinic address" [(ngModel)]="clinicAddress" name="clinicAddress" class="textarea textarea-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
+        <label class="label"><span class="label-text text-gray-700 dark:text-gray-200">{{ 'CLINIC_ADDRESS' | translate }}</span></label>
+        <textarea [placeholder]="'CLINIC_ADDRESS_PLACEHOLDER' | translate" [(ngModel)]="clinicAddress" name="clinicAddress" class="textarea textarea-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white"></textarea>
       </div>
      
       <div class="form-control">
-        <label class="label"><span class="label-text text-gray-700 dark:text-gray-200">Phone Number</span></label>
+        <label class="label"><span class="label-text text-gray-700 dark:text-gray-200">{{ 'PHONE' | translate }}</span></label>
         <div class="input-group">
-          <input type="tel" placeholder="234-567-890" [(ngModel)]="phone" name="phone" class="input input-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
+          <input type="tel" [placeholder]="'PHONE_PLACEHOLDER' | translate" [(ngModel)]="phone" name="phone" class="input input-bordered w-full dark:bg-gray-700 dark:border-gray-600 dark:text-white" />
         </div>
       </div>
       <div class="form-control mt-6">
         <button type="submit" [disabled]="password && passwordInput.invalid"
           class="w-full text-white font-semibold py-2 rounded bg-gradient-to-r from-indigo-900/90 to-blue-800/90 dark:from-indigo-700/90 dark:to-blue-700/90 hover:from-indigo-800/90 hover:to-blue-700/90 transition-colors">
-          Save Changes
+          {{ 'SAVE_CHANGES' | translate }}
         </button>
       </div>
     </form>

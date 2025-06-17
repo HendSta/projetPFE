@@ -11,7 +11,7 @@
           <span class="text-xl font-bold">MedWin</span>
         </div>
         <p class="text-indigo-100 dark:text-indigo-200 text-sm mb-4">
-          Providing state-of-the-art medical analysis services with precision and care since 2010.
+          {{ 'FOOTER_COMPANY_DESCRIPTION' | translate }}
         </p>
         <div class="flex space-x-3 mt-6">
           <a href="#" class="bg-indigo-700/40 hover:bg-indigo-600/60 p-2 rounded-full transition-colors border border-indigo-300/20">
@@ -31,49 +31,49 @@
 
       <!-- Contact Info -->
       <div>
-        <h3 class="text-lg font-bold mb-4 border-b border-indigo-500/30 pb-2">Contact Us</h3>
+        <h3 class="text-lg font-bold mb-4 border-b border-indigo-500/30 pb-2">{{ 'FOOTER_CONTACT_US_TITLE' | translate }}</h3>
         <ul class="space-y-3">
           <li class="flex items-start">
             <lucide-icon name="map-pin" class="h-5 w-5 mr-2 mt-0.5 text-indigo-300"></lucide-icon>
-            <span class="text-indigo-100">Bizerte</span>
+            <span class="text-indigo-100">{{ 'FOOTER_ADDRESS_CITY' | translate }}</span>
           </li>
           <li class="flex items-center">
             <lucide-icon name="phone" class="h-5 w-5 mr-2 text-indigo-300"></lucide-icon>
-            <span class="text-indigo-100">(+216) 29 392 492</span>
+            <span class="text-indigo-100">{{ 'FOOTER_PHONE1' | translate }}</span>
           </li>
           <li class="flex items-center">
             <lucide-icon name="phone" class="h-5 w-5 mr-2 text-indigo-300"></lucide-icon>
-            <span class="text-indigo-100">(+216) 70 001 300</span>
+            <span class="text-indigo-100">{{ 'FOOTER_PHONE2' | translate }}</span>
           </li>
           <li class="flex items-center">
             <lucide-icon name="mail" class="h-5 w-5 mr-2 text-indigo-300"></lucide-icon>
-            <span class="text-indigo-100">medwintn&#64;gmail.com</span>
+            <span class="text-indigo-100">{{ 'FOOTER_EMAIL_ADDRESS' | translate }}</span>
           </li>
           <li class="flex items-center">
             <lucide-icon name="clock" class="h-5 w-5 mr-2 text-indigo-300"></lucide-icon>
-            <span class="text-indigo-100">Mon-Fri: 8AM-6PM<br>Sat: 9AM-1PM</span>
+            <span class="text-indigo-100">{{ 'FOOTER_HOURS_WEEKDAY' | translate }}<br>{{ 'FOOTER_HOURS_SATURDAY' | translate }}</span>
           </li>
         </ul>
       </div>
 
       <!-- Main Website Link -->
       <div>
-        <h3 class="text-lg font-bold mb-4 border-b border-indigo-500/30 pb-2">Main Website</h3>
+        <h3 class="text-lg font-bold mb-4 border-b border-indigo-500/30 pb-2">{{ 'FOOTER_MAIN_WEBSITE_TITLE' | translate }}</h3>
         <p class="text-indigo-100 dark:text-indigo-200 text-sm mb-4">
-          Visit our main website for more information about MedWin services and products.
+          {{ 'FOOTER_MAIN_WEBSITE_DESCRIPTION' | translate }}
         </p>
         <a href="https://www.medwin.tn" target="_blank" rel="noopener noreferrer" class="flex items-center bg-indigo-600/70 hover:bg-indigo-500/80 text-white py-2 px-4 rounded transition-colors mt-4 w-fit border border-indigo-300/20">
           <lucide-icon name="external-link" class="h-5 w-5 mr-2"></lucide-icon>
-          <span>www.medwin.tn</span>
+          <span>{{ 'FOOTER_MAIN_WEBSITE_LINK_TEXT' | translate }}</span>
         </a>
         <div class="mt-6">
           <div class="flex items-start">
             <lucide-icon name="check-circle" class="h-5 w-5 mr-2 text-indigo-300"></lucide-icon>
-            <span class="text-indigo-100">Medical Practice Management</span>
+            <span class="text-indigo-100">{{ 'FOOTER_LINK1_TEXT' | translate }}</span>
           </div>
           <div class="flex items-start mt-2">
             <lucide-icon name="check-circle" class="h-5 w-5 mr-2 text-indigo-300"></lucide-icon>
-            <span class="text-indigo-100">Complete Software Solutions</span>
+            <span class="text-indigo-100">{{ 'FOOTER_LINK2_TEXT' | translate }}</span>
           </div>
         </div>
       </div>
@@ -84,7 +84,7 @@
   <div class="border-t border-indigo-500/20 py-6 bg-indigo-950/50">
     <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
       <div class="text-sm text-indigo-200 mb-4 md:mb-0">
-        © 2025 MedWin Medical Analysis. All rights reserved.
+        © 2025 MedWin Medical Analysis. {{ 'FOOTER_COPYRIGHT_TEXT' | translate }}
       </div>
       
     </div>

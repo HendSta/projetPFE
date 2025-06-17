@@ -15,7 +15,7 @@
           </div>
         </div>
         <div class="ml-4">
-          <p class="text-lg font-bold">{{ userProfile?.name || 'Doctor' }}</p>
+          <p class="text-lg font-bold">{{ userProfile?.name || ('DOCTOR_PLACEHOLDER' | translate) }}</p>
           <p class="text-sm opacity-75">{{ userProfile?.email }}</p>
         </div>
       </div>
@@ -23,20 +23,20 @@
       <ul class="menu menu-compact flex-1">
         <li>
           <a routerLink="/user-profile" routerLinkActive="bg-white/20 text-white" class="mb-2 hover:bg-white/20 rounded-lg px-4 py-2 transition-colors flex items-center">
-            <img [src]="userProfile?.picture || 'https://via.placeholder.com/40'" alt="Avatar" class="w-6 h-6 rounded-full mr-3" />
-            Profile
+            <img [src]="userProfile?.picture || 'https://via.placeholder.com/40'" alt="{{ 'AVATAR_ALT_TEXT' | translate }}" class="w-6 h-6 rounded-full mr-3" />
+            {{ 'PROFILE_BUTTON' | translate }}
           </a>
         </li>
         <li>
           <a routerLink="/analyzing" routerLinkActive="bg-white/20 text-white" class="mb-2 hover:bg-white/20 rounded-lg px-4 py-2 transition-colors flex items-center">
             <lucide-icon name="stethoscope" class="h-5 w-5 inline-block mr-3"></lucide-icon>
-            Analyze
+            {{ 'ANALYZE_BUTTON' | translate }}
           </a>
         </li>
         <li>
           <a routerLink="/historics" routerLinkActive="bg-white/20 text-white" class="mb-2 hover:bg-white/20 rounded-lg px-4 py-2 transition-colors flex items-center">
             <lucide-icon name="file-text" class="h-5 w-5 inline-block mr-3"></lucide-icon>
-            History
+            {{ 'HISTORY_BUTTON' | translate }}
           </a>
         </li>
       </ul>
@@ -45,7 +45,7 @@
         *ngIf="userProfile?.email"
         [href]="'mailto:' + userProfile.email"
         class="mt-8 flex items-center bg-white/10 rounded-lg px-4 py-3 text-white shadow-inner transition-all duration-200 hover:bg-indigo-600/80 hover:shadow-lg cursor-pointer group"
-        title="Open your mailbox"
+        title="{{ 'OPEN_MAILBOX_TITLE' | translate }}"
       >
         <lucide-icon name="mail" class="h-5 w-5 mr-3 text-indigo-200 group-hover:text-white transition-colors"></lucide-icon>
         <span class="truncate text-sm font-medium underline group-hover:text-white">{{ userProfile.email }}</span>
@@ -55,40 +55,40 @@
             *ngIf="userProfile.email.endsWith('@gmail.com')"
             (click)="$event.preventDefault(); openGmail()"
             class="ml-3 px-2 py-1 rounded bg-red-500 hover:bg-red-600 text-white text-xs flex items-center shadow transition-all duration-200"
-            title="Ouvrir Gmail"
+            title="{{ 'OPEN_GMAIL_TITLE' | translate }}"
             type="button"
           >
-            <lucide-icon name="external-link" class="h-4 w-4 mr-1"></lucide-icon>Gmail
+            <lucide-icon name="external-link" class="h-4 w-4 mr-1"></lucide-icon>{{ 'GMAIL_BUTTON' | translate }}
           </button>
           <button
             *ngIf="userProfile.email.endsWith('@outlook.com') || userProfile.email.endsWith('@hotmail.com') || userProfile.email.endsWith('@live.com')"
             (click)="$event.preventDefault(); openOutlook()"
             class="ml-3 px-2 py-1 rounded bg-blue-600 hover:bg-blue-700 text-white text-xs flex items-center shadow transition-all duration-200"
-            title="Ouvrir Outlook Web"
+            title="{{ 'OPEN_OUTLOOK_WEB_TITLE' | translate }}"
             type="button"
           >
-            <lucide-icon name="external-link" class="h-4 w-4 mr-1"></lucide-icon>Outlook
+            <lucide-icon name="external-link" class="h-4 w-4 mr-1"></lucide-icon>{{ 'OUTLOOK_BUTTON' | translate }}
           </button>
           <button
             *ngIf="!(userProfile.email.endsWith('@gmail.com') || userProfile.email.endsWith('@outlook.com') || userProfile.email.endsWith('@hotmail.com') || userProfile.email.endsWith('@live.com'))"
             class="ml-3 px-2 py-1 rounded bg-gray-500 hover:bg-gray-600 text-white text-xs flex items-center relative shadow transition-all duration-200"
-            title="Choisir un webmail ou copier l'email"
+            title="{{ 'OTHER_WEBMAIL_TITLE' | translate }}"
             type="button"
             (click)="toggleWebmailMenu()"
             (blur)="hideWebmailMenuWithDelay()"
             tabindex="0"
           >
-            <lucide-icon name="external-link" class="h-4 w-4 mr-1"></lucide-icon>Other Webmail
+            <lucide-icon name="external-link" class="h-4 w-4 mr-1"></lucide-icon>{{ 'OTHER_WEBMAIL_BUTTON' | translate }}
             <!-- Menu déroulant custom -->
             <div *ngIf="showWebmailMenu" class="absolute top-10 right-0 z-50 bg-white text-gray-800 rounded-lg shadow-lg min-w-[160px] border border-gray-200 animate-fade-in">
               <button (mousedown)="openGmail(); showWebmailMenu=false" class="w-full text-left px-4 py-2 hover:bg-indigo-100 flex items-center">
-                <lucide-icon name='mail' class='h-4 w-4 mr-2 text-red-500'></lucide-icon>Ouvrir Gmail
+                <lucide-icon name='mail' class='h-4 w-4 mr-2 text-red-500'></lucide-icon>{{ 'OPEN_GMAIL_MENU_BUTTON' | translate }}
               </button>
               <button (mousedown)="openOutlook(); showWebmailMenu=false" class="w-full text-left px-4 py-2 hover:bg-blue-100 flex items-center">
-                <lucide-icon name='mail' class='h-4 w-4 mr-2 text-blue-500'></lucide-icon>Ouvrir Outlook
+                <lucide-icon name='mail' class='h-4 w-4 mr-2 text-blue-500'></lucide-icon>{{ 'OPEN_OUTLOOK_MENU_BUTTON' | translate }}
               </button>
               <button (mousedown)="copyEmail(userProfile.email); showWebmailMenu=false" class="w-full text-left px-4 py-2 hover:bg-green-100 flex items-center">
-                <lucide-icon name='copy' class='h-4 w-4 mr-2 text-green-500'></lucide-icon>Copier l'email
+                <lucide-icon name='copy' class='h-4 w-4 mr-2 text-green-500'></lucide-icon>{{ 'COPY_EMAIL_MENU_BUTTON' | translate }}
               </button>
             </div>
           </button>
@@ -96,7 +96,7 @@
       </a>
       <div *ngIf="!userProfile?.email" class="mt-8 flex items-center bg-white/10 rounded-lg px-4 py-3 text-white shadow-inner">
         <lucide-icon name="mail" class="h-5 w-5 mr-3 text-indigo-200"></lucide-icon>
-        <span class="truncate text-sm font-medium">No email</span>
+        <span class="truncate text-sm font-medium">{{ 'NO_EMAIL_MESSAGE' | translate }}</span>
       </div>
     </aside>
   </div>
