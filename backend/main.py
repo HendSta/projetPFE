@@ -16,6 +16,8 @@ import random
 import math
 import xml.etree.ElementTree as ET
 from fastapi.responses import JSONResponse
+from sklearn.base import BaseEstimator, TransformerMixin
+import sys
 
 app = FastAPI()
 
@@ -27,8 +29,30 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+class NumericConverter(BaseEstimator, TransformerMixin):
+    """
+    Transformer that converts string values to numeric, with special handling for 'Négatif'
+    """
+    def __init__(self, negatif_value=0):
+        self.negatif_value = negatif_value
+        
+    def fit(self, X, y=None):
+        return self
+        
+    def transform(self, X):
+        X_copy = X.copy()
+        for col in X_copy.columns:
+            mask = X_copy[col] == 'Négatif'
+            if mask.any():
+                X_copy.loc[mask, col] = self.negatif_value
+            X_copy[col] = pd.to_numeric(X_copy[col], errors='coerce')
+        X_copy.fillna(0, inplace=True)
+        return X_copy
+
+sys.modules['__main__'].NumericConverter = NumericConverter
+
 # Charger le modèle ML
-pipeline = joblib.load("MLmodels/pipeline.joblib")
+pipeline = joblib.load("MLmodels/modele_analyse_medicale_final.joblib")
 
 # Créer un imputer pour gérer les valeurs NaN
 imputer = SimpleImputer(strategy='constant', fill_value=0)
@@ -434,7 +458,7 @@ def analyze_risk(param: dict = Body(...)):
     import joblib
     import pandas as pd
     import numpy as np
-    model_path = "MLmodels/model2.joblib"
+    model_path = "MLmodels/analyze_row_final.joblib"
     # Charger le modèle
     model = joblib.load(model_path)
 
