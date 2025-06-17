@@ -229,8 +229,8 @@
 <div class="bg-blue-50 dark:bg-gray-900 py-16">
   <div class="container mx-auto px-4">
     <div class="text-center mb-12">
-      <h2 class="text-3xl font-bold text-blue-800 dark:text-blue-300">What Our Users Say</h2>
-      <p class="text-gray-600 dark:text-gray-400 mt-4 max-w-2xl mx-auto">Discover testimonials from healthcare professionals who use our AI-powered medical analysis system</p>
+      <h2 class="text-3xl font-bold text-blue-800 dark:text-blue-300">{{ 'TESTIMONIAL_SECTION_TITLE' | translate }}</h2>
+      <p class="text-gray-600 dark:text-gray-400 mt-4 max-w-2xl mx-auto">{{ 'TESTIMONIAL_SECTION_SUBTITLE' | translate }}</p>
     </div>
     
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -240,15 +240,15 @@
           <div class="flex items-center mb-4">
             <div class="avatar mr-4">
               <div class="w-12 rounded-full">
-                <img src="https://images.pexels.com/photos/4173251/pexels-photo-4173251.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Dr. Mehdi" />
+                <img src="https://images.pexels.com/photos/4173251/pexels-photo-4173251.jpeg?auto=compress&cs=tinysrgb&w=150" [alt]="'TESTIMONIAL1_IMAGE_ALT' | translate" />
               </div>
             </div>
             <div>
-              <h3 class="font-bold text-blue-700 dark:text-blue-300">Dr. Mehdi Trabelsi</h3>
-              <div class="text-gray-500 dark:text-gray-400">General Practitioner</div>
+              <h3 class="font-bold text-blue-700 dark:text-blue-300">{{ 'TESTIMONIAL1_NAME' | translate }}</h3>
+              <div class="text-gray-500 dark:text-gray-400">{{ 'TESTIMONIAL1_OCCUPATION' | translate }}</div>
             </div>
           </div>
-          <p class="text-gray-600 dark:text-gray-400">"This tool has revolutionized my daily practice. I save valuable time analyzing results and can focus more on my patients."</p>
+          <p class="text-gray-600 dark:text-gray-400">{{ 'TESTIMONIAL1_TEXT' | translate }}</p>
         </div>
       </div>
       
@@ -258,15 +258,15 @@
           <div class="flex items-center mb-4">
             <div class="avatar mr-4">
               <div class="w-12 rounded-full">
-                <img src="https://images.pexels.com/photos/5214958/pexels-photo-5214958.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Dr. Leila" />
+                <img src="https://images.pexels.com/photos/5214958/pexels-photo-5214958.jpeg?auto=compress&cs=tinysrgb&w=150" [alt]="'TESTIMONIAL2_IMAGE_ALT' | translate" />
               </div>
             </div>
             <div>
-              <h3 class="font-bold text-blue-700 dark:text-blue-300">Dr. Leila Ben Salem</h3>
-              <div class="text-gray-500 dark:text-gray-400">Biologist</div>
+              <h3 class="font-bold text-blue-700 dark:text-blue-300">{{ 'TESTIMONIAL2_NAME' | translate }}</h3>
+              <div class="text-gray-500 dark:text-gray-400">{{ 'TESTIMONIAL2_OCCUPATION' | translate }}</div>
             </div>
           </div>
-          <p class="text-gray-600 dark:text-gray-400">"The accuracy of the data extraction is impressive. The system consistently identifies abnormal values that I might sometimes miss during a quick analysis."</p>
+          <p class="text-gray-600 dark:text-gray-400">{{ 'TESTIMONIAL2_TEXT' | translate }}</p>
         </div>
       </div>
       
@@ -276,129 +276,15 @@
           <div class="flex items-center mb-4">
             <div class="avatar mr-4">
               <div class="w-12 rounded-full">
-                <img src="https://images.pexels.com/photos/5327585/pexels-photo-5327585.jpeg?auto=compress&cs=tinysrgb&w=150" alt="Dr. Karim" />
+                <img src="https://images.pexels.com/photos/5327585/pexels-photo-5327585.jpeg?auto=compress&cs=tinysrgb&w=150" [alt]="'TESTIMONIAL3_IMAGE_ALT' | translate" />
               </div>
             </div>
             <div>
-              <h3 class="font-bold text-blue-700 dark:text-blue-300">Dr. Karim Jeddi</h3>
-              <div class="text-gray-500 dark:text-gray-400">Cardiologist</div>
+              <h3 class="font-bold text-blue-700 dark:text-blue-300">{{ 'TESTIMONIAL3_NAME' | translate }}</h3>
+              <div class="text-gray-500 dark:text-gray-400">{{ 'TESTIMONIAL3_OCCUPATION' | translate }}</div>
             </div>
           </div>
-          <p class="text-gray-600 dark:text-gray-400">"The potential disease prediction module is invaluable in my diagnosis. It allows me to consider possibilities I might not have necessarily thought of."</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Pricing Section -->
-<div class="bg-white dark:bg-gray-800 py-16">
-  <div class="container mx-auto px-4">
-    <div class="text-center mb-12">
-      <h2 class="text-3xl font-bold text-blue-800 dark:text-blue-300">{{ 'PRICING_SECTION_TITLE' | translate }}</h2>
-      <p class="text-gray-600 dark:text-gray-400 mt-4 max-w-2xl mx-auto">{{ 'PRICING_SECTION_SUBTITLE' | translate }}</p>
-    </div>
-    
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <!-- Plan 1: Basic -->
-      <div class="card bg-blue-50 dark:bg-gray-900 shadow-xl">
-        <div class="card-body text-center">
-          <h3 class="text-2xl font-bold text-blue-900 dark:text-blue-300 mb-2">{{ 'PLAN_BASIC_TITLE' | translate }}</h3>
-          <p class="text-gray-500 dark:text-gray-400">{{ 'PLAN_BASIC_DESCRIPTION' | translate }}</p>
-          <div class="text-5xl font-extrabold text-blue-800 dark:text-blue-300 my-4">
-            $0<span class="text-xl font-normal text-gray-500">{{ 'PLAN_MONTH_SUFFIX' | translate }}</span>
-          </div>
-          <ul class="list-none text-left mb-6 space-y-2">
-            <li class="flex items-center text-gray-700 dark:text-gray-300">
-              <lucide-icon name="check" class="h-5 w-5 text-green-500 mr-2"></lucide-icon>
-              {{ 'PLAN_BASIC_FEATURE1' | translate }}
-            </li>
-            <li class="flex items-center text-gray-700 dark:text-gray-300">
-              <lucide-icon name="check" class="h-5 w-5 text-green-500 mr-2"></lucide-icon>
-              {{ 'PLAN_BASIC_FEATURE2' | translate }}
-            </li>
-            <li class="flex items-center text-gray-700 dark:text-gray-300 opacity-50">
-              <lucide-icon name="x" class="h-5 w-5 text-red-500 mr-2"></lucide-icon>
-              {{ 'PLAN_BASIC_FEATURE3' | translate }}
-            </li>
-            <li class="flex items-center text-gray-700 dark:text-gray-300 opacity-50">
-              <lucide-icon name="x" class="h-5 w-5 text-red-500 mr-2"></lucide-icon>
-              {{ 'PLAN_BASIC_FEATURE4' | translate }}
-            </li>
-            <li class="flex items-center text-gray-700 dark:text-gray-300 opacity-50">
-              <lucide-icon name="x" class="h-5 w-5 text-red-500 mr-2"></lucide-icon>
-              {{ 'PLAN_BASIC_FEATURE5' | translate }}
-            </li>
-          </ul>
-          <button class="btn bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded-lg">{{ 'PLAN_BASIC_BUTTON' | translate }}</button>
-        </div>
-      </div>
-      
-      <!-- Plan 2: Professional -->
-      <div class="card bg-blue-100 dark:bg-gray-700 shadow-xl border-2 border-blue-500">
-        <div class="card-body text-center">
-          <h3 class="text-2xl font-bold text-blue-900 dark:text-blue-300 mb-2">{{ 'PLAN_PROFESSIONAL_TITLE' | translate }}</h3>
-          <p class="text-gray-500 dark:text-gray-400">{{ 'PLAN_PROFESSIONAL_DESCRIPTION' | translate }}</p>
-          <div class="text-5xl font-extrabold text-blue-800 dark:text-blue-300 my-4">
-            $29<span class="text-xl font-normal text-gray-500">{{ 'PLAN_MONTH_SUFFIX' | translate }}</span>
-          </div>
-          <ul class="list-none text-left mb-6 space-y-2">
-            <li class="flex items-center text-gray-700 dark:text-gray-300">
-              <lucide-icon name="check" class="h-5 w-5 text-green-500 mr-2"></lucide-icon>
-              {{ 'PLAN_PROFESSIONAL_FEATURE1' | translate }}
-            </li>
-            <li class="flex items-center text-gray-700 dark:text-gray-300">
-              <lucide-icon name="check" class="h-5 w-5 text-green-500 mr-2"></lucide-icon>
-              {{ 'PLAN_PROFESSIONAL_FEATURE2' | translate }}
-            </li>
-            <li class="flex items-center text-gray-700 dark:text-gray-300">
-              <lucide-icon name="check" class="h-5 w-5 text-green-500 mr-2"></lucide-icon>
-              {{ 'PLAN_PROFESSIONAL_FEATURE3' | translate }}
-            </li>
-            <li class="flex items-center text-gray-700 dark:text-gray-300 opacity-50">
-              <lucide-icon name="x" class="h-5 w-5 text-red-500 mr-2"></lucide-icon>
-              {{ 'PLAN_PROFESSIONAL_FEATURE4' | translate }}
-            </li>
-            <li class="flex items-center text-gray-700 dark:text-gray-300 opacity-50">
-              <lucide-icon name="x" class="h-5 w-5 text-red-500 mr-2"></lucide-icon>
-              {{ 'PLAN_PROFESSIONAL_FEATURE5' | translate }}
-            </li>
-          </ul>
-          <button class="btn bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded-lg">{{ 'PLAN_PROFESSIONAL_BUTTON' | translate }}</button>
-        </div>
-      </div>
-      
-      <!-- Plan 3: Enterprise -->
-      <div class="card bg-blue-50 dark:bg-gray-900 shadow-xl">
-        <div class="card-body text-center">
-          <h3 class="text-2xl font-bold text-blue-900 dark:text-blue-300 mb-2">{{ 'PLAN_ENTERPRISE_TITLE' | translate }}</h3>
-          <p class="text-gray-500 dark:text-gray-400">{{ 'PLAN_ENTERPRISE_DESCRIPTION' | translate }}</p>
-          <div class="text-5xl font-extrabold text-blue-800 dark:text-blue-300 my-4">
-            $99<span class="text-xl font-normal text-gray-500">{{ 'PLAN_MONTH_SUFFIX' | translate }}</span>
-          </div>
-          <ul class="list-none text-left mb-6 space-y-2">
-            <li class="flex items-center text-gray-700 dark:text-gray-300">
-              <lucide-icon name="check" class="h-5 w-5 text-green-500 mr-2"></lucide-icon>
-              {{ 'PLAN_ENTERPRISE_FEATURE1' | translate }}
-            </li>
-            <li class="flex items-center text-gray-700 dark:text-gray-300">
-              <lucide-icon name="check" class="h-5 w-5 text-green-500 mr-2"></lucide-icon>
-              {{ 'PLAN_ENTERPRISE_FEATURE2' | translate }}
-            </li>
-            <li class="flex items-center text-gray-700 dark:text-gray-300">
-              <lucide-icon name="check" class="h-5 w-5 text-green-500 mr-2"></lucide-icon>
-              {{ 'PLAN_ENTERPRISE_FEATURE3' | translate }}
-            </li>
-            <li class="flex items-center text-gray-700 dark:text-gray-300">
-              <lucide-icon name="check" class="h-5 w-5 text-green-500 mr-2"></lucide-icon>
-              {{ 'PLAN_ENTERPRISE_FEATURE4' | translate }}
-            </li>
-            <li class="flex items-center text-gray-700 dark:text-gray-300">
-              <lucide-icon name="check" class="h-5 w-5 text-green-500 mr-2"></lucide-icon>
-              {{ 'PLAN_ENTERPRISE_FEATURE5' | translate }}
-            </li>
-          </ul>
-          <button class="btn bg-blue-600 hover:bg-blue-700 text-white w-full py-2 rounded-lg">{{ 'PLAN_ENTERPRISE_BUTTON' | translate }}</button>
+          <p class="text-gray-600 dark:text-gray-400">{{ 'TESTIMONIAL3_TEXT' | translate }}</p>
         </div>
       </div>
     </div>
