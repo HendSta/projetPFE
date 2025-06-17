@@ -130,6 +130,7 @@ export class HistoricsComponent implements OnInit {
       this.medicalReportService.deleteReport(id).subscribe({
         next: () => {
           this.reports = this.reports.filter(report => report._id !== id);
+          this.applyFilters();
           if (this.selectedReport?._id === id) {
             this.closeReportDetails();
           }
