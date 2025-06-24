@@ -1,20 +1,51 @@
 <div class="container mx-auto px-4 py-8 relative">
   <!-- Cercle de progression à droite -->
   <div class="hidden md:block absolute right-8 top-0 mt-8">
-    <div class="flex flex-col items-center">
-      <div class="radial-progress text-indigo-600 dark:text-indigo-300"
-           [style.--value]="analyzedPercentage"
-           [style.--size]="'5rem'"
-           [style.--thickness]="'0.7rem'"
-           role="progressbar">
-        {{ analyzedPercentage }}%
+    <div class="flex flex-col items-center backdrop-blur-lg bg-white/30 dark:bg-gray-800/30 rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/20">
+      <div class="relative">
+        <div class="radial-progress transform hover:scale-105 transition-transform duration-300"
+             [ngClass]="{
+               'text-green-500 dark:text-green-400': analyzedPercentage >= 90,
+               'text-blue-500 dark:text-blue-400': analyzedPercentage >= 70 && analyzedPercentage < 90,
+               'text-yellow-500 dark:text-yellow-400': analyzedPercentage >= 50 && analyzedPercentage < 70,
+               'text-red-500 dark:text-red-400': analyzedPercentage < 50
+             }"
+             [style.--value]="analyzedPercentage"
+             [style.--size]="'4rem'"
+             [style.--thickness]="'3px'"
+             role="progressbar">
+          <span class="text-sm font-bold">{{ analyzedPercentage }}%</span>
+        </div>
+        <div class="absolute -top-1 -right-1 w-3 h-3 rounded-full animate-pulse"
+             [ngClass]="{
+               'bg-green-400': analyzedPercentage >= 90,
+               'bg-blue-400': analyzedPercentage >= 70 && analyzedPercentage < 90,
+               'bg-yellow-400': analyzedPercentage >= 50 && analyzedPercentage < 70,
+               'bg-red-400': analyzedPercentage < 50
+             }">
+        </div>
       </div>
-      <div class="mt-2 text-sm text-gray-700 dark:text-gray-300 text-center">
-        Rapports totalement analysés<br>
-        <span class="font-semibold">{{ filteredReports.length - notFullyAnalyzedCount }}</span> / <span class="font-semibold">{{ filteredReports.length }}</span>
+      
+      <div class="mt-3 text-center">
+        <p class="text-xs font-medium text-gray-600 dark:text-gray-300 mb-1">Rapports analysés</p>
+        <div class="flex items-center justify-center space-x-1">
+          <span class="text-lg font-bold bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent">
+            {{ filteredReports.length - notFullyAnalyzedCount }}
+          </span>
+          <span class="text-xs text-gray-400">/</span>
+          <span class="text-sm text-gray-600 dark:text-gray-400">
+            {{ filteredReports.length }}
+          </span>
+        </div>
       </div>
-      <div class="mt-1 text-xs text-red-500 dark:text-red-400 text-center" *ngIf="notFullyAnalyzedCount > 0">
-        {{ notFullyAnalyzedCount }} non totalement analysé(s)
+      
+      <div class="mt-2" *ngIf="notFullyAnalyzedCount > 0">
+        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400">
+          <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+          </svg>
+          {{ notFullyAnalyzedCount }} en attente
+        </span>
       </div>
     </div>
   </div>
