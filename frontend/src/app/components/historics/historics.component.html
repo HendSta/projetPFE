@@ -1,4 +1,25 @@
-<div class="container mx-auto px-4 py-8">
+<div class="container mx-auto px-4 py-8 relative">
+  <!-- Cercle de progression à droite -->
+  <div class="hidden md:block absolute right-8 top-0 mt-8">
+    <div class="flex flex-col items-center">
+      <div class="radial-progress text-indigo-600 dark:text-indigo-300"
+           [style.--value]="analyzedPercentage"
+           [style.--size]="'5rem'"
+           [style.--thickness]="'0.7rem'"
+           role="progressbar">
+        {{ analyzedPercentage }}%
+      </div>
+      <div class="mt-2 text-sm text-gray-700 dark:text-gray-300 text-center">
+        Rapports totalement analysés<br>
+        <span class="font-semibold">{{ filteredReports.length - notFullyAnalyzedCount }}</span> / <span class="font-semibold">{{ filteredReports.length }}</span>
+      </div>
+      <div class="mt-1 text-xs text-red-500 dark:text-red-400 text-center" *ngIf="notFullyAnalyzedCount > 0">
+        {{ notFullyAnalyzedCount }} non totalement analysé(s)
+      </div>
+    </div>
+  </div>
+
+  <!-- Bloc titre/sous-titre centré -->
   <div class="text-center mb-12">
     <h2 class="text-3xl md:text-4xl font-bold text-indigo-800 dark:text-indigo-300">{{ 'HISTORY_TITLE' | translate }}</h2>
     <p class="text-gray-600 dark:text-gray-400 mt-4 max-w-2xl mx-auto">{{ 'HISTORY_SUBTITLE' | translate }}</p>

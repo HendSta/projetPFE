@@ -41,6 +41,9 @@ export class HistoricsComponent implements OnInit {
   // Propriété pour la recherche unifiée
   searchQuery: string = '';
 
+  analyzedPercentage: number = 0;
+  notFullyAnalyzedCount: number = 0;
+
   constructor(
     private medicalReportService: MedicalReportService,
     private auth: AuthService,
@@ -60,6 +63,7 @@ export class HistoricsComponent implements OnInit {
         this.reports = reports;
         this.filteredReports = [...reports];
         this.isLoading = false;
+        this.updateAnalysisStats();
       },
       error: (error) => {
         this.errorMessage = 'Failed to load reports. Please try again later.';
@@ -108,11 +112,14 @@ export class HistoricsComponent implements OnInit {
       // Recherche par date (partielle) ou par nom de patient
       return report.patientName.toLowerCase().includes(query) || reportDateStr.includes(query);
     });
+
+    this.updateAnalysisStats();
   }
 
   resetFilters() {
     this.searchQuery = '';
     this.filteredReports = [...this.reports];
+    this.updateAnalysisStats();
   }
 
   viewReportDetails(report: MedicalReport) {
@@ -184,5 +191,29 @@ export class HistoricsComponent implements OnInit {
     
     // Close the modal
     this.closeReportDetails();
+  }
+
+  private updateAnalysisStats() {
+    const total = this.filteredReports.length;
+    if (total === 0) {
+      this.analyzedPercentage = 0;
+      this.notFullyAnalyzedCount = 0;
+      return;
+    }
+    let fullyAnalyzed = 0;
+    let notFullyAnalyzed = 0;
+
+    this.filteredReports.forEach(report => {
+      // Un rapport est "totalement analysé" si tous ses résultats ont un riskStatus défini
+      const allAnalyzed = report.results.every(r => !!r.riskStatus);
+      if (allAnalyzed) {
+        fullyAnalyzed++;
+      } else {
+        notFullyAnalyzed++;
+      }
+    });
+
+    this.analyzedPercentage = Math.round((fullyAnalyzed / total) * 100);
+    this.notFullyAnalyzedCount = notFullyAnalyzed;
   }
 }
