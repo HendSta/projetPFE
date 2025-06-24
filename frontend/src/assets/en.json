@@ -254,5 +254,7 @@
     "SAVE_CHANGES": "Save Changes",
     "PASSWORD_REQUIRED_ERROR": "Password is required",
     "PASSWORD_MIN_LENGTH_ERROR": "Password must be at least 8 characters",
-    "PASSWORD_PATTERN_ERROR": "Password must include uppercase, lowercase, and number"
+    "PASSWORD_PATTERN_ERROR": "Password must include uppercase, lowercase, and number",
+    "ANALYZED_REPORTS": "Analyzed reports",
+    "PENDING_REPORTS": "pending"
 }

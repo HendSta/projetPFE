@@ -256,5 +256,7 @@
     "SAVE_CHANGES": "Enregistrer les modifications",
     "PASSWORD_REQUIRED_ERROR": "Le mot de passe est requis",
     "PASSWORD_MIN_LENGTH_ERROR": "Le mot de passe doit contenir au moins 8 caractères",
-    "PASSWORD_PATTERN_ERROR": "Le mot de passe doit contenir une majuscule, une minuscule et un chiffre"
+    "PASSWORD_PATTERN_ERROR": "Le mot de passe doit contenir une majuscule, une minuscule et un chiffre",
+    "ANALYZED_REPORTS": "Rapports analysés",
+    "PENDING_REPORTS": "en attente"
 }
