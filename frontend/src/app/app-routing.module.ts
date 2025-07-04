@@ -6,7 +6,6 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
 import { DoctorDashboardComponent } from './components/doctor-dashboard/doctor-dashboard.component';
 import { AnalyzingComponent } from './components/analyzing/analyzing.component';
 import { HistoricsComponent } from './components/historics/historics.component';
-import { FilesComponent } from './components/files/files.component';
 import { AuthGuard } from './guards/auth.guard';
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -20,7 +19,6 @@ const routes: Routes = [
       { path: 'user-profile', component: UserProfileComponent },
       { path: 'analyzing', component: AnalyzingComponent },
       { path: 'historics', component: HistoricsComponent },
-      { path: 'files', component: FilesComponent },
       { path: '', redirectTo: 'user-profile', pathMatch: 'full' }
     ]
   },
