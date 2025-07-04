@@ -35,8 +35,14 @@
         </li>
         <li>
           <a routerLink="/historics" routerLinkActive="bg-white/20 text-white" class="mb-2 hover:bg-white/20 rounded-lg px-4 py-2 transition-colors flex items-center">
-            <lucide-icon name="file-text" class="h-5 w-5 inline-block mr-3"></lucide-icon>
+            <lucide-icon name="clock" class="h-5 w-5 inline-block mr-3"></lucide-icon>
             {{ 'HISTORY_BUTTON' | translate }}
+          </a>
+        </li>
+        <li>
+          <a routerLink="/files" routerLinkActive="bg-white/20 text-white" class="mb-2 hover:bg-white/20 rounded-lg px-4 py-2 transition-colors flex items-center">
+            <lucide-icon name="file-text" class="h-5 w-5 inline-block mr-3 text-white"></lucide-icon>
+            {{ 'FILES' | translate }}
           </a>
         </li>
       </ul>

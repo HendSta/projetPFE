@@ -28,6 +28,7 @@ import { AuthModule } from '@auth0/auth0-angular';
 import { environment } from '../environments/environment';
 import { AnalyzingComponent } from './components/analyzing/analyzing.component';
 import { HistoricsComponent } from './components/historics/historics.component';
+import { FilesComponent } from './components/files/files.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/', '.json');
@@ -46,6 +47,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     DoctorDashboardComponent,
     AnalyzingComponent,
     HistoricsComponent,
+    FilesComponent,
   ],
   imports: [
     BrowserModule,

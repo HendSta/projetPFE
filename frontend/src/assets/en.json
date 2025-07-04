@@ -256,5 +256,6 @@
     "PASSWORD_MIN_LENGTH_ERROR": "Password must be at least 8 characters",
     "PASSWORD_PATTERN_ERROR": "Password must include uppercase, lowercase, and number",
     "ANALYZED_REPORTS": "Analyzed reports",
-    "PENDING_REPORTS": "pending"
+    "PENDING_REPORTS": "pending",
+    "FILES_BUTTON": "Files"
 }
