@@ -20,6 +20,17 @@ export class AnalyzingComponent implements OnInit {
   };
   riskResults: { [key: number]: any } = {};
   isReanalyzingReport: boolean = false;
+  columnHeaderTranslationKeys: { [key: string]: string } = {
+    CodParametre: 'TABLE_HEADER_ANALYZING_parameterCode',
+    ValeurActuelle: 'TABLE_HEADER_ANALYZING_currentValue',
+    Unite: 'TABLE_HEADER_ANALYZING_unit',
+    ValeursUsuelles: 'TABLE_HEADER_ANALYZING_normalRange',
+    ValeurUsuelleMin: 'TABLE_HEADER_ANALYZING_normalMin',
+    ValeurUsuelleMax: 'TABLE_HEADER_ANALYZING_normalMax',
+    ValeurAnterieure: 'TABLE_HEADER_ANALYZING_previousValue',
+    DateAnterieure: 'TABLE_HEADER_ANALYZING_previousDate',
+    // Ajoute d'autres colonnes si besoin
+  };
 
   constructor(private http: HttpClient, private auth: AuthService) {}
 

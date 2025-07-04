@@ -88,7 +88,9 @@
         <table class="min-w-full bg-white dark:bg-gray-800 rounded-lg shadow-lg">
           <thead>
             <tr class="bg-gray-50 dark:bg-gray-700">
-              <th *ngFor="let col of tableColumns" class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 whitespace-nowrap">{{ 'TABLE_HEADER_ANALYZING_' + col | translate }}</th>
+              <th *ngFor="let col of tableColumns" class="px-4 py-3 text-left text-sm font-semibold text-gray-900 dark:text-gray-100 whitespace-nowrap">
+                {{ columnHeaderTranslationKeys[col] ? (columnHeaderTranslationKeys[col] | translate) : col }}
+              </th>
               <th>{{ 'TABLE_HEADER_ANALYZE_BUTTON' | translate }}</th>
               <th *ngIf="showRiskHeaders()">{{ 'TABLE_HEADER_RISK_STATUS' | translate }}</th>
               <th *ngIf="showRiskHeaders()">{{ 'TABLE_HEADER_RISK_DEGREE' | translate }}</th>
