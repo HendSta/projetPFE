@@ -664,7 +664,7 @@ def predict_disease(data: dict = Body(...)):
         if diseases:
             prediction_text = "\n".join(diseases)
             confidence = "Modérée"
-            explanation = "Analyse basée sur les paramètres anormaux détectés (mode fallback)."
+            explanation = "Analyse basée sur les paramètres anormaux détectés."
             recommendations = "Consultez un professionnel de santé pour confirmation et suivi."
         else:
             prediction_text = "Anomalies biologiques détectées nécessitant une évaluation médicale approfondie."

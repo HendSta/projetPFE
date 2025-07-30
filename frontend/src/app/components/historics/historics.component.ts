@@ -23,6 +23,12 @@ interface MedicalReport {
     trend?: string;
     advice?: string;
   }>;
+  diseasePrediction?: {
+    prediction: string;
+    confidence: string;
+    explanation: string;
+    recommendations: string;
+  };
 }
 
 @Component({
@@ -60,6 +66,16 @@ export class HistoricsComponent implements OnInit {
     
     this.medicalReportService.getUserReports().subscribe({
       next: (reports) => {
+        console.log('📊 Loaded reports from API:', reports);
+        reports.forEach((report, index) => {
+          console.log(`📋 Report ${index + 1}:`, {
+            id: report._id,
+            patientName: report.patientName,
+            hasDiseasePrediction: !!report.diseasePrediction,
+            diseasePrediction: report.diseasePrediction
+          });
+        });
+        
         this.reports = reports;
         this.filteredReports = [...reports];
         this.isLoading = false;
@@ -123,6 +139,11 @@ export class HistoricsComponent implements OnInit {
   }
 
   viewReportDetails(report: MedicalReport) {
+    console.log('🔍 Viewing report details:', report);
+    console.log('🔍 Disease prediction exists:', !!report.diseasePrediction);
+    if (report.diseasePrediction) {
+      console.log('🔍 Disease prediction details:', report.diseasePrediction);
+    }
     this.selectedReport = report;
     this.showReportDetails = true;
   }
@@ -191,6 +212,49 @@ export class HistoricsComponent implements OnInit {
     
     // Close the modal
     this.closeReportDetails();
+  }
+
+  // Méthode de test pour créer un rapport avec prédiction
+  createTestReport() {
+    const testReportData = {
+      auth0Id: 'test-user',
+      patientName: 'Patient Test',
+      doctorName: 'Dr. Test',
+      analysisDate: new Date().toISOString(),
+      results: [
+        {
+          parameterCode: 'TEST001',
+          currentValue: '120',
+          unit: 'mg/dL',
+          normalRange: '70-100',
+          normalMin: '70',
+          normalMax: '100',
+          parameterName: 'Glucose',
+          riskStatus: 'ÉLEVÉ',
+          riskDegree: 'Modéré',
+          trend: 'Augmentation',
+          advice: 'Surveillance recommandée'
+        }
+      ],
+      diseasePrediction: {
+        prediction: 'Possibilité de diabète de type 2\nRisque de syndrome métabolique',
+        confidence: 'Modérée',
+        explanation: 'Analyse basée sur les paramètres anormaux détectés.',
+        recommendations: 'Consultez un endocrinologue pour confirmation et suivi.'
+      }
+    };
+
+    console.log('🧪 Creating test report with prediction:', testReportData);
+    
+    this.medicalReportService.createReport(testReportData).subscribe({
+      next: (response) => {
+        console.log('✅ Test report created successfully:', response);
+        this.loadReports(); // Recharger les rapports
+      },
+      error: (error) => {
+        console.error('❌ Error creating test report:', error);
+      }
+    });
   }
 
   private updateAnalysisStats() {

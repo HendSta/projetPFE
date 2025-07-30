@@ -23,6 +23,13 @@ const medicalReportSchema = new mongoose.Schema({
     trend: String,
     advice: String
   }],
+  // Prédiction de maladie
+  diseasePrediction: {
+    prediction: String,
+    confidence: String,
+    explanation: String,
+    recommendations: String
+  },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
   // Champs pour le suivi des réanalyses

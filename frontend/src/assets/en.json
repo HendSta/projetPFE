@@ -193,6 +193,7 @@
     "TABLE_HEADER_ANALYZE_BUTTON": "Analyze",
     "ANALYZE_ROW_BUTTON": "Analyze",
     "SAVE_REPORT_BUTTON": "Save Report",
+    "SAVE_WITH_PREDICTION": "Save with Prediction",
     
     "PROFILE_TITLE": "User Profile",
     "PROFILE_SUBTITLE": "Manage your account information",
