@@ -20,6 +20,12 @@ export class AnalyzingComponent implements OnInit {
   };
   riskResults: { [key: number]: any } = {};
   isReanalyzingReport: boolean = false;
+  
+  // Variables pour la prédiction de maladie
+  showDiseaseModal: boolean = false;
+  isPredictingDisease: boolean = false;
+  diseasePrediction: any = null;
+  diseasePredictionError: string = '';
   columnHeaderTranslationKeys: { [key: string]: string } = {
     CodParametre: 'TABLE_HEADER_ANALYZING_parameterCode',
     ValeurActuelle: 'TABLE_HEADER_ANALYZING_currentValue',
@@ -481,5 +487,51 @@ export class AnalyzingComponent implements OnInit {
         console.error('Error parsing range values:', error);
       }
     }
+  }
+
+  // Méthodes pour la prédiction de maladie
+  predictDisease(): void {
+    // Vérifier qu'on a des résultats d'analyse
+    if (!this.analysisResult || this.analysisResult.length === 0) {
+      alert('Aucun résultat d\'analyse disponible pour la prédiction de maladie.');
+      return;
+    }
+
+    // Vérifier qu'on a des résultats de risque
+    if (Object.keys(this.riskResults).length === 0) {
+      alert('Veuillez d\'abord analyser les risques des paramètres avant de prédire les maladies.');
+      return;
+    }
+
+    this.showDiseaseModal = true;
+    this.isPredictingDisease = true;
+    this.diseasePrediction = null;
+    this.diseasePredictionError = '';
+
+    // Préparer les données pour l'API
+    const requestData = {
+      analysis_result: this.analysisResult,
+      risk_results: Object.values(this.riskResults)
+    };
+
+    // Appeler l'API de prédiction de maladie
+    this.http.post<any>('http://127.0.0.1:8000/predict-disease', requestData).subscribe({
+      next: (response) => {
+        this.isPredictingDisease = false;
+        this.diseasePrediction = response;
+        console.log('Disease prediction result:', response);
+      },
+      error: (error) => {
+        this.isPredictingDisease = false;
+        this.diseasePredictionError = 'Erreur lors de la prédiction de maladie. Veuillez réessayer.';
+        console.error('Error predicting disease:', error);
+      }
+    });
+  }
+
+  closeDiseaseModal(): void {
+    this.showDiseaseModal = false;
+    this.diseasePrediction = null;
+    this.diseasePredictionError = '';
   }
 }

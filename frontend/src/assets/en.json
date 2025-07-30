@@ -257,5 +257,14 @@
     "PASSWORD_PATTERN_ERROR": "Password must include uppercase, lowercase, and number",
     "ANALYZED_REPORTS": "Analyzed reports",
     "PENDING_REPORTS": "pending",
-    "FILES_BUTTON": "Files"
+    "FILES_BUTTON": "Files",
+    
+    "PREDICT_DISEASE_BUTTON": "Predict Diseases",
+    "DISEASE_PREDICTION_TITLE": "Disease Prediction",
+    "ANALYZING_DISEASE_MESSAGE": "Analyzing biological parameters...",
+    "PREDICTION_RESULT": "Prediction Result",
+    "CONFIDENCE_LEVEL": "Confidence Level",
+    "EXPLANATION": "Explanation",
+    "RECOMMENDATIONS": "Recommendations",
+    "CLOSE": "Close"
 }

@@ -259,5 +259,14 @@
     "PASSWORD_PATTERN_ERROR": "Le mot de passe doit contenir une majuscule, une minuscule et un chiffre",
     "ANALYZED_REPORTS": "Rapports analysés",
     "PENDING_REPORTS": "en attente",
-    "FILES": "Fichiers"
+    "FILES": "Fichiers",
+    
+    "PREDICT_DISEASE_BUTTON": "Prédire les Maladies",
+    "DISEASE_PREDICTION_TITLE": "Prédiction de Maladie",
+    "ANALYZING_DISEASE_MESSAGE": "Analyse des paramètres biologiques...",
+    "PREDICTION_RESULT": "Résultat de la Prédiction",
+    "CONFIDENCE_LEVEL": "Niveau de Confiance",
+    "EXPLANATION": "Explication",
+    "RECOMMENDATIONS": "Recommandations",
+    "CLOSE": "Fermer"
 }

@@ -57,6 +57,45 @@ pipeline = joblib.load("MLmodels/modele_analyse_medicale_final.joblib")
 # Créer un imputer pour gérer les valeurs NaN
 imputer = SimpleImputer(strategy='constant', fill_value=0)
 
+# Variables globales pour le modèle LLM (chargement unique)
+llm_model = None
+llm_tokenizer = None
+llm_loaded = False
+
+def load_llm_model():
+    """Charge le modèle LLM une seule fois au démarrage"""
+    global llm_model, llm_tokenizer, llm_loaded
+    
+    if llm_loaded:
+        return llm_model, llm_tokenizer
+    
+    try:
+        print("🔄 Chargement initial du modèle LLM BioMistral...")
+        from transformers import AutoTokenizer, AutoModelForCausalLM
+        import torch
+        
+        # Utiliser le modèle Hugging Face
+        model_id = "HendSta/biomistral-finetuned-fullv3"
+        
+        llm_tokenizer = AutoTokenizer.from_pretrained(model_id)
+        llm_model = AutoModelForCausalLM.from_pretrained(
+            model_id,
+            device_map="auto" if torch.cuda.is_available() else "cpu",
+            torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
+            low_cpu_mem_usage=True
+        )
+        
+        if llm_tokenizer.pad_token is None:
+            llm_tokenizer.pad_token = llm_tokenizer.eos_token
+        
+        llm_loaded = True
+        print("✅ Modèle LLM chargé avec succès!")
+        return llm_model, llm_tokenizer
+        
+    except Exception as e:
+        print(f"❌ Erreur lors du chargement du modèle LLM: {str(e)}")
+        return None, None
+
 # ==== Pydantic Models ====
 class InputData(BaseModel):
     CodeParametre: str
@@ -370,6 +409,12 @@ def to_native(val):
     return val
 
 # ==== API Endpoints ====
+@app.on_event("startup")
+async def startup_event():
+    """Événement de démarrage"""
+    print("🚀 Démarrage du serveur...")
+    print("✅ Prêt à utiliser l'API Hugging Face pour les prédictions")
+
 @app.post("/predict", response_model=PredictionResult)
 def predict(data: InputData):
     df = pd.DataFrame([data.dict()])
@@ -545,6 +590,144 @@ def analyze_risk(param: dict = Body(...)):
         "tendance": to_native(tendance),
         "conseil": to_native(conseil)
     }
+
+@app.post("/predict-disease")
+def predict_disease(data: dict = Body(...)):
+    """
+    Prédit les maladies basées sur les paramètres biologiques anormaux
+    """
+    try:
+        print("🔍 Début de l'analyse de prédiction de maladie...")
+        print(f"Données reçues: {len(data.get('risk_results', []))} résultats de risque")
+        
+        # Vérifier si tous les statuts sont NORMAL
+        risk_results = data.get('risk_results', [])
+        abnormal_count = 0
+        
+        for i, risk_result in enumerate(risk_results):
+            if risk_result and risk_result.get('statut_risque') != 'NORMAL':
+                abnormal_count += 1
+                print(f"Paramètre anormal détecté: {risk_result.get('statut_risque')}")
+        
+        print(f"Nombre de paramètres anormaux: {abnormal_count}")
+        
+        if abnormal_count == 0:
+            return {
+                "disease_prediction": "Aucune maladie détectée",
+                "confidence": "Élevée",
+                "explanation": "Tous les paramètres biologiques sont dans les plages normales.",
+                "recommendations": "Continuez à maintenir un mode de vie sain."
+            }
+        
+        # Pour les cas anormaux, utiliser le modèle LLM BioMistral
+        print("🔍 Analyse des paramètres anormaux avec le modèle LLM...")
+        
+        # Préparer le texte des paramètres anormaux
+        abnormal_params = []
+        analysis_result = data.get('analysis_result', [])
+        
+        for i, risk_result in enumerate(risk_results):
+            if risk_result and risk_result.get('statut_risque') != 'NORMAL':
+                if i < len(analysis_result):
+                    param_data = analysis_result[i]
+                    param_name = param_data.get('LibParametre', param_data.get('CodParametre', 'Paramètre'))
+                    current_value = param_data.get('ValeurActuelle', '')
+                    unit = param_data.get('Unite', '')
+                    status = risk_result.get('statut_risque', '')
+                    normal_range = param_data.get('ValeursUsuelles', '')
+                    
+                    abnormal_params.append(
+                        f"- {param_name} : {current_value} {unit} ({status}) | Valeur usuelle : ({normal_range})"
+                    )
+        
+        print(f"Paramètres anormaux identifiés: {len(abnormal_params)}")
+        
+        if not abnormal_params:
+            return {
+                "disease_prediction": "Aucune maladie détectée",
+                "confidence": "Élevée",
+                "explanation": "Aucun paramètre anormal significatif détecté.",
+                "recommendations": "Continuez à maintenir un mode de vie sain."
+            }
+        
+        # Utiliser l'analyse basée sur des règles (mode fallback)
+        print("🧠 Analyse basée sur des règles médicales...")
+        
+        diseases = analyze_abnormal_parameters([{
+            'name': param.split(' : ')[0].replace('- ', ''),
+            'value': param.split(' : ')[1].split(' ')[0] if ' : ' in param else '',
+            'unit': param.split(' ')[2] if len(param.split(' : ')) > 1 and len(param.split(' : ')[1].split(' ')) > 2 else '',
+            'status': param.split('(')[1].split(')')[0] if '(' in param and ')' in param else '',
+            'normal_range': param.split('(')[-1].split(')')[0] if '(' in param and ')' in param else ''
+        } for param in abnormal_params])
+        
+        if diseases:
+            prediction_text = "\n".join(diseases)
+            confidence = "Modérée"
+            explanation = "Analyse basée sur les paramètres anormaux détectés (mode fallback)."
+            recommendations = "Consultez un professionnel de santé pour confirmation et suivi."
+        else:
+            prediction_text = "Anomalies biologiques détectées nécessitant une évaluation médicale approfondie."
+            confidence = "Faible"
+            explanation = "Les paramètres anormaux nécessitent une interprétation médicale spécialisée."
+            recommendations = "Consultez immédiatement un professionnel de santé."
+        
+        return {
+            "disease_prediction": prediction_text,
+            "confidence": confidence,
+            "explanation": explanation,
+            "recommendations": recommendations
+        }
+        
+    except Exception as e:
+        print(f"Erreur lors de la prédiction de maladie: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return {
+            "disease_prediction": "Erreur lors de l'analyse",
+            "confidence": "Faible",
+            "explanation": f"Erreur technique: {str(e)}",
+            "recommendations": "Veuillez réessayer ou consulter un professionnel de santé."
+        }
+
+def analyze_abnormal_parameters(abnormal_params):
+    """
+    Analyse les paramètres anormaux et retourne des prédictions de maladies basées sur des règles
+    """
+    diseases = []
+    
+    # Dictionnaire des maladies associées aux paramètres
+    disease_patterns = {
+        'diabète': ['GLY', 'GLUCOSE', 'HBA1C', 'HBA2C', 'glycémie'],
+        'hypercholestérolémie': ['CHOLESTEROL', 'CT', 'LDL', 'HDL', 'TG', 'TRIGLYCERIDES'],
+        'insuffisance rénale': ['CREA', 'CREATININE', 'UREE', 'URI'],
+        'anémie': ['HEM1', 'NFS5', 'NFS6', 'HEMOGLOBINE'],
+        'hyperthyroïdie': ['TSH', 'T3', 'T4'],
+        'hypothyroïdie': ['TSH'],
+        'inflammation': ['CRP', 'VS', 'FIBRINOGENE'],
+        'problèmes hépatiques': ['AST', 'ALT', 'ALAT', 'ASAT', 'BILIRUBINE'],
+        'problèmes cardiaques': ['TROPONINE', 'CPK', 'BNP']
+    }
+    
+    # Analyser chaque paramètre anormal
+    for param in abnormal_params:
+        param_name = param['name'].upper()
+        status = param['status']
+        value = param['value']
+        
+        # Chercher des correspondances avec les patterns de maladies
+        for disease, patterns in disease_patterns.items():
+            for pattern in patterns:
+                if pattern.upper() in param_name:
+                    if disease not in diseases:
+                        diseases.append(disease)
+                    break
+    
+    # Ajouter des analyses spécifiques
+    if diseases:
+        return [f"Possibilité de {disease.replace('_', ' ')}" for disease in diseases]
+    else:
+        return ["Anomalies biologiques détectées nécessitant une évaluation médicale"]
 
 # Fonction de debug temporaire pour tester l'extraction
 def debug_extraction(line):
