@@ -46,8 +46,8 @@ export class MedicalReportService {
   }
 
   // Télécharger un rapport au format PDF
-  downloadReport(id: string): Observable<Blob> {
-    return this.http.get(`${this.apiUrl}/download/${id}`, {
+  downloadReport(id: string, language: string = 'fr'): Observable<Blob> {
+    return this.http.get(`${this.apiUrl}/download/${id}?lang=${language}`, {
       responseType: 'blob'
     });
   }

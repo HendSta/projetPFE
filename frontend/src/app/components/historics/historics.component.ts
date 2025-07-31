@@ -3,6 +3,7 @@ import { MedicalReportService } from '../../services/medical-report.service';
 import { AuthService } from '@auth0/auth0-angular';
 import { Loader, FileText, Eye, Trash2, X, Stethoscope, Download, Search, RefreshCw, User, Calendar } from 'lucide-angular';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 interface MedicalReport {
   _id: string;
@@ -57,7 +58,8 @@ export class HistoricsComponent implements OnInit {
   constructor(
     private medicalReportService: MedicalReportService,
     private auth: AuthService,
-    private router: Router
+    private router: Router,
+    private translateService: TranslateService
   ) {}
 
   ngOnInit() {
@@ -177,7 +179,11 @@ export class HistoricsComponent implements OnInit {
 
   downloadReport(id: string) {
     this.isLoading = true;
-    this.medicalReportService.downloadReport(id).subscribe({
+    
+    // Détecter la langue actuelle
+    const currentLang = this.translateService.currentLang || 'fr';
+    
+    this.medicalReportService.downloadReport(id, currentLang).subscribe({
       next: (blob) => {
         this.isLoading = false;
         // Créer une URL pour le blob
@@ -186,7 +192,7 @@ export class HistoricsComponent implements OnInit {
         // Créer un élément de lien
         const a = document.createElement('a');
         a.href = url;
-        a.download = `rapport-medical-${id}.pdf`;
+        a.download = currentLang === 'en' ? `medical-report-${id}.pdf` : `rapport-medical-${id}.pdf`;
         
         // Ajouter au document et déclencher le téléchargement
         document.body.appendChild(a);

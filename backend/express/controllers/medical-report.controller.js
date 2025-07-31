@@ -81,26 +81,79 @@ const deleteReport = async (req, res) => {
 const downloadReport = async (req, res) => {
   try {
     const reportId = req.params.id;
+    const language = req.query.lang || 'fr'; // Récupérer la langue depuis les paramètres de requête
     const report = await MedicalReport.findById(reportId);
 
     if (!report) {
       return res.status(404).json({ message: 'Report not found' });
     }
 
+    // Définir les traductions selon la langue
+    const translations = {
+      fr: {
+        title: 'Rapport d\'Analyse Médicale',
+        subtitle: 'MedWin Analyzing',
+        patient: 'Patient',
+        requestedBy: 'Demandé par',
+        analysisDate: 'Date d\'analyse',
+        parameter: 'Paramètre',
+        value: 'Valeur',
+        unit: 'Unité',
+        usualValues: 'Valeurs usuelles',
+        status: 'Statut',
+        trend: 'Tendance',
+        advice: 'Conseil',
+        diseasePrediction: 'Prédiction de Maladie',
+        predictionResult: 'Résultat de la Prédiction',
+        confidenceLevel: 'Niveau de Confiance',
+        explanation: 'Explication',
+        recommendations: 'Recommandations',
+        reportGenerated: 'Rapport généré le',
+        page: 'Page',
+        reportContinuation: 'Rapport d\'Analyse Médicale (suite)',
+        filename: `rapport-medical-${reportId}.pdf`
+      },
+      en: {
+        title: 'Medical Analysis Report',
+        subtitle: 'MedWin Analyzing',
+        patient: 'Patient',
+        requestedBy: 'Requested by',
+        analysisDate: 'Analysis Date',
+        parameter: 'Parameter',
+        value: 'Value',
+        unit: 'Unit',
+        usualValues: 'Usual Values',
+        status: 'Status',
+        trend: 'Trend',
+        advice: 'Advice',
+        diseasePrediction: 'Disease Prediction',
+        predictionResult: 'Prediction Result',
+        confidenceLevel: 'Confidence Level',
+        explanation: 'Explanation',
+        recommendations: 'Recommendations',
+        reportGenerated: 'Report generated on',
+        page: 'Page',
+        reportContinuation: 'Medical Analysis Report (continued)',
+        filename: `medical-report-${reportId}.pdf`
+      }
+    };
+
+    const t = translations[language] || translations.fr; // Utiliser français par défaut
+
     // Créer un document PDF simple
     const doc = new PDFDocument({ 
       margin: 50,  // Marge augmentée
       size: 'A4',
       info: {
-        Title: `Rapport Médical - ${report.patientName}`,
+        Title: language === 'en' ? `Medical Report - ${report.patientName}` : `Rapport Médical - ${report.patientName}`,
         Author: 'MedWin Analyzing',
-        Subject: 'Rapport d\'analyse médicale'
+        Subject: language === 'en' ? 'Medical analysis report' : 'Rapport d\'analyse médicale'
       }
     });
 
     // Définir les en-têtes pour le téléchargement du PDF
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="rapport-medical-${reportId}.pdf"`);
+    res.setHeader('Content-Disposition', `attachment; filename="${t.filename}"`);
 
     // Envoyer le PDF à la réponse
     doc.pipe(res);
@@ -138,18 +191,18 @@ const downloadReport = async (req, res) => {
       doc.fillColor(colors.primary)
          .fontSize(20)
          .font('Helvetica-Bold')
-         .text('Rapport d\'Analyse Médicale', 120, 50, { align: 'center' });
+         .text(t.title, 120, 50, { align: 'center' });
     } else {
       // Si le logo n'existe pas, centrer le titre
       doc.fillColor(colors.primary)
          .fontSize(20)
          .font('Helvetica-Bold')
-         .text('Rapport d\'Analyse Médicale', { align: 'center' });
+         .text(t.title, { align: 'center' });
     }
     
     doc.fontSize(15)
        .fillColor(colors.textColor)
-       .text('MedWin Analyzing', { align: 'center' });
+       .text(t.subtitle, { align: 'center' });
     
     doc.moveDown(2);
 
@@ -162,11 +215,11 @@ const downloadReport = async (req, res) => {
     
     // Table des informations de base
     const infoTable = {
-      headers: ['Patient', 'Demandé par', 'Date d\'analyse'],
+      headers: [t.patient, t.requestedBy, t.analysisDate],
       rows: [[
         report.patientName,
         report.doctorName,
-        new Date(report.analysisDate).toLocaleDateString('fr-FR')
+        new Date(report.analysisDate).toLocaleDateString(language === 'en' ? 'en-US' : 'fr-FR')
       ]]
     };
     
@@ -207,13 +260,13 @@ const downloadReport = async (req, res) => {
     // Définir les colonnes avec des largeurs proportionnelles pour une meilleure lisibilité
     // Répartition plus adaptée aux contenus longs
     const columns = [
-      { title: 'Paramètre', width: pageWidth * 0.18, property: 'parameterName' },
-      { title: 'Valeur', width: pageWidth * 0.08, property: 'currentValue' },
-      { title: 'Unité', width: pageWidth * 0.08, property: 'unit' },
-      { title: 'Valeurs usuelles', width: pageWidth * 0.12, property: 'normalRange' },
-      { title: 'Statut', width: pageWidth * 0.10, property: 'riskStatus' },
-      { title: 'Tendance', width: pageWidth * 0.14, property: 'trend' },
-      { title: 'Conseil', width: pageWidth * 0.30, property: 'advice' }
+      { title: t.parameter, width: pageWidth * 0.18, property: 'parameterName' },
+      { title: t.value, width: pageWidth * 0.08, property: 'currentValue' },
+      { title: t.unit, width: pageWidth * 0.08, property: 'unit' },
+      { title: t.usualValues, width: pageWidth * 0.12, property: 'normalRange' },
+      { title: t.status, width: pageWidth * 0.10, property: 'riskStatus' },
+      { title: t.trend, width: pageWidth * 0.14, property: 'trend' },
+      { title: t.advice, width: pageWidth * 0.30, property: 'advice' }
     ];
     
     // En-têtes des colonnes
@@ -267,7 +320,7 @@ const downloadReport = async (req, res) => {
         doc.fillColor(colors.primary)
            .fontSize(16)
            .font('Helvetica-Bold')
-           .text('Rapport d\'Analyse Médicale (suite)', {
+           .text(t.reportContinuation, {
              align: 'center'
            });
            
@@ -408,7 +461,7 @@ const downloadReport = async (req, res) => {
         doc.fillColor(colors.primary)
            .fontSize(16)
            .font('Helvetica-Bold')
-           .text('Rapport d\'Analyse Médicale (suite)', {
+           .text(t.reportContinuation, {
              align: 'center'
            });
            
@@ -422,7 +475,7 @@ const downloadReport = async (req, res) => {
       doc.fillColor(colors.primary)
          .fontSize(16)
          .font('Helvetica-Bold')
-         .text('Prédiction de Maladie', 50, doc.y, {
+         .text(t.diseasePrediction, 50, doc.y, {
            align: 'left'
          });
       
@@ -447,7 +500,7 @@ const downloadReport = async (req, res) => {
       doc.fillColor(colors.textColor)
          .fontSize(12)
          .font('Helvetica-Bold')
-         .text('Résultat de la Prédiction:', 60, currentY);
+         .text(t.predictionResult + ':', 60, currentY);
       
       currentY += 20;
       
@@ -466,7 +519,7 @@ const downloadReport = async (req, res) => {
       doc.fillColor(colors.textColor)
          .fontSize(12)
          .font('Helvetica-Bold')
-         .text('Niveau de Confiance:', 60, currentY);
+         .text(t.confidenceLevel + ':', 60, currentY);
       
       currentY += 20;
       
@@ -481,7 +534,7 @@ const downloadReport = async (req, res) => {
       doc.fillColor(colors.textColor)
          .fontSize(12)
          .font('Helvetica-Bold')
-         .text('Explication:', 60, currentY);
+         .text(t.explanation + ':', 60, currentY);
       
       currentY += 20;
       
@@ -500,7 +553,7 @@ const downloadReport = async (req, res) => {
       doc.fillColor(colors.textColor)
          .fontSize(12)
          .font('Helvetica-Bold')
-         .text('Recommandations:', 60, currentY);
+         .text(t.recommendations + ':', 60, currentY);
       
       currentY += 20;
       
@@ -519,7 +572,7 @@ const downloadReport = async (req, res) => {
     // Pied de page
     doc.fontSize(9)
        .fillColor(colors.mediumGray)
-       .text(`Rapport généré le ${new Date().toLocaleDateString('fr-FR')} | MedWin Analyzing | Page ${doc.page.pageNumber}`, 
+       .text(`${t.reportGenerated} ${new Date().toLocaleDateString(language === 'en' ? 'en-US' : 'fr-FR')} | MedWin Analyzing | ${t.page} ${doc.page.pageNumber}`, 
         50, doc.page.height - 30, {
           align: 'center'
         });
