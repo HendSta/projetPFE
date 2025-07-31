@@ -301,6 +301,28 @@ const downloadReport = async (req, res) => {
       }
     };
 
+    // Function to translate risk status
+    const translateRiskStatus = (status) => {
+      if (!status) return '-';
+      
+      if (language === 'en') {
+        switch(status) {
+          case 'NORMAL': return 'NORMAL';
+          case 'BAS': return 'LOW';
+          case 'ÉLEVÉ': return 'HIGH';
+          default: return status;
+        }
+      } else {
+        // Français (par défaut)
+        switch(status) {
+          case 'NORMAL': return 'NORMAL';
+          case 'BAS': return 'BAS';
+          case 'ÉLEVÉ': return 'ÉLEVÉ';
+          default: return status;
+        }
+      }
+    };
+
     // Créer un document PDF simple
     const doc = new PDFDocument({ 
       margin: 50,  // Marge augmentée
@@ -570,7 +592,7 @@ const downloadReport = async (req, res) => {
       doc.fillColor(statusColor)
          .fontSize(10)
          .font('Helvetica-Bold')
-         .text(result.riskStatus || '-', x, y + 13, {
+         .text(translateRiskStatus(result.riskStatus) || '-', x, y + 13, {
            width: columns[4].width - 5,
            align: 'center'
          });
