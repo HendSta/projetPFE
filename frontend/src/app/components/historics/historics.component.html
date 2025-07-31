@@ -246,11 +246,11 @@
                   <span *ngIf="!result.riskDegree" class="text-gray-400 text-xs">{{ 'NOT_ANALYZED_STATUS' | translate }}</span>
                 </td>
                 <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">
-                  <span *ngIf="result.trend">{{ 'TREND_' + result.trend | translate }}</span>
+                  <span *ngIf="result.trend">{{ getTranslatedPrediction(result.trend) }}</span>
                   <span *ngIf="!result.trend" class="text-gray-400 text-xs">{{ 'NOT_AVAILABLE_TREND' | translate }}</span>
                 </td>
                 <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">
-                  <span *ngIf="result.advice">{{ result.advice }}</span>
+                  <span *ngIf="result.advice">{{ getTranslatedPrediction(result.advice) }}</span>
                   <span *ngIf="!result.advice" class="text-gray-400 text-xs">{{ 'NOT_AVAILABLE_ADVICE' | translate }}</span>
                 </td>
               </tr>
@@ -274,7 +274,7 @@
                 {{ 'PREDICTION_RESULT' | translate }}
               </h5>
               <p class="text-gray-800 dark:text-gray-200 text-sm leading-relaxed whitespace-pre-line">
-                {{ selectedReport.diseasePrediction.prediction }}
+                {{ getTranslatedPrediction(selectedReport.diseasePrediction.prediction) }}
               </p>
             </div>
 
@@ -287,7 +287,7 @@
                 </span>
                 <span class="px-3 py-1 rounded-full text-sm font-medium 
                   bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300">
-                  {{ selectedReport.diseasePrediction.confidence }}
+                  {{ getTranslatedPrediction(selectedReport.diseasePrediction.confidence) }}
                 </span>
               </div>
             </div>
@@ -298,7 +298,7 @@
                 {{ 'EXPLANATION' | translate }}:
               </h5>
               <p class="text-gray-600 dark:text-gray-400 text-sm">
-                {{ selectedReport.diseasePrediction.explanation }}
+                {{ getTranslatedPrediction(selectedReport.diseasePrediction.explanation) }}
               </p>
             </div>
 
@@ -309,7 +309,7 @@
                 {{ 'RECOMMENDATIONS' | translate }}:
               </h5>
               <p class="text-yellow-700 dark:text-yellow-400 text-sm">
-                {{ selectedReport.diseasePrediction.recommendations }}
+                {{ getTranslatedPrediction(selectedReport.diseasePrediction.recommendations) }}
               </p>
             </div>
           </div>

@@ -290,4 +290,164 @@ export class HistoricsComponent implements OnInit {
     this.analyzedPercentage = Math.round((fullyAnalyzed / total) * 100);
     this.notFullyAnalyzedCount = notFullyAnalyzed;
   }
+
+    // Méthode pour traduire les messages de prédiction
+  getTranslatedPrediction(message: string): string {
+    if (!message) return '-';
+    
+    // Vérifier d'abord les phrases avec des codes de paramètres spécifiques
+    const medicalConsultationPattern = /^Consultation médicale recommandée\. Le ([A-Z0-9]+) présente un risque élevé\.$/;
+    const monitorNextControlPattern = /^À surveiller lors du prochain contrôle\. Le ([A-Z0-9]+) est légèrement bas\.$/;
+    const surveillanceRecommendedPattern = /^Surveillance recommandée\. Le ([A-Z0-9]+) est bas avec un risque modéré\.$/;
+    
+    const currentLang = this.translateService.currentLang || 'fr';
+    
+    // Vérifier le pattern "Consultation médicale recommandée"
+    const medicalMatch = message.match(medicalConsultationPattern);
+    if (medicalMatch) {
+      const parameterCode = medicalMatch[1];
+      if (currentLang === 'en') {
+        return `Medical consultation recommended. The ${parameterCode} presents a high risk.`;
+      } else {
+        return message; // Garder en français
+      }
+    }
+    
+    // Vérifier le pattern "À surveiller lors du prochain contrôle"
+    const monitorMatch = message.match(monitorNextControlPattern);
+    if (monitorMatch) {
+      const parameterCode = monitorMatch[1];
+      if (currentLang === 'en') {
+        return `To monitor during the next control. The ${parameterCode} is slightly low.`;
+      } else {
+        return message; // Garder en français
+      }
+    }
+    
+    // Vérifier le pattern "Surveillance recommandée"
+    const surveillanceMatch = message.match(surveillanceRecommendedPattern);
+    if (surveillanceMatch) {
+      const parameterCode = surveillanceMatch[1];
+      if (currentLang === 'en') {
+        return `Surveillance recommended. The ${parameterCode} is low with moderate risk.`;
+      } else {
+        return message; // Garder en français
+      }
+    }
+    
+    // Mapper les messages français vers les clés de traduction
+    const messageKeyMap: { [key: string]: string } = {
+      'Anomalies biologiques détectées nécessitant une évaluation médicale': 'BIOLOGICAL_ANOMALIES_DETECTED',
+      'Analyse basée sur les paramètres anormaux détectés.': 'ANALYSIS_BASED_ON_ABNORMAL_PARAMETERS',
+      'Consultez un professionnel de santé pour confirmation et suivi.': 'CONSULT_HEALTHCARE_PROFESSIONAL',
+      'Aucune maladie détectée': 'NO_DISEASE_DETECTED',
+      'Tous les paramètres biologiques sont dans les plages normales.': 'ALL_PARAMETERS_NORMAL',
+      'Continuez à maintenir un mode de vie sain.': 'MAINTAIN_HEALTHY_LIFESTYLE',
+      'Possibilité de insuffisance rénale': 'RENAL_INSUFFICIENCY_POSSIBILITY',
+      'Modérée': 'CONFIDENCE_MODERATE',
+      'Élevée': 'CONFIDENCE_HIGH',
+      'Faible': 'CONFIDENCE_LOW',
+      'Stable': 'TREND_STABLE',
+      'En hausse': 'TREND_EN_HAUSSE',
+      'En baisse': 'TREND_EN_BAISSE',
+      'Augmentation': 'TREND_AUGMENTATION',
+      'Consultez votre médecin rapidement.': 'ADVICE_CONSULT_DOCTOR_QUICKLY',
+      'Surveillez ce paramètre et discutez-en lors de votre prochaine visite médicale.': 'ADVICE_MONITOR_PARAMETER',
+      'Valeur légèrement inférieure à la normale, sans danger immédiat.': 'ADVICE_SLIGHTLY_BELOW_NORMAL',
+      'Valeur légèrement supérieure à la normale, sans danger immédiat.': 'ADVICE_SLIGHTLY_ABOVE_NORMAL',
+      'Surveillance recommandée': 'ADVICE_SURVEILLANCE_RECOMMENDED',
+      'Indéterminée': 'TREND_UNDETERMINED',
+      'Indéterminée (pas de valeur antérieure)': 'TREND_UNDETERMINED_NO_PREVIOUS_VALUE',
+      'Aucune évaluation de risque disponible pour ce paramètre.': 'ADVICE_NO_RISK_ASSESSMENT',
+      'Erreur lors de l\'analyse de risque simplifiée.': 'ADVICE_SIMPLIFIED_ANALYSIS_ERROR',
+              'Aucune action particulière requise. Les valeurs sont dans la plage normale.': 'ADVICE_NO_ACTION_REQUIRED',
+      'À surveiller lors du prochain contrôle. Le {parameterCode} est légèrement bas.': 'ADVICE_MONITOR_NEXT_CONTROL_BAS',
+      'Consultation médicale recommandée. Le {parameterCode} présente un risque élevé.': 'ADVICE_MEDICAL_CONSULTATION_RECOMMENDED_PARAM',
+        'Possibilité de hypercholestérolémie': 'POSSIBILITY_HYPERCHOLESTEROLEMIA',
+        'Possibilité de diabète': 'POSSIBILITY_DIABETES',
+        'Possibilité de anémie': 'POSSIBILITY_ANEMIA'
+      };
+      
+      // Obtenir la clé de traduction
+      const translationKey = messageKeyMap[message];
+      if (!translationKey) return message;
+      
+      // Retourner la traduction selon la langue actuelle
+      if (currentLang === 'en') {
+        const englishTranslations: { [key: string]: string } = {
+          'BIOLOGICAL_ANOMALIES_DETECTED': 'Biological anomalies detected requiring medical evaluation',
+          'ANALYSIS_BASED_ON_ABNORMAL_PARAMETERS': 'Analysis based on detected abnormal parameters.',
+          'CONSULT_HEALTHCARE_PROFESSIONAL': 'Consult a healthcare professional for confirmation and follow-up.',
+          'NO_DISEASE_DETECTED': 'No disease detected',
+          'ALL_PARAMETERS_NORMAL': 'All biological parameters are within normal ranges.',
+          'MAINTAIN_HEALTHY_LIFESTYLE': 'Continue to maintain a healthy lifestyle.',
+          'RENAL_INSUFFICIENCY_POSSIBILITY': 'Possibility of renal insufficiency',
+          'CONFIDENCE_MODERATE': 'Moderate',
+          'CONFIDENCE_HIGH': 'High',
+          'CONFIDENCE_LOW': 'Low',
+          'TREND_STABLE': 'Stable',
+          'TREND_EN_HAUSSE': 'Increasing',
+          'TREND_EN_BAISSE': 'Decreasing',
+          'TREND_AUGMENTATION': 'Increasing',
+          'ADVICE_CONSULT_DOCTOR_QUICKLY': 'Consult your doctor quickly.',
+          'ADVICE_MONITOR_PARAMETER': 'Monitor this parameter and discuss it during your next medical visit.',
+          'ADVICE_SLIGHTLY_BELOW_NORMAL': 'Value slightly below normal, no immediate danger.',
+          'ADVICE_SLIGHTLY_ABOVE_NORMAL': 'Value slightly above normal, no immediate danger.',
+          'ADVICE_SURVEILLANCE_RECOMMENDED': 'Surveillance recommended',
+          'TREND_UNDETERMINED': 'Undetermined',
+          'TREND_UNDETERMINED_NO_PREVIOUS_VALUE': 'Undetermined (no previous value)',
+          'ADVICE_NO_RISK_ASSESSMENT': 'No risk assessment available for this parameter.',
+          'ADVICE_SIMPLIFIED_ANALYSIS_ERROR': 'Error during simplified risk analysis.',
+          'ADVICE_NO_ACTION_REQUIRED': 'No particular action required. The values are within the normal range.',
+          'ADVICE_MONITOR_NEXT_CONTROL': 'To monitor during the next control. The {parameterCode} is slightly {status}.',
+          'ADVICE_MONITOR_NEXT_CONTROL_BAS': 'To monitor during the next control. The {parameterCode} is slightly low.',
+          'ADVICE_SURVEILLANCE_RECOMMENDED_PARAM': 'Surveillance recommended. The {parameterCode} is {status} with moderate risk.',
+          'ADVICE_MEDICAL_CONSULTATION_RECOMMENDED': 'Medical consultation recommended. The {parameterCode} presents a high risk.',
+          'ADVICE_MEDICAL_CONSULTATION_RECOMMENDED_PARAM': 'Medical consultation recommended. The {parameterCode} presents a high risk.',
+          'POSSIBILITY_HYPERCHOLESTEROLEMIA': 'Possibility of hypercholesterolemia',
+          'POSSIBILITY_DIABETES': 'Possibility of diabetes',
+          'POSSIBILITY_ANEMIA': 'Possibility of anemia',
+          'POSSIBILITY_RENAL_INSUFFICIENCY': 'Possibility of renal insufficiency'
+        };
+        return englishTranslations[translationKey] || message;
+      } else {
+        // Français (par défaut)
+        const frenchTranslations: { [key: string]: string } = {
+          'BIOLOGICAL_ANOMALIES_DETECTED': 'Anomalies biologiques détectées nécessitant une évaluation médicale',
+          'ANALYSIS_BASED_ON_ABNORMAL_PARAMETERS': 'Analyse basée sur les paramètres anormaux détectés.',
+          'CONSULT_HEALTHCARE_PROFESSIONAL': 'Consultez un professionnel de santé pour confirmation et suivi.',
+          'NO_DISEASE_DETECTED': 'Aucune maladie détectée',
+          'ALL_PARAMETERS_NORMAL': 'Tous les paramètres biologiques sont dans les plages normales.',
+          'MAINTAIN_HEALTHY_LIFESTYLE': 'Continuez à maintenir un mode de vie sain.',
+          'RENAL_INSUFFICIENCY_POSSIBILITY': 'Possibilité de insuffisance rénale',
+          'CONFIDENCE_MODERATE': 'Modérée',
+          'CONFIDENCE_HIGH': 'Élevée',
+          'CONFIDENCE_LOW': 'Faible',
+          'TREND_STABLE': 'Stable',
+          'TREND_EN_HAUSSE': 'En hausse',
+          'TREND_EN_BAISSE': 'En baisse',
+          'TREND_AUGMENTATION': 'Augmentation',
+          'ADVICE_CONSULT_DOCTOR_QUICKLY': 'Consultez votre médecin rapidement.',
+          'ADVICE_MONITOR_PARAMETER': 'Surveillez ce paramètre et discutez-en lors de votre prochaine visite médicale.',
+          'ADVICE_SLIGHTLY_BELOW_NORMAL': 'Valeur légèrement inférieure à la normale, sans danger immédiat.',
+          'ADVICE_SLIGHTLY_ABOVE_NORMAL': 'Valeur légèrement supérieure à la normale, sans danger immédiat.',
+          'ADVICE_SURVEILLANCE_RECOMMENDED': 'Surveillance recommandée',
+          'TREND_UNDETERMINED': 'Indéterminée',
+          'TREND_UNDETERMINED_NO_PREVIOUS_VALUE': 'Indéterminée (pas de valeur antérieure)',
+          'ADVICE_NO_RISK_ASSESSMENT': 'Aucune évaluation de risque disponible pour ce paramètre.',
+          'ADVICE_SIMPLIFIED_ANALYSIS_ERROR': 'Erreur lors de l\'analyse de risque simplifiée.',
+          'ADVICE_NO_ACTION_REQUIRED': 'Aucune action particulière requise. Les valeurs sont dans la plage normale.',
+          'ADVICE_MONITOR_NEXT_CONTROL': 'À surveiller lors du prochain contrôle. Le {parameterCode} est légèrement {status}.',
+          'ADVICE_MONITOR_NEXT_CONTROL_BAS': 'À surveiller lors du prochain contrôle. Le {parameterCode} est légèrement bas.',
+          'ADVICE_SURVEILLANCE_RECOMMENDED_PARAM': 'Surveillance recommandée. Le {parameterCode} est {status} avec un risque modéré.',
+          'ADVICE_MEDICAL_CONSULTATION_RECOMMENDED': 'Consultation médicale recommandée. Le {parameterCode} présente un risque élevé.',
+          'ADVICE_MEDICAL_CONSULTATION_RECOMMENDED_PARAM': 'Consultation médicale recommandée. Le {parameterCode} présente un risque élevé.',
+          'POSSIBILITY_HYPERCHOLESTEROLEMIA': 'Possibilité de hypercholestérolémie',
+          'POSSIBILITY_DIABETES': 'Possibilité de diabète',
+          'POSSIBILITY_ANEMIA': 'Possibilité de anémie',
+          'POSSIBILITY_RENAL_INSUFFICIENCY': 'Possibilité de insuffisance rénale'
+        };
+        return frenchTranslations[translationKey] || message;
+      }
+  }
 }

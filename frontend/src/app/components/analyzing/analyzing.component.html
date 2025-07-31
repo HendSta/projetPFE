@@ -199,10 +199,10 @@
                 <div *ngIf="!riskResults[i].erreur">{{ 'RISK_DEGREE_' + riskResults[i].degre_risque | translate }}</div>
               </td>
               <td *ngIf="riskResults[i]" class="px-4 py-3 text-sm whitespace-nowrap">
-                <div *ngIf="!riskResults[i].erreur">{{ 'TREND_' + riskResults[i].tendance | translate }}</div>
+                <div *ngIf="!riskResults[i].erreur">{{ getTranslatedPrediction(riskResults[i].tendance) }}</div>
               </td>
               <td *ngIf="riskResults[i]" class="px-4 py-3 text-sm whitespace-nowrap">
-                <div *ngIf="!riskResults[i].erreur">{{ riskResults[i].conseil }}</div>
+                <div *ngIf="!riskResults[i].erreur">{{ getTranslatedPrediction(riskResults[i].conseil) }}</div>
               </td>
             </tr>
           </tbody>
@@ -291,7 +291,7 @@
                 {{ 'PREDICTION_RESULT' | translate }}
               </h4>
               <p class="text-gray-800 dark:text-gray-200 leading-relaxed whitespace-pre-line">
-                {{ diseasePrediction.disease_prediction }}
+                {{ getTranslatedPrediction(diseasePrediction.disease_prediction) }}
               </p>
             </div>
 
@@ -304,7 +304,7 @@
                 </span>
                 <span class="px-3 py-1 rounded-full text-sm font-medium 
                   bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300">
-                  {{ diseasePrediction.confidence }}
+                  {{ getTranslatedPrediction(diseasePrediction.confidence) }}
                 </span>
               </div>
             </div>
@@ -315,7 +315,7 @@
                 {{ 'EXPLANATION' | translate }}:
               </h5>
               <p class="text-gray-600 dark:text-gray-400 text-sm">
-                {{ diseasePrediction.explanation }}
+                {{ getTranslatedPrediction(diseasePrediction.explanation) }}
               </p>
             </div>
 
@@ -326,7 +326,7 @@
                 {{ 'RECOMMENDATIONS' | translate }}:
               </h5>
               <p class="text-yellow-700 dark:text-yellow-400 text-sm">
-                {{ diseasePrediction.recommendations }}
+                {{ getTranslatedPrediction(diseasePrediction.recommendations) }}
               </p>
             </div>
           </div>
