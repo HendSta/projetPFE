@@ -120,6 +120,13 @@
           <div>
             <h3 class="text-xl font-bold text-indigo-800 dark:text-indigo-300">{{ report.patientName }}</h3>
             <p class="text-sm text-gray-500 dark:text-gray-400">{{ 'DOCTOR_LABEL' | translate }}: {{ report.doctorName }}</p>
+            <!-- Indicateur de prédiction de maladie -->
+            <div *ngIf="report.diseasePrediction" class="mt-2">
+              <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
+                <lucide-icon name="activity" class="w-3 h-3 mr-1"></lucide-icon>
+                {{ 'DISEASE_PREDICTION_AVAILABLE' | translate }}
+              </span>
+            </div>
           </div>
           <div class="bg-indigo-100 dark:bg-indigo-900/30 p-2 rounded-full">
             <lucide-icon name="file-text" class="h-5 w-5 text-indigo-600 dark:text-indigo-400"></lucide-icon>
@@ -251,6 +258,63 @@
           </table>
         </div>
         
+        <!-- Section Prédiction de Maladie -->
+        <div *ngIf="selectedReport.diseasePrediction" class="mt-8">
+          <h4 class="text-xl font-semibold text-indigo-800 dark:text-indigo-300 mb-4 flex items-center">
+            <lucide-icon name="activity" class="h-5 w-5 mr-2"></lucide-icon>
+            {{ 'DISEASE_PREDICTION_TITLE' | translate }}
+          </h4>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Prédiction -->
+            <div class="bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/30 dark:to-blue-900/30 
+              p-4 rounded-lg border border-indigo-200 dark:border-indigo-700">
+              <h5 class="text-sm font-semibold text-indigo-800 dark:text-indigo-300 mb-2 flex items-center">
+                <lucide-icon name="check-circle" class="h-4 w-4 mr-2"></lucide-icon>
+                {{ 'PREDICTION_RESULT' | translate }}
+              </h5>
+              <p class="text-gray-800 dark:text-gray-200 text-sm leading-relaxed whitespace-pre-line">
+                {{ selectedReport.diseasePrediction.prediction }}
+              </p>
+            </div>
+
+            <!-- Niveau de Confiance -->
+            <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/30 dark:to-emerald-900/30 
+              p-4 rounded-lg border border-green-200 dark:border-green-700">
+              <div class="flex items-center justify-between">
+                <span class="text-sm font-medium text-green-800 dark:text-green-300">
+                  {{ 'CONFIDENCE_LEVEL' | translate }}:
+                </span>
+                <span class="px-3 py-1 rounded-full text-sm font-medium 
+                  bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-300">
+                  {{ selectedReport.diseasePrediction.confidence }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Explication -->
+            <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg">
+              <h5 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                {{ 'EXPLANATION' | translate }}:
+              </h5>
+              <p class="text-gray-600 dark:text-gray-400 text-sm">
+                {{ selectedReport.diseasePrediction.explanation }}
+              </p>
+            </div>
+
+            <!-- Recommandations -->
+            <div class="bg-yellow-50 dark:bg-yellow-900/30 p-4 rounded-lg border border-yellow-200 dark:border-yellow-700">
+              <h5 class="text-sm font-semibold text-yellow-800 dark:text-yellow-300 mb-2 flex items-center">
+                <lucide-icon name="help-circle" class="h-4 w-4 mr-2"></lucide-icon>
+                {{ 'RECOMMENDATIONS' | translate }}:
+              </h5>
+              <p class="text-yellow-700 dark:text-yellow-400 text-sm">
+                {{ selectedReport.diseasePrediction.recommendations }}
+              </p>
+            </div>
+          </div>
+        </div>
+
         <div class="mt-6 flex justify-end space-x-3">
           <button (click)="reanalyzeReport(selectedReport)" 
             class="btn bg-indigo-600 hover:bg-indigo-700 text-white shadow-md hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300">

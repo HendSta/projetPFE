@@ -29,6 +29,10 @@ interface MedicalReport {
     explanation: string;
     recommendations: string;
   };
+  isReanalyzed?: boolean;
+  reanalysisDate?: string;
+  reanalysisCount?: number;
+  lastUpdated?: string;
 }
 
 @Component({

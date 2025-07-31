@@ -26,6 +26,7 @@ export class AnalyzingComponent implements OnInit {
   isPredictingDisease: boolean = false;
   diseasePrediction: any = null;
   diseasePredictionError: string = '';
+  hasDiseasePrediction: boolean = false; // Nouveau flag pour indiquer si une prédiction existe
   columnHeaderTranslationKeys: { [key: string]: string } = {
     CodParametre: 'TABLE_HEADER_ANALYZING_parameterCode',
     ValeurActuelle: 'TABLE_HEADER_ANALYZING_currentValue',
@@ -101,6 +102,13 @@ export class AnalyzingComponent implements OnInit {
         }
       });
       
+      // Charger la prédiction de maladie si elle existe
+      if (report.diseasePrediction) {
+        this.diseasePrediction = report.diseasePrediction;
+        this.hasDiseasePrediction = true;
+        console.log('Loaded existing disease prediction:', report.diseasePrediction);
+      }
+      
       // Clear the localStorage to avoid reanalyzing the same report on refresh
       localStorage.removeItem('reportToReanalyze');
     }
@@ -113,6 +121,10 @@ export class AnalyzingComponent implements OnInit {
       this.selectedFile = input.files[0];
       this.riskResults = {};
       this.isReanalyzingReport = false;
+      // Réinitialiser la prédiction de maladie pour un nouveau fichier
+      this.diseasePrediction = null;
+      this.hasDiseasePrediction = false;
+      this.diseasePredictionError = '';
     }
   }
 
@@ -138,6 +150,11 @@ export class AnalyzingComponent implements OnInit {
       console.log('No file selected');
       return;
     }
+
+    // Réinitialiser la prédiction de maladie pour un nouveau fichier
+    this.diseasePrediction = null;
+    this.hasDiseasePrediction = false;
+    this.diseasePredictionError = '';
 
     const formData = new FormData();
     formData.append('file', this.selectedFile);
@@ -406,7 +423,14 @@ export class AnalyzingComponent implements OnInit {
             trend: riskResult.tendance || '',
             advice: riskResult.conseil || ''
           };
-        })
+        }),
+        // Inclure la prédiction de maladie si elle existe
+        diseasePrediction: this.hasDiseasePrediction && this.diseasePrediction ? {
+          prediction: this.diseasePrediction.disease_prediction || this.diseasePrediction.prediction || '',
+          confidence: this.diseasePrediction.confidence || '',
+          explanation: this.diseasePrediction.explanation || '',
+          recommendations: this.diseasePrediction.recommendations || ''
+        } : undefined
       };
 
       // Vérifier si nous mettons à jour un rapport existant ou si nous en créons un nouveau
@@ -519,6 +543,7 @@ export class AnalyzingComponent implements OnInit {
       next: (response) => {
         this.isPredictingDisease = false;
         this.diseasePrediction = response;
+        this.hasDiseasePrediction = true; // Marquer qu'une prédiction existe
         console.log('Disease prediction result:', response);
       },
       error: (error) => {
@@ -531,7 +556,15 @@ export class AnalyzingComponent implements OnInit {
 
   closeDiseaseModal(): void {
     this.showDiseaseModal = false;
-    this.diseasePrediction = null;
     this.diseasePredictionError = '';
+    // Ne pas réinitialiser diseasePrediction pour qu'il soit sauvegardé avec le rapport
+  }
+
+  // Méthode pour effacer la prédiction de maladie
+  clearDiseasePrediction(): void {
+    this.diseasePrediction = null;
+    this.hasDiseasePrediction = false;
+    this.diseasePredictionError = '';
+    console.log('Disease prediction cleared');
   }
 }

@@ -6,15 +6,22 @@ const fs = require('fs');
 // Créer un nouveau rapport médical
 const createReport = async (req, res) => {
   try {
-    const { auth0Id, patientName, doctorName, analysisDate, results } = req.body;
+    const { auth0Id, patientName, doctorName, analysisDate, results, diseasePrediction } = req.body;
     
-    const report = new MedicalReport({
+    const reportData = {
       auth0Id,
       patientName,
       doctorName,
       analysisDate: new Date(analysisDate),
       results
-    });
+    };
+
+    // Ajouter la prédiction de maladie si elle existe
+    if (diseasePrediction) {
+      reportData.diseasePrediction = diseasePrediction;
+    }
+    
+    const report = new MedicalReport(reportData);
 
     const savedReport = await report.save();
     res.status(201).json(savedReport);
@@ -413,7 +420,7 @@ const downloadReport = async (req, res) => {
 const updateReport = async (req, res) => {
   try {
     const { id } = req.params;
-    const { auth0Id, patientName, doctorName, analysisDate, results, isReanalysis } = req.body;
+    const { auth0Id, patientName, doctorName, analysisDate, results, isReanalysis, diseasePrediction } = req.body;
     
     // Vérifier si le rapport existe
     const existingReport = await MedicalReport.findById(id);
@@ -433,6 +440,11 @@ const updateReport = async (req, res) => {
     existingReport.analysisDate = new Date(analysisDate);
     existingReport.results = results;
     existingReport.lastUpdated = new Date(); // Ajouter un horodatage de mise à jour
+    
+    // Mettre à jour la prédiction de maladie si elle existe
+    if (diseasePrediction) {
+      existingReport.diseasePrediction = diseasePrediction;
+    }
     
     // Ajouter une information que c'est une réanalyse
     if (isReanalysis) {
