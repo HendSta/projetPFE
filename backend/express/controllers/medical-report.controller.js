@@ -110,6 +110,7 @@ const downloadReport = async (req, res) => {
       primary: '#4338ca',    // Indigo 700
       primaryLight: '#e0e7ff', // Indigo 100
       lightGray: '#f3f4f6',  // Gray 100
+      lightBlue: '#dbeafe',  // Blue 100 pour la section prédiction
       mediumGray: '#9ca3af', // Gray 400
       textColor: '#1f2937',  // Gray 800
       green: '#10b981',      // Green 500
@@ -396,6 +397,124 @@ const downloadReport = async (req, res) => {
        .lineTo(50 + pageWidth, startY + 35)
        .lineWidth(0.5)
        .stroke(colors.borderColor);
+    
+    // Section Prédiction de Maladie
+    if (report.diseasePrediction) {
+      // Vérifier si on doit aller à une nouvelle page
+      if (y + 200 > doc.page.height - 100) {
+        doc.addPage();
+        
+        // Ajouter un en-tête simple sur la nouvelle page
+        doc.fillColor(colors.primary)
+           .fontSize(16)
+           .font('Helvetica-Bold')
+           .text('Rapport d\'Analyse Médicale (suite)', {
+             align: 'center'
+           });
+           
+        doc.moveDown(1);
+        y = doc.y;
+      }
+      
+      doc.moveDown(2);
+      
+      // Titre de la section Prédiction
+      doc.fillColor(colors.primary)
+         .fontSize(16)
+         .font('Helvetica-Bold')
+         .text('Prédiction de Maladie', 50, doc.y, {
+           align: 'left'
+         });
+      
+      doc.moveDown(1);
+      
+      // Encadré pour la prédiction
+      const predictionY = doc.y;
+      const predictionHeight = 180;
+      
+      // Rectangle de fond pour la section prédiction
+      doc.rect(50, predictionY, pageWidth, predictionHeight)
+         .fill(colors.lightBlue);
+      
+      // Bordure du rectangle
+      doc.rect(50, predictionY, pageWidth, predictionHeight)
+         .lineWidth(1)
+         .stroke(colors.primary);
+      
+      let currentY = predictionY + 20;
+      
+      // Résultat de la prédiction
+      doc.fillColor(colors.textColor)
+         .fontSize(12)
+         .font('Helvetica-Bold')
+         .text('Résultat de la Prédiction:', 60, currentY);
+      
+      currentY += 20;
+      
+      doc.fillColor(colors.textColor)
+         .fontSize(11)
+         .font('Helvetica')
+         .text(report.diseasePrediction.prediction || '-', 60, currentY, {
+           width: pageWidth - 20,
+           align: 'left',
+           lineGap: 3
+         });
+      
+      currentY += 40;
+      
+      // Niveau de confiance
+      doc.fillColor(colors.textColor)
+         .fontSize(12)
+         .font('Helvetica-Bold')
+         .text('Niveau de Confiance:', 60, currentY);
+      
+      currentY += 20;
+      
+      doc.fillColor(colors.green)
+         .fontSize(11)
+         .font('Helvetica-Bold')
+         .text(report.diseasePrediction.confidence || '-', 60, currentY);
+      
+      currentY += 30;
+      
+      // Explication
+      doc.fillColor(colors.textColor)
+         .fontSize(12)
+         .font('Helvetica-Bold')
+         .text('Explication:', 60, currentY);
+      
+      currentY += 20;
+      
+      doc.fillColor(colors.textColor)
+         .fontSize(11)
+         .font('Helvetica')
+         .text(report.diseasePrediction.explanation || '-', 60, currentY, {
+           width: pageWidth - 20,
+           align: 'left',
+           lineGap: 3
+         });
+      
+      currentY += 40;
+      
+      // Recommandations
+      doc.fillColor(colors.textColor)
+         .fontSize(12)
+         .font('Helvetica-Bold')
+         .text('Recommandations:', 60, currentY);
+      
+      currentY += 20;
+      
+      doc.fillColor(colors.textColor)
+         .fontSize(11)
+         .font('Helvetica')
+         .text(report.diseasePrediction.recommendations || '-', 60, currentY, {
+           width: pageWidth - 20,
+           align: 'left',
+           lineGap: 3
+         });
+      
+      y = predictionY + predictionHeight + 20;
+    }
     
     // Pied de page
     doc.fontSize(9)
