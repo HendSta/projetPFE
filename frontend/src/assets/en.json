@@ -261,7 +261,13 @@
     "FILES_BUTTON": "Files",
     
     "PREDICT_DISEASE_BUTTON": "Predict Diseases",
+    "UPDATE_DISEASE_PREDICTION_BUTTON": "Update Prediction",
     "DISEASE_PREDICTION_TITLE": "Disease Prediction",
+    "DISEASE_PREDICTION_EXISTS": "Disease prediction available",
+    "DISEASE_PREDICTION_WILL_BE_SAVED": "This prediction will be saved with the report",
+    "DISEASE_PREDICTION_AVAILABLE": "Prediction available",
+    "CLICK_TO_VIEW_PREDICTION": "Click to view prediction",
+    "VIEW_PREDICTION": "View",
     "ANALYZING_DISEASE_MESSAGE": "Analyzing biological parameters...",
     "PREDICTION_RESULT": "Prediction Result",
     "CONFIDENCE_LEVEL": "Confidence Level",

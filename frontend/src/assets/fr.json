@@ -263,7 +263,13 @@
     "FILES": "Fichiers",
     
     "PREDICT_DISEASE_BUTTON": "Prédire les Maladies",
+    "UPDATE_DISEASE_PREDICTION_BUTTON": "Mettre à jour la Prédiction",
     "DISEASE_PREDICTION_TITLE": "Prédiction de Maladie",
+    "DISEASE_PREDICTION_EXISTS": "Prédiction de maladie disponible",
+    "DISEASE_PREDICTION_WILL_BE_SAVED": "Cette prédiction sera sauvegardée avec le rapport",
+    "DISEASE_PREDICTION_AVAILABLE": "Prédiction disponible",
+    "CLICK_TO_VIEW_PREDICTION": "Cliquez pour voir la prédiction",
+    "VIEW_PREDICTION": "Voir",
     "ANALYZING_DISEASE_MESSAGE": "Analyse des paramètres biologiques...",
     "PREDICTION_RESULT": "Résultat de la Prédiction",
     "CONFIDENCE_LEVEL": "Niveau de Confiance",

@@ -567,4 +567,14 @@ export class AnalyzingComponent implements OnInit {
     this.diseasePredictionError = '';
     console.log('Disease prediction cleared');
   }
+
+  // Méthode pour ouvrir la modal de prédiction existante
+  openExistingPrediction(): void {
+    if (this.hasDiseasePrediction && this.diseasePrediction) {
+      this.showDiseaseModal = true;
+      this.isPredictingDisease = false;
+      this.diseasePredictionError = '';
+      console.log('Opening existing disease prediction modal');
+    }
+  }
 }
