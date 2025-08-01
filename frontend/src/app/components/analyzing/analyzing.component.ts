@@ -586,7 +586,12 @@ export class AnalyzingComponent implements OnInit {
   }
 
       // Méthode pour traduire les messages de prédiction
-  getTranslatedPrediction(message: string): string {
+  getTranslatedPrediction(message: string | string[]): string {
+    // Si c'est un tableau de messages, les traduire et les joindre
+    if (Array.isArray(message)) {
+      return message.map(msg => this.translationUtils.translatePredictionMessage(msg)).join('\n');
+    }
+    // Si c'est une chaîne simple
     return this.translationUtils.translatePredictionMessage(message);
   }
 }

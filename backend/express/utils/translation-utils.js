@@ -12,12 +12,12 @@ const translatePredictionMessage = (message, language) => {
     if (!message) return '';
   
     // Patterns pour les messages dynamiques avec codes de paramètres
-    const hemPattern = /^Le ([A-Z0-9]+) présente un risque élevé\.$/;
-    const hemBasPattern = /^Le ([A-Z0-9]+) est légèrement bas\.$/;
-    const surveillanceRecommendedPattern = /^Surveillance recommandée\. Le ([A-Z0-9]+) est légèrement bas\.$/;
-    const surveillanceRecommendedElevePattern = /^Surveillance recommandée\. Le ([A-Z0-9]+) est élevé avec un risque modéré\.$/;
-    const aSurveillerPattern = /^À surveiller lors du prochain contrôle\. Le ([A-Z0-9]+) est légèrement bas\.$/;
-    const consultationMedicalePattern = /^Consultation médicale recommandée\. Le ([A-Z0-9]+) présente un risque élevé\.$/;
+    const hemPattern = /^Le ([A-Z0-9\-]+) présente un risque élevé\.$/;
+    const hemBasPattern = /^Le ([A-Z0-9\-]+) est légèrement bas\.$/;
+    const surveillanceRecommendedPattern = /^Surveillance recommandée\. Le ([A-Z0-9\-]+) est légèrement bas\.$/;
+    const surveillanceRecommendedElevePattern = /^Surveillance recommandée\. Le ([A-Z0-9\-]+) est élevé avec un risque modéré\.$/;
+    const aSurveillerPattern = /^À surveiller lors du prochain contrôle\. Le ([A-Z0-9\-]+) est légèrement bas\.$/;
+    const consultationMedicalePattern = /^Consultation médicale recommandée\. Le ([A-Z0-9\-]+) présente un risque élevé\.$/;
   
     // Vérifier le pattern "Le HEM1 présente un risque élevé."
     const hemMatch = message.match(hemPattern);
@@ -84,6 +84,15 @@ const translatePredictionMessage = (message, language) => {
         return message; // Garder en français
       }
     }
+
+    // Vérifier le pattern "Possibilité de {maladie}"
+    const possibilitePattern = /^Possibilité de (.+)$/;
+    const possibiliteMatch = message.match(possibilitePattern);
+    if (possibiliteMatch) {
+      const maladie = possibiliteMatch[1];
+      // Toujours traduire en anglais pour les prédictions de maladie
+      return `Possibility of ${maladie}`;
+    }
   
     // Mapper les messages français vers les clés de traduction
     const messageKeyMap = {
@@ -113,7 +122,19 @@ const translatePredictionMessage = (message, language) => {
       'Possibilité de insuffisance rénale': 'RENAL_INSUFFICIENCY_POSSIBILITY',
       'Possibilité de hypercholestérolémie': 'POSSIBILITY_HYPERCHOLESTEROLEMIA',
       'Possibilité de diabète': 'POSSIBILITY_DIABETES',
-      'Possibilité de anémie': 'POSSIBILITY_ANEMIA'
+      'Possibilité de anémie': 'POSSIBILITY_ANEMIA',
+      'Résultat de prédiction': 'PREDICTION_RESULT',
+      'Niveau de confiance': 'CONFIDENCE_LEVEL',
+      'Explication': 'EXPLANATION',
+      'Recommandations': 'RECOMMENDATIONS',
+      'Analyse des paramètres biologiques...': 'ANALYZING_DISEASE_MESSAGE',
+      'Prédiction de Maladie': 'DISEASE_PREDICTION_TITLE',
+      'Prédiction de maladie disponible': 'DISEASE_PREDICTION_EXISTS',
+      'Cette prédiction sera sauvegardée avec le rapport': 'DISEASE_PREDICTION_WILL_BE_SAVED',
+      'Cliquez pour voir la prédiction': 'CLICK_TO_VIEW_PREDICTION',
+      'Voir': 'VIEW_PREDICTION',
+      'Mettre à jour la Prédiction': 'UPDATE_DISEASE_PREDICTION_BUTTON',
+      'Prédire les Maladies': 'PREDICT_DISEASE_BUTTON'
     };
   
     // Traductions statiques
@@ -145,7 +166,19 @@ const translatePredictionMessage = (message, language) => {
         'RENAL_INSUFFICIENCY_POSSIBILITY': 'Possibility of renal insufficiency',
         'POSSIBILITY_HYPERCHOLESTEROLEMIA': 'Possibility of hypercholesterolemia',
         'POSSIBILITY_DIABETES': 'Possibility of diabetes',
-        'POSSIBILITY_ANEMIA': 'Possibility of anemia'
+        'POSSIBILITY_ANEMIA': 'Possibility of anemia',
+        'PREDICTION_RESULT': 'Prediction Result',
+        'CONFIDENCE_LEVEL': 'Confidence Level',
+        'EXPLANATION': 'Explanation',
+        'RECOMMENDATIONS': 'Recommendations',
+        'ANALYZING_DISEASE_MESSAGE': 'Analyzing biological parameters...',
+        'DISEASE_PREDICTION_TITLE': 'Disease Prediction',
+        'DISEASE_PREDICTION_EXISTS': 'Disease prediction available',
+        'DISEASE_PREDICTION_WILL_BE_SAVED': 'This prediction will be saved with the report',
+        'CLICK_TO_VIEW_PREDICTION': 'Click to view prediction',
+        'VIEW_PREDICTION': 'View',
+        'UPDATE_DISEASE_PREDICTION_BUTTON': 'Update Prediction',
+        'PREDICT_DISEASE_BUTTON': 'Predict Diseases'
       },
       fr: {
         'UNDETERMINED': 'Indéterminée',
@@ -174,7 +207,19 @@ const translatePredictionMessage = (message, language) => {
         'RENAL_INSUFFICIENCY_POSSIBILITY': 'Possibilité de insuffisance rénale',
         'POSSIBILITY_HYPERCHOLESTEROLEMIA': 'Possibilité de hypercholestérolémie',
         'POSSIBILITY_DIABETES': 'Possibilité de diabète',
-        'POSSIBILITY_ANEMIA': 'Possibilité de anémie'
+        'POSSIBILITY_ANEMIA': 'Possibilité de anémie',
+        'PREDICTION_RESULT': 'Résultat de prédiction',
+        'CONFIDENCE_LEVEL': 'Niveau de confiance',
+        'EXPLANATION': 'Explication',
+        'RECOMMENDATIONS': 'Recommandations',
+        'ANALYZING_DISEASE_MESSAGE': 'Analyse des paramètres biologiques...',
+        'DISEASE_PREDICTION_TITLE': 'Prédiction de Maladie',
+        'DISEASE_PREDICTION_EXISTS': 'Prédiction de maladie disponible',
+        'DISEASE_PREDICTION_WILL_BE_SAVED': 'Cette prédiction sera sauvegardée avec le rapport',
+        'CLICK_TO_VIEW_PREDICTION': 'Cliquez pour voir la prédiction',
+        'VIEW_PREDICTION': 'Voir',
+        'UPDATE_DISEASE_PREDICTION_BUTTON': 'Mettre à jour la Prédiction',
+        'PREDICT_DISEASE_BUTTON': 'Prédire les Maladies'
       }
     };
   

@@ -19,12 +19,12 @@ export class TranslationUtilsService {
     const currentLang = this.translateService.currentLang || 'fr';
 
     // Patterns pour les messages dynamiques avec codes de paramètres
-    const hemPattern = /^Le ([A-Z0-9]+) présente un risque élevé\.$/;
-    const hemBasPattern = /^Le ([A-Z0-9]+) est légèrement bas\.$/;
-    const surveillanceRecommendedPattern = /^Surveillance recommandée\. Le ([A-Z0-9]+) est légèrement bas\.$/;
-    const surveillanceRecommendedElevePattern = /^Surveillance recommandée\. Le ([A-Z0-9]+) est élevé avec un risque modéré\.$/;
-    const aSurveillerPattern = /^À surveiller lors du prochain contrôle\. Le ([A-Z0-9]+) est légèrement bas\.$/;
-    const consultationMedicalePattern = /^Consultation médicale recommandée\. Le ([A-Z0-9]+) présente un risque élevé\.$/;
+    const hemPattern = /^Le ([A-Z0-9\-]+) présente un risque élevé\.$/;
+    const hemBasPattern = /^Le ([A-Z0-9\-]+) est légèrement bas\.$/;
+    const surveillanceRecommendedPattern = /^Surveillance recommandée\. Le ([A-Z0-9\-]+) est légèrement bas\.$/;
+    const surveillanceRecommendedElevePattern = /^Surveillance recommandée\. Le ([A-Z0-9\-]+) est élevé avec un risque modéré\.$/;
+    const aSurveillerPattern = /^À surveiller lors du prochain contrôle\. Le ([A-Z0-9\-]+) est légèrement bas\.$/;
+    const consultationMedicalePattern = /^Consultation médicale recommandée\. Le ([A-Z0-9\-]+) présente un risque élevé\.$/;
 
     // Vérifier le pattern "Le HEM1 présente un risque élevé."
     const hemMatch = message.match(hemPattern);
@@ -92,6 +92,15 @@ export class TranslationUtilsService {
       }
     }
 
+    // Vérifier le pattern "Possibilité de {maladie}"
+    const possibilitePattern = /^Possibilité de (.+)$/;
+    const possibiliteMatch = message.match(possibilitePattern);
+    if (possibiliteMatch) {
+      const maladie = possibiliteMatch[1];
+      // Toujours traduire en anglais pour les prédictions de maladie
+      return `Possibility of ${maladie}`;
+    }
+
     // Mapper les messages français vers les clés de traduction
     const messageKeyMap: { [key: string]: string } = {
       'Indéterminée': 'UNDETERMINED',
@@ -120,7 +129,19 @@ export class TranslationUtilsService {
       'Possibilité de insuffisance rénale': 'RENAL_INSUFFICIENCY_POSSIBILITY',
       'Possibilité de hypercholestérolémie': 'POSSIBILITY_HYPERCHOLESTEROLEMIA',
       'Possibilité de diabète': 'POSSIBILITY_DIABETES',
-      'Possibilité de anémie': 'POSSIBILITY_ANEMIA'
+      'Possibilité de anémie': 'POSSIBILITY_ANEMIA',
+      'Résultat de prédiction': 'PREDICTION_RESULT',
+      'Niveau de confiance': 'CONFIDENCE_LEVEL',
+      'Explication': 'EXPLANATION',
+      'Recommandations': 'RECOMMENDATIONS',
+      'Analyse des paramètres biologiques...': 'ANALYZING_DISEASE_MESSAGE',
+      'Prédiction de Maladie': 'DISEASE_PREDICTION_TITLE',
+      'Prédiction de maladie disponible': 'DISEASE_PREDICTION_EXISTS',
+      'Cette prédiction sera sauvegardée avec le rapport': 'DISEASE_PREDICTION_WILL_BE_SAVED',
+      'Cliquez pour voir la prédiction': 'CLICK_TO_VIEW_PREDICTION',
+      'Voir': 'VIEW_PREDICTION',
+      'Mettre à jour la Prédiction': 'UPDATE_DISEASE_PREDICTION_BUTTON',
+      'Prédire les Maladies': 'PREDICT_DISEASE_BUTTON'
     };
 
     // Vérifier si le message est dans la map
