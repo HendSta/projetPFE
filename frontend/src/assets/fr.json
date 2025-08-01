@@ -172,6 +172,8 @@
     "REANALYZE_REPORT_CARD_TITLE": "Réanalyse du Rapport",
     "UPLOAD_PDF_CARD_TITLE": "Télécharger un Fichier",
     "SELECT_REPORT_LABEL": "Sélectionnez votre rapport médical (PDF ou XML)",
+    "CHOOSE_FILE_BUTTON": "CHOISIR UN FICHIER",
+    "NO_FILE_SELECTED": "Aucun fichier sélectionné",
     "REANALYZE_LABEL": "Réanalyse",
     "DATE_LABEL": "Date",
     "NOT_SPECIFIED": "Non spécifié",

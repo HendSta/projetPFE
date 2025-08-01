@@ -170,6 +170,8 @@
     "REANALYZE_REPORT_CARD_TITLE": "Reanalyzing Report",
     "UPLOAD_PDF_CARD_TITLE": "Upload File",
     "SELECT_REPORT_LABEL": "Select your medical report (PDF or XML)",
+    "CHOOSE_FILE_BUTTON": "CHOOSE FILE",
+    "NO_FILE_SELECTED": "No file selected",
     "REANALYZE_LABEL": "Reanalyzing",
     "DATE_LABEL": "Date",
     "NOT_SPECIFIED": "Not specified",
@@ -258,7 +260,7 @@
     "PASSWORD_PATTERN_ERROR": "Password must include uppercase, lowercase, and number",
     "ANALYZED_REPORTS": "Analyzed reports",
     "PENDING_REPORTS": "pending",
-    "FILES_BUTTON": "Files",
+    "FILES": "Files",
     
     "PREDICT_DISEASE_BUTTON": "Predict Diseases",
     "UPDATE_DISEASE_PREDICTION_BUTTON": "Update Prediction",
