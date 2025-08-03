@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService,User } from '@auth0/auth0-angular';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,7 @@ export class AppComponent implements OnInit {
     this.auth.user$.subscribe((user: User | null | undefined) => {
       if (user) {
         // 👇 Appel backend pour enregistrer/utiliser l'utilisateur
-        this.http.post('http://localhost:8000/api/auth/register', {
+        this.http.post(`${environment.apiUrl}/auth/register`, {
           auth0Id: user.sub,
           email: user.email,
           name: user.name,

@@ -18,12 +18,16 @@ import xml.etree.ElementTree as ET
 from fastapi.responses import JSONResponse
 from sklearn.base import BaseEstimator, TransformerMixin
 import sys
+from dotenv import load_dotenv
+
+# Charger les variables d'environnement
+load_dotenv()
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:4200"],  # URL de votre frontend Angular
+    allow_origins=os.getenv("ALLOW_ORIGINS", "http://localhost:4200").split(","),  # URLs du frontend depuis .env
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -51,8 +55,8 @@ class NumericConverter(BaseEstimator, TransformerMixin):
 
 sys.modules['__main__'].NumericConverter = NumericConverter
 
-# Charger le modèle ML
-pipeline = joblib.load("MLmodels/modele_analyse_medicale_final.joblib")
+# Charger le modèle ML depuis les variables d'environnement
+pipeline = joblib.load(os.getenv("ML_MODEL_PATH", "MLmodels/modele_analyse_medicale_final.joblib"))
 
 # Créer un imputer pour gérer les valeurs NaN
 imputer = SimpleImputer(strategy='constant', fill_value=0)
@@ -74,8 +78,8 @@ def load_llm_model():
         from transformers import AutoTokenizer, AutoModelForCausalLM
         import torch
         
-        # Utiliser le modèle Hugging Face
-        model_id = "HendSta/biomistral-finetuned-fullv3"
+        # Utiliser le modèle Hugging Face depuis les variables d'environnement
+        model_id = os.getenv("LLM_MODEL_ID", "HendSta/biomistral-finetuned-fullv3")
         
         llm_tokenizer = AutoTokenizer.from_pretrained(model_id)
         llm_model = AutoModelForCausalLM.from_pretrained(
@@ -412,8 +416,21 @@ def to_native(val):
 @app.on_event("startup")
 async def startup_event():
     """Événement de démarrage"""
-    print("🚀 Démarrage du serveur...")
-    print("✅ Prêt à utiliser l'API Hugging Face pour les prédictions")
+    print("Démarrage du serveur FastAPI...")
+    print(f"Port: {os.getenv('PORT', '8000')}")
+    print(f"Host: {os.getenv('HOST', '0.0.0.0')}")
+    print(f"Frontend URL: {os.getenv('FRONTEND_URL', 'http://localhost:4200')}")
+    print("Prêt à utiliser l'API Hugging Face pour les prédictions")
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(
+        "main:app",
+        host=os.getenv("HOST", "0.0.0.0"),
+        port=int(os.getenv("PORT", "8000")),
+        reload=os.getenv("RELOAD", "true").lower() == "true",
+        debug=os.getenv("DEBUG", "true").lower() == "true"
+    )
 
 @app.post("/predict", response_model=PredictionResult)
 def predict(data: InputData):
@@ -503,7 +520,7 @@ def analyze_risk(param: dict = Body(...)):
     import joblib
     import pandas as pd
     import numpy as np
-    model_path = "MLmodels/analyze_row_final.joblib"
+    model_path = os.getenv("RISK_MODEL_PATH", "MLmodels/analyze_row_final.joblib")
     # Charger le modèle
     model = joblib.load(model_path)
 

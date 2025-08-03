@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AuthService } from '@auth0/auth0-angular';
 import { switchMap } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MedicalReportService {
-  private apiUrl = 'http://localhost:8000/api/medical-reports';
+  private apiUrl = `${environment.apiUrl}/medical-reports`;
 
   constructor(private http: HttpClient, private auth: AuthService) { }
 

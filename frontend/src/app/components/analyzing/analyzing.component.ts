@@ -447,7 +447,7 @@ export class AnalyzingComponent implements OnInit {
         // Mettre à jour le rapport existant
         console.log('Mise à jour du rapport existant:', originalReportId);
         
-        this.http.put(`http://localhost:8000/api/medical-reports/${originalReportId}`, reportData)
+        this.http.put(`${environment.apiUrl}/medical-reports/${originalReportId}`, reportData)
           .subscribe({
             next: (response) => {
               console.log('Rapport mis à jour avec succès:', response);
@@ -472,7 +472,7 @@ export class AnalyzingComponent implements OnInit {
 
   // Helper method to create a new report
   private createNewReport(reportData: any): void {
-    this.http.post(`http://localhost:8000/api/medical-reports`, reportData)
+    this.http.post(`${environment.apiUrl}/medical-reports`, reportData)
       .subscribe({
         next: (response) => {
           console.log('Rapport sauvegardé avec succès:', response);

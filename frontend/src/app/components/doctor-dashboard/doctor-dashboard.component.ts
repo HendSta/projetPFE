@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@auth0/auth0-angular';
 import { HttpClient } from '@angular/common/http';
 import { ProfileService } from 'src/app/services/profile.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-doctor-dashboard',
@@ -27,7 +28,7 @@ export class DoctorDashboardComponent implements OnInit {
     this.auth.user$.subscribe(authUser => {
       if (!authUser) return;
       this.auth0Id = authUser.sub as string;
-      this.http.get<any>(`http://localhost:8000/api/auth/profile/${this.auth0Id}`)
+      this.http.get<any>(`${environment.apiUrl}/auth/profile/${this.auth0Id}`)
         .subscribe(
           dbUser => {
             // Set and broadcast loaded profile

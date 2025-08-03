@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '@auth0/auth0-angular';
 import { ProfileService } from 'src/app/services/profile.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-user-profile',
@@ -40,7 +41,7 @@ export class UserProfileComponent implements OnInit {
     this.auth.user$.subscribe(authUser => {
       if (!authUser) return;
       const auth0Id = authUser.sub as string;
-      this.http.get<any>(`http://localhost:8000/api/auth/profile/${auth0Id}`)
+      this.http.get<any>(`${environment.apiUrl}/auth/profile/${auth0Id}`)
         .subscribe(
           dbUser => {
             // Use returned DB record as currentUser
@@ -80,7 +81,7 @@ export class UserProfileComponent implements OnInit {
       picture,
       phone: this.phone
     };
-    this.http.put<any>(`http://localhost:8000/api/auth/profile/${payload.auth0Id}`, payload)
+    this.http.put<any>(`${environment.apiUrl}/auth/profile/${payload.auth0Id}`, payload)
       .subscribe(
         (updated) => {
           console.log('Profile updated:', updated);
