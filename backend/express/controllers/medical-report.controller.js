@@ -169,19 +169,23 @@ const downloadReport = async (req, res) => {
     // Envoyer le PDF à la réponse
     doc.pipe(res);
 
-    // Couleurs simples
+    // Couleurs modernes et harmonieuses
     const colors = {
-      primary: '#4338ca',    // Indigo 700
-      primaryLight: '#e0e7ff', // Indigo 100
-      lightGray: '#f3f4f6',  // Gray 100
-      lightBlue: '#dbeafe',  // Blue 100 pour la section prédiction
-      mediumGray: '#9ca3af', // Gray 400
-      textColor: '#1f2937',  // Gray 800
-      green: '#10b981',      // Green 500
-      yellow: '#f59e0b',     // Amber 500
-      red: '#ef4444',        // Red 500
+      primary: '#4338ca',        // Indigo 700
+      primaryLight: '#e0e7ff',   // Indigo 100
+      lightGray: '#f3f4f6',      // Gray 100
+      lightBlue: '#dbeafe',      // Blue 100 pour la section prédiction
+      lightGreen: '#dcfce7',     // Green 100 pour la section confiance
+      lightYellow: '#fef3c7',    // Yellow 100 pour la section explication
+      lightOrange: '#fed7aa',    // Orange 100 pour la section recommandations
+      mediumGray: '#9ca3af',     // Gray 400
+      textColor: '#1f2937',      // Gray 800
+      green: '#10b981',          // Green 500
+      darkGreen: '#059669',      // Green 600 pour les bordures
+      yellow: '#f59e0b',         // Amber 500
+      red: '#ef4444',            // Red 500
       white: '#ffffff',
-      borderColor: '#d1d5db' // Gray 300
+      borderColor: '#d1d5db'     // Gray 300
     };
 
     // Fonction pour limiter la longueur du texte uniquement si c'est vraiment nécessaire
@@ -482,114 +486,178 @@ const downloadReport = async (req, res) => {
       
       doc.moveDown(2);
       
-      // Titre de la section Prédiction
+      // Titre de la section Prédiction avec design amélioré
+      const titleY = doc.y;
+      
+      // Ligne décorative sous le titre
+      doc.moveTo(50, titleY + 35)
+         .lineTo(50 + pageWidth, titleY + 35)
+         .lineWidth(2)
+         .stroke(colors.primary);
+      
       doc.fillColor(colors.primary)
-         .fontSize(16)
+         .fontSize(20)
          .font('Helvetica-Bold')
-         .text(t.diseasePrediction, 50, doc.y, {
+         .text(t.diseasePrediction, 50, titleY, {
            align: 'left'
          });
       
-      doc.moveDown(1);
+      doc.moveDown(2);
       
-      // Encadré pour la prédiction
-      const predictionY = doc.y;
-      const predictionHeight = 180;
+      // Section prédiction avec design moderne
+      let currentY = doc.y;
       
-      // Rectangle de fond pour la section prédiction
-      doc.rect(50, predictionY, pageWidth, predictionHeight)
+      // Résultat de la prédiction avec design amélioré
+      const resultSectionY = currentY;
+      
+      // Fond subtil pour la section
+      doc.roundedRect(50, resultSectionY - 10, pageWidth, 0, 8)
          .fill(colors.lightBlue);
       
-      // Bordure du rectangle
-      doc.rect(50, predictionY, pageWidth, predictionHeight)
-         .lineWidth(1)
-         .stroke(colors.primary);
-      
-      let currentY = predictionY + 20;
-      
-      // Résultat de la prédiction
-      doc.fillColor(colors.textColor)
-         .fontSize(12)
+      doc.fillColor(colors.primary)
+         .fontSize(15)
          .font('Helvetica-Bold')
          .text(t.predictionResult + ':', 60, currentY);
       
-      currentY += 20;
+      currentY += 30;
       
-      // Traduire le contenu de la prédiction
+      // Traduire le contenu de la prédiction avec design moderne
       let translatedPrediction = translatePredictionMessageLocal(report.diseasePrediction.prediction);
       
-      doc.fillColor(colors.textColor)
-         .fontSize(11)
-         .font('Helvetica')
-         .text(translatedPrediction, 60, currentY, {
-           width: pageWidth - 20,
-           align: 'left',
-           lineGap: 3
-         });
+      // Gérer les sauts de ligne multiples dans les prédictions
+      const predictionLines = translatedPrediction.split('\n');
+      let lineY = currentY;
       
-      currentY += 40;
+      predictionLines.forEach((line, index) => {
+        if (line.trim()) { // Ignorer les lignes vides
+          // Bullet point pour chaque prédiction
+          doc.fillColor(colors.primary)
+             .fontSize(10)
+             .text('•', 60, lineY);
+          
+          doc.fillColor(colors.textColor)
+             .fontSize(13)
+             .font('Helvetica')
+             .text(line.trim(), 75, lineY, {
+               width: pageWidth - 25,
+               align: 'left'
+             });
+          lineY += 25; // Espacement augmenté entre les lignes
+        }
+      });
       
-      // Niveau de confiance
-      doc.fillColor(colors.textColor)
-         .fontSize(12)
+      // Ajuster currentY pour la suite
+      currentY = lineY + 35;
+      
+      // Niveau de confiance avec design amélioré
+      const confidenceSectionY = currentY;
+      
+      // Fond subtil pour la section
+      doc.roundedRect(50, confidenceSectionY - 10, pageWidth, 0, 8)
+         .fill(colors.lightGreen);
+      
+      doc.fillColor(colors.primary)
+         .fontSize(15)
          .font('Helvetica-Bold')
          .text(t.confidenceLevel + ':', 60, currentY);
       
-      currentY += 20;
-      
-      // Traduire le niveau de confiance
-      let translatedConfidence = translatePredictionMessageLocal(report.diseasePrediction.confidence);
-      
-      doc.fillColor(colors.green)
-         .fontSize(11)
-         .font('Helvetica-Bold')
-         .text(translatedConfidence, 60, currentY);
-      
       currentY += 30;
       
-      // Explication
-      doc.fillColor(colors.textColor)
-         .fontSize(12)
+      // Traduire le niveau de confiance avec badge moderne
+      let translatedConfidence = translatePredictionMessageLocal(report.diseasePrediction.confidence);
+      
+      // Créer un badge moderne pour le niveau de confiance
+      const confidenceText = translatedConfidence;
+      const confidenceWidth = doc.font('Helvetica-Bold').fontSize(13).widthOfString(confidenceText);
+      
+      // Badge avec ombre et design moderne
+      doc.roundedRect(60, currentY - 8, confidenceWidth + 20, 30, 12)
+         .fill(colors.green);
+      
+      // Bordure du badge
+      doc.roundedRect(60, currentY - 8, confidenceWidth + 20, 30, 12)
+         .lineWidth(1)
+         .stroke(colors.darkGreen || colors.green);
+      
+      // Texte du niveau de confiance
+      doc.fillColor(colors.white)
+         .fontSize(13)
+         .font('Helvetica-Bold')
+         .text(confidenceText, 70, currentY);
+      
+      currentY += 45;
+      
+      // Explication avec design amélioré
+      const explanationSectionY = currentY;
+      
+      // Fond subtil pour la section
+      doc.roundedRect(50, explanationSectionY - 10, pageWidth, 0, 8)
+         .fill(colors.lightYellow);
+      
+      doc.fillColor(colors.primary)
+         .fontSize(15)
          .font('Helvetica-Bold')
          .text(t.explanation + ':', 60, currentY);
       
-      currentY += 20;
+      currentY += 30;
       
-      // Traduire l'explication
+      // Traduire l'explication avec design moderne
       let translatedExplanation = translatePredictionMessageLocal(report.diseasePrediction.explanation);
       
-      doc.fillColor(colors.textColor)
-         .fontSize(11)
-         .font('Helvetica')
-         .text(translatedExplanation, 60, currentY, {
-           width: pageWidth - 20,
-           align: 'left',
-           lineGap: 3
-         });
+      // Gérer les sauts de ligne dans l'explication
+      const explanationLines = translatedExplanation.split('\n');
+      let explanationY = currentY;
       
-      currentY += 40;
+      explanationLines.forEach((line, index) => {
+        if (line.trim()) {
+          doc.fillColor(colors.textColor)
+             .fontSize(13)
+             .font('Helvetica')
+             .text(line.trim(), 60, explanationY, {
+               width: pageWidth - 10,
+               align: 'left'
+             });
+          explanationY += 22;
+        }
+      });
       
-      // Recommandations
-      doc.fillColor(colors.textColor)
-         .fontSize(12)
+      currentY = explanationY + 35;
+      
+      // Recommandations avec design amélioré
+      const recommendationsSectionY = currentY;
+      
+      // Fond subtil pour la section
+      doc.roundedRect(50, recommendationsSectionY - 10, pageWidth, 0, 8)
+         .fill(colors.lightOrange);
+      
+      doc.fillColor(colors.primary)
+         .fontSize(15)
          .font('Helvetica-Bold')
          .text(t.recommendations + ':', 60, currentY);
       
-      currentY += 20;
+      currentY += 30;
       
-      // Traduire les recommandations
+      // Traduire les recommandations avec design moderne
       let translatedRecommendations = translatePredictionMessageLocal(report.diseasePrediction.recommendations);
       
-      doc.fillColor(colors.textColor)
-         .fontSize(11)
-         .font('Helvetica')
-         .text(translatedRecommendations, 60, currentY, {
-           width: pageWidth - 20,
-           align: 'left',
-           lineGap: 3
-         });
+      // Gérer les sauts de ligne dans les recommandations
+      const recommendationsLines = translatedRecommendations.split('\n');
+      let recommendationsY = currentY;
       
-      y = predictionY + predictionHeight + 20;
+      recommendationsLines.forEach((line, index) => {
+        if (line.trim()) {
+          doc.fillColor(colors.textColor)
+             .fontSize(13)
+             .font('Helvetica')
+             .text(line.trim(), 60, recommendationsY, {
+               width: pageWidth - 10,
+               align: 'left'
+             });
+          recommendationsY += 22;
+        }
+      });
+      
+      y = recommendationsY + 40;
     }
     
     // Pied de page
