@@ -3,10 +3,14 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
+    "prestart": "node build-env.js",
     "start": "ng serve",
+    "prebuild": "node build-env.js",
     "build": "ng build",
+    "build:prod": "node build-env.js && ng build --configuration production",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "setup-env": "cp env.example .env && echo 'Fichier .env créé. Veuillez le modifier selon vos besoins.'"
   },
   "private": true,
   "dependencies": {
@@ -36,6 +40,7 @@
     "@types/jasmine": "~4.3.0",
     "autoprefixer": "^10.4.21",
     "daisyui": "^4.12.24",
+    "dotenv": "^16.5.0",
     "dotenv-webpack": "^8.1.0",
     "jasmine-core": "~4.6.0",
     "karma": "~6.4.0",
