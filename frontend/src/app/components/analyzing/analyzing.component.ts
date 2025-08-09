@@ -168,7 +168,7 @@ export class AnalyzingComponent implements OnInit {
 
     this.isLoading = true;
 
-    this.http.post<any[]>('http://127.0.0.1:8000/upload-pdf', formData, {
+    this.http.post<any[]>(`${environment.pythonApiUrl}/upload-pdf`, formData, {
       headers: {
         'Accept': 'application/json',
       },
@@ -261,7 +261,7 @@ export class AnalyzingComponent implements OnInit {
     }
 
     // Try API call
-    this.http.post<any>('http://127.0.0.1:8000/analyze-risk', analyzeData).subscribe({
+    this.http.post<any>(`${environment.pythonApiUrl}/analyze-risk`, analyzeData).subscribe({
       next: (result) => {
         this.riskResults[index] = result;
       },
@@ -546,7 +546,7 @@ export class AnalyzingComponent implements OnInit {
     };
 
     // Appeler l'API de prédiction de maladie
-    this.http.post<any>('http://127.0.0.1:8000/predict-disease', requestData).subscribe({
+    this.http.post<any>(`${environment.pythonApiUrl}/predict-disease`, requestData).subscribe({
       next: (response) => {
         this.isPredictingDisease = false;
         this.diseasePrediction = response;

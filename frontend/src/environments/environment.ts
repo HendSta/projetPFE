@@ -5,5 +5,5 @@ export const environment = {
     clientId: '2CTMPHhvwVZ2OK8LK9mQM6GoitUSgIVe'
   },
   apiUrl: 'http://localhost:8002/api',
-  pythonApiUrl: 'http://localhost:8000'
+  pythonApiUrl: 'https://hendsta-medwin-analyzer.hf.space'
 }; 
