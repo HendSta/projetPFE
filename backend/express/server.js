@@ -23,9 +23,15 @@ const medicalReportRoutes = require('./routes/medical-report.routes');
 app.use('/api/auth', authRoutes);
 app.use('/api/medical-reports', medicalReportRoutes);
 
-const PORT = process.env.PORT || 8002;
-const HOST = process.env.HOST || 'localhost';
-app.listen(PORT, () => {
-  console.log(`🚀 Serveur Express lancé sur http://${HOST}:${PORT}`);
-  console.log(`📊 MongoDB: ${process.env.MONGO_URI || 'mongodb://localhost:27017/auth-app'}`);
-});
+// Export for Vercel serverless
+module.exports = app;
+
+// Only start server if running locally (not on Vercel)
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 8002;
+  const HOST = process.env.HOST || 'localhost';
+  app.listen(PORT, () => {
+    console.log(`🚀 Serveur Express lancé sur http://${HOST}:${PORT}`);
+    console.log(`📊 MongoDB: ${process.env.MONGO_URI || 'mongodb://localhost:27017/auth-app'}`);
+  });
+}
