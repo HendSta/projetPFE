@@ -3,6 +3,12 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
 
+// Debug environment variables (remove in production)
+console.log("🔍 Environment check:");
+console.log("NODE_ENV:", process.env.NODE_ENV);
+console.log("MONGO_URI exists:", !!process.env.MONGO_URI);
+console.log("MONGO_URI preview:", process.env.MONGO_URI ? process.env.MONGO_URI.substring(0, 20) + "..." : "NOT SET");
+
 const app = express();
 app.use(cors());
 // Increase payload size limit for profile updates (including Base64 images)
@@ -10,12 +16,19 @@ app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ limit: '5mb', extended: true }));
 
 // Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
-.then(() => console.log("MongoDB connecté"))
-.catch((err) => console.error("Erreur MongoDB :", err));
+const mongoUri = process.env.MONGO_URI;
+if (!mongoUri) {
+  console.error("❌ MONGO_URI environment variable is not set!");
+  console.error("Please set MONGO_URI in your Vercel environment variables");
+} else {
+  console.log("🔗 Attempting to connect to MongoDB...");
+  mongoose.connect(mongoUri)
+    .then(() => console.log("✅ MongoDB connecté"))
+    .catch((err) => {
+      console.error("❌ Erreur MongoDB :", err.message);
+      console.error("🔍 Check your MONGO_URI and MongoDB Atlas network access");
+    });
+}
 
 // Routes
 const authRoutes = require('./routes/auth.routes');
