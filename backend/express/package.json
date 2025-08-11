@@ -2,9 +2,11 @@
   "name": "express",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "api/index.js",
   "scripts": {
     "dev": "nodemon server.js",
+    "start": "node server.js",
+    "build": "echo 'Build completed'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
