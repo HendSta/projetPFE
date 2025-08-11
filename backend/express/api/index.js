@@ -45,3 +45,11 @@ app.get('/api/health', (req, res) => {
 
 // Export for Vercel serverless
 module.exports = app;
+
+// For local development, also start the server if running directly
+if (require.main === module) {
+  const PORT = process.env.PORT || 8002;
+  app.listen(PORT, () => {
+    console.log(`🚀 Server running on port ${PORT}`);
+  });
+}
